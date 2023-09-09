@@ -57,7 +57,9 @@ srun -n 4 ./cuda_hello
 ## OpenACC
 ```bash
 # Compilation
-pgc++ openacc_hello.cpp -o openacc_hello
+pgc++ -acc -mp openacc_parallel.cpp -o openacc_parallel
 # Execution
-srun -n 4 ./openacc_hello
+# OpenACC has not been configured for all nodes in the cluster yet.
+# Before further announcement, use `./openacc_parallel` instead to execute locally
+srun -n 4 ./openacc_parallel
 ```
