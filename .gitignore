@@ -1,3 +1,9 @@
+# Excluded Directories
+/cmake-build-debug
+/cmake-build-release
+/build
+.idea
+
 # Prerequisites
 *.d
 
@@ -13,6 +19,7 @@
 
 # Compiled Dynamic libraries
 *.so
+*.so.0.0.0
 *.dylib
 *.dll
 
@@ -30,3 +37,6 @@
 *.exe
 *.out
 *.app
+
+*.Plo
+*.Plo.0.0.0
