@@ -27,7 +27,8 @@ MPI plugin types are...
 # Compilation
 mpic++ ./mpi_hello.cpp -o mpi_hello
 # Execution
-srun -n 4 -mpi=pmi2 ./mpi_hello
+srun -n 4 --mpi=pmi2 ./mpi_hello
+# or simply ignore the '--mpi=pmi2' with 'srun -n 4 ./mpi_hello'
 ```
 
 ## Pthread
