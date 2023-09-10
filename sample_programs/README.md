@@ -1,4 +1,4 @@
-# How to compiler and run these programs
+# How to compile and run these programs
 
 ## Allocate Computing Resources
 ```bash
@@ -41,7 +41,7 @@ srun -n 4 ./pthread_hello
 ## OpenMP
 ```bash
 # Compilation
-g++ -fopenmp openmp_hello.cpp -o openmp_hellp
+g++ -fopenmp openmp_hello.cpp -o openmp_hello
 # Execution
 srun -n 4 ./openmp_hello
 ```

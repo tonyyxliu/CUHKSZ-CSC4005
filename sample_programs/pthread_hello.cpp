@@ -1,5 +1,6 @@
 #include <iostream>
 #include <pthread.h>
+#include <cstdlib>
 
 #define NUM_THREADS 4
 
