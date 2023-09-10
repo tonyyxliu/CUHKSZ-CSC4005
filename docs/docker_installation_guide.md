@@ -18,6 +18,8 @@ Refer to the official website: https://www.docker.com/
 
 ### If your laptop has an NVIDIA card and supports CUDA
 
+This docker is able to run all the six parallel programming languages (AVX-512 not supported but with other instrcution-set parallelism).
+
 #### Prerequisite
 
 You need to install NVIDIA driver on your personal computer first, which supports CUDA 11.4.
@@ -104,9 +106,15 @@ nvc++ --version
 # nvc++ 21.7-0 64-bit target on x86-64 Linux -tp haswell
 # NVIDIA Compilers and Tools
 # Copyright (c) 2021, NVIDIA CORPORATION & AFFILIATES.  All rights reserved.
+
+# To compile OpenACC program on the cluster, you need to explicitly specify the CUDA version
+pgc++ -gpu cuda11.4 -acc -mp ./openacc_parallel.cpp -o openacc_parallel
 ```
 
 ### If your laptop does not have NVIDIA card equipped
+
+This docker cannot compile & execute CUDA and OpenACC programs, but are fine with the other 4 programming languages.
+
 ```bash
 # Pull a docker image of CentOS7 with basic MPI, Pthread, and OpenMP installed
 # It may be slow pulling images from Docker hub.
