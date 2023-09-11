@@ -16,19 +16,35 @@ Refer to the official website: https://www.docker.com/
 
 ## How to setup docker container for this course
 
+We have provided two different docker images for you. One for students with NVIDIA-card-equipped computer and the other forstudents without NVIDIA-card-equipped computer.
+
+For both containers, you can use either `docker pull` from Docker Hub online (maybe slow)
+or download the .tar file from the cluster login node, and use `docker load` to build image
+
+**Directory of Images .tar file on the Cluster**
+- With NVIDIA card (about 9GB):\
+  10.26.200.21:/CSC4005-resources/nvhpc:21.7-devel-cuda11.4-centos7.tar\
+  All six parallel languages supported
+
+
+- Without NVIDIA card (about 670MB):\
+  10.26.200.21:/CSC4005-resources/centos7_csc4005.tar\
+  Only vectorization, MPI, Pthread, and OpenMP supported
+
+**Notes:**
+By default, docker stores all the images under C:\. Please make sure you have enough disk space in 'C:\' or refer to this instruction to try to store docker images in another disk.
+[Instruction to change the docker default image location](#change-the-docker-default-image-location)
+
 ### If your laptop has an NVIDIA card and supports CUDA
 
-This docker is able to run all the six parallel programming languages (AVX-512 not supported but with other instrcution-set parallelism).
+This docker is able to run all the six parallel programming languages (AVX-512 instruction-set support depends on your CPU).
 
-#### Prerequisite
+#### Prerequisite: check if you have an compatible NVIDIA driver installed
 
 You need to install NVIDIA driver on your personal computer first, which supports CUDA 11.4.
 
 Refer to the official driver releases and search for the one you need according to the NVIDIA card you have.
 https://www.nvidia.com/Download/index.aspx?lang=en-us
-
-
-**How to check if there is an NVIDIA driver installed on my computer?**
 
 ```bash
 nvidia-smi
@@ -53,6 +69,11 @@ Sun Sep 10 21:19:27 2023
 +-----------------------------------------------------------------------------+
 ```
 
+Here, please check that the CUDA version supported by your NVIDIA driver is newer than CUDA-11.4.
+Otherwise, you need to update your NVIDIA driver first if you want to use the nvhpc container.
+
+**Installing Docker Image & Container**
+
 ```bash
 # Pull docker image from nvidia
 # It may be slow pulling images from Docker hub.
@@ -73,6 +94,8 @@ docker images
 # Here, you need to set the <IMAGE ID> as the one displayed as the result of `docker images`, 2306fd2cb44f in this case
 # Here, we bind port 22 of the docker container to the host machine as port 2222, so that we can SSH to the container through port 2222
 docker run -it -d -p 2222:22 --gpus all --name csc4005 <IMAGE ID>
+# If you want to mount a shared folder to the container, please add --volume flag
+docker run -it -d -p 2222:22 --gpus all --name csc4005 --volume /path/host/directory:/path/container/directory <IMAGE ID>
 
 # Check the docker container instance created just now
 docker container ps
@@ -107,7 +130,8 @@ nvc++ --version
 # NVIDIA Compilers and Tools
 # Copyright (c) 2021, NVIDIA CORPORATION & AFFILIATES.  All rights reserved.
 
-# To compile OpenACC program on the cluster, you need to explicitly specify the CUDA version
+# To compile OpenACC program in the container, you need to explicitly specify the CUDA version
+# On the cluster, you don't need this '-gpu cuda11.4' flag
 pgc++ -gpu cuda11.4 -acc -mp ./openacc_parallel.cpp -o openacc_parallel
 ```
 
@@ -141,7 +165,11 @@ docker container ps
 docker exec -it <CONTAINER ID> bash
 ```
 
-## How to connect to your docker container with SSH
+## [Optional] How to connect to your docker container with SSH
+
+This is just an alternative to write programs on your docker container.
+You can also mount a shared folder to the docker container and write programs
+on your host machine directly.
 
 ```bash
 # First, enter your container with `docker exec -it <CONTAINER ID> bash`
@@ -170,3 +198,48 @@ passwd root
 
 # Finally, use ssh -p 2222 root@localhost to connect to your docker container
 ```
+
+## Change the docker default image location
+
+This method was verified in Windows 10 Professional Edition (higher than or equal to version 19044) and the method needs the docker installation with WSL 2.
+
+Follow the instruction below, we can see that the default path of docker (/var/lib/docker) is the same as shown in Linux.
+
+```bash
+docker info
+
+--- output ---
+...
+Docker Root Dir: /var/lib/docker
+...
+```
+This means that docker relies on WSL for file mapping, so we need to modify docker's file mapping path through wsl, which can be understood as file mounting.
+
+The docker-desktop-data disk image in WSL 2 mode is usually located at the following location:
+```text
+C:\Users\<Your Name>\AppData\Local\Docker\wsl\data\ext4.vhdx
+```
+Follow the instructions below to relocate it to a different drive/directory and keep all existing Docker data.
+- Exit Docker Desktop, then, open a command prompt (cmd):
+```cmd
+wsl --list -v
+```
+You should be able to see the states and make sure all states are stopped.
+
+```cmd
+NAME                  STATE        VERSION
+docker-desktop        Stopped      2
+docker-desktop-data   Stopped      2
+```
+
+- Export docker-desktop-data to a file (backup image and related files) and then import back to WSL2, and set the path you want, use the following command:
+```cmd
+wsl --export docker-desktop-data "D:\\docker-desktop-data.tar"
+wsl --unregister docker-desktop-data
+wsl --import docker-desktop-data "D:\\<You like>" "D:\\docker-desktop-data.tar" --version 2
+```
+Please note that the C:\\Users\\<Your Name>\\AppData\\Local\\Docker\\wsl\\data\\ext4.vhdx file will be automatically deleted.
+
+Now start Docker Desktop and it will work normally.
+Don't forget to delete the D:\\docker-desktop-data.tar file last.
+
