@@ -109,8 +109,14 @@ docker exec -it <CONTAINER ID> bash
 
 # Now, you can interact with the docker container just like a normal linux machine.
 # You need to do some manipulations on the system path for your nvcc and pgc++ to work as expected
-echo 'export PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/21.7/cuda/11.4/bin:$PATH' >> ~/.bashrc
+echo export 'LD_LIBRARY_PATH'=`echo $LD_LIBRARY_PATH`:'$LD_LIBRARY_PATH' >> ~/.bashrc
+echo export 'PATH'=`echo $PATH`:'$PATH' >> ~/.bashrc
+
 source ~/.bashrc
+
+# Check if there are a long string output:
+echo $PATH
+echo $LD_LIBRARY_PATH
 
 # We should see expected output for the following commands
 nvcc --version
@@ -133,6 +139,9 @@ nvc++ --version
 # To compile OpenACC program in the container, you need to explicitly specify the CUDA version
 # On the cluster, you don't need this '-gpu cuda11.4' flag
 pgc++ -gpu cuda11.4 -acc -mp ./openacc_parallel.cpp -o openacc_parallel
+
+# To run mpi program in the container, you need use the following command:
+mpirun -n 4 --allow-run-as-root ./mpi_hello
 ```
 
 ### If your laptop does not have NVIDIA card equipped
