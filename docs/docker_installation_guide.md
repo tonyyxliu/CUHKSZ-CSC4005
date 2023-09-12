@@ -187,7 +187,7 @@ on your host machine directly.
 yum install -y openssh-server
 
 # Start sshd service
-/usr/sbin/sshd -D
+/usr/sbin/sshd
 # You may get the following error
 # [root@ b3426410ff43 /]# /usr/sbin/sshd
 # Could not load host key: /etc/ssh/ssh_host_rsa_key
@@ -203,7 +203,7 @@ ssh-keygen -t dsa -f /etc/ssh/ssh_host_ed25519_key -N ''
 passwd root
 
 # Restart sshd service
-/usr/sbin/sshd -D
+/usr/sbin/sshd
 
 # Finally, use ssh -p 2222 root@localhost to connect to your docker container
 ```
