@@ -1,3 +1,8 @@
+//
+// Created by Liu Yuxuan on 2023/9/14.
+// Email: 118010200@link.cuhk.edu.cn
+//
+
 #include <iostream>
 #include <cuda_runtime.h>
 #include <chrono>

@@ -1,5 +1,9 @@
 # Tutorial 1: Introduction & Environment Setup
 
+Arthor: Liu Yuxuan
+\
+Email: [118010200@link.cuhk.edu.cn](mailto:118010200@link.cuhk.edu.cn)
+
 ## Sample Program: Parallel Vector Addition
 
 ```bash
