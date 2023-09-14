@@ -8,6 +8,8 @@
 #include <chrono>
 #include <cmath>
 
+constexpr int VECTOR_SIZE = 100000000;  // Size of the vectors
+
 void addVectors(const float* a, const float* b, float* c, int size) {
   for (int i = 0; i < size; i++) {
     c[i] = a[i] + b[i];
@@ -22,74 +24,65 @@ __global__ void addVectorsCUDA(const float* a, const float* b, float* c, int siz
 }
 
 int main() {
-  int size = 100000000;  // Size of the vectors
   int numBlocks[] = {1, 2, 4, 8, 16, 32, 64, 128};  // Different numbers of blocks to test
 
   // Allocate memory on the host
-  float* h_a = new float[size];
-  float* h_b = new float[size];
-  float* h_c = new float[size];
+  float* h_a = new float[VECTOR_SIZE];
+  float* h_b = new float[VECTOR_SIZE];
+  float* h_c = new float[VECTOR_SIZE];
 
   // Initialize the vectors
-  for (int i = 0; i < size; i++) {
+  for (int i = 0; i < VECTOR_SIZE; i++) {
     h_a[i] = i;
     h_b[i] = i;
   }
 
   // Perform the vector addition on the CPU and record the time consumed
   auto cpuStartTime = std::chrono::high_resolution_clock::now();
-  addVectors(h_a, h_b, h_c, size);
+  addVectors(h_a, h_b, h_c, VECTOR_SIZE);
   auto cpuEndTime = std::chrono::high_resolution_clock::now();
-  auto cpuDuration = std::chrono::duration_cast<std::chrono::microseconds>(cpuEndTime - cpuStartTime).count();
+  auto cpuDuration = std::chrono::duration_cast<std::chrono::milliseconds>(cpuEndTime - cpuStartTime).count();
 
   // Print the result of the CPU computation
-  std::cout << "CPU Execution Time: " << cpuDuration << " microseconds" << std::endl;
+  std::cout << "CPU Execution Time: " << cpuDuration << " milliseconds" << std::endl;
 
   // Allocate memory on the device
   float* d_a, * d_b, * d_c;
-  cudaMalloc((void**)&d_a, size * sizeof(float));
-  cudaMalloc((void**)&d_b, size * sizeof(float));
-  cudaMalloc((void**)&d_c, size * sizeof(float));
+  cudaMalloc((void**)&d_a, VECTOR_SIZE * sizeof(float));
+  cudaMalloc((void**)&d_b, VECTOR_SIZE * sizeof(float));
+  cudaMalloc((void**)&d_c, VECTOR_SIZE * sizeof(float));
 
   // Copy the input vectors from host to device
-  cudaMemcpy(d_a, h_a, size * sizeof(float), cudaMemcpyHostToDevice);
-  cudaMemcpy(d_b, h_b, size * sizeof(float), cudaMemcpyHostToDevice);
+  cudaMemcpy(d_a, h_a, VECTOR_SIZE * sizeof(float), cudaMemcpyHostToDevice);
+  cudaMemcpy(d_b, h_b, VECTOR_SIZE * sizeof(float), cudaMemcpyHostToDevice);
 
   // Perform the vector addition on the GPU for different numbers of blocks
   for (int i = 0; i < sizeof(numBlocks) / sizeof(numBlocks[0]); i++) {
     cudaEvent_t start, stop;
-    float elapsedTime;
+    float gpuDuration;
 
     cudaEventCreate(&start);
     cudaEventCreate(&stop);
 
-    cudaEventRecord(start, 0); // 记录开始时间
+    cudaEventRecord(start, 0); // GPU start time
 
-    int blockSize = (int)ceil((float)size / numBlocks[i]);
-
-    // Record the time consumed for the GPU computation
-    auto gpuStartTime = std::chrono::high_resolution_clock::now();
+    int blockSize = (int)ceil((float)VECTOR_SIZE / numBlocks[i]);
 
     // Launch the kernel with specified number of blocks and threads
-    addVectorsCUDA<<<numBlocks[i], blockSize>>>(d_a, d_b, d_c, size);
+    addVectorsCUDA<<<numBlocks[i], blockSize>>>(d_a, d_b, d_c, VECTOR_SIZE);
 
     // Wait for GPU to finish
     cudaDeviceSynchronize();
 
-    auto gpuEndTime = std::chrono::high_resolution_clock::now();
-    auto gpuDuration = std::chrono::duration_cast<std::chrono::microseconds>(gpuEndTime - gpuStartTime).count();
-
     // Copy the result of the GPU computation from device to host
-    cudaMemcpy(h_c, d_c, size * sizeof(float), cudaMemcpyDeviceToHost);
+    cudaMemcpy(h_c, d_c, VECTOR_SIZE * sizeof(float), cudaMemcpyDeviceToHost);
 
-    cudaEventRecord(stop, 0); // 记录结束时间
+    cudaEventRecord(stop, 0); // GPU end time
     cudaEventSynchronize(stop);
 
-    cudaEventElapsedTime(&elapsedTime, start, stop); // 计算时间差
-
     // Print the result of the GPU computation
-    // std::cout << "GPU Execution Time (Blocks: " << numBlocks[i] << "): " << gpuDuration << " microseconds" << std::endl;
-    std::cout << "GPU Execution Time (Blocks: " << numBlocks[i] << "): " << elapsedTime << " milliseconds" << std::endl;
+    cudaEventElapsedTime(&gpuDuration, start, stop);
+    std::cout << "GPU Execution Time (Blocks: " << numBlocks[i] << "): " << gpuDuration << " milliseconds" << std::endl;
 
     // Calculate and display the speedup
     double speedup = cpuDuration / gpuDuration;
