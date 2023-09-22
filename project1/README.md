@@ -138,7 +138,7 @@ The image used for performance evaluation is a 20K JPEG image with around 250 mi
   - Try to avoid expensive arithmetic operations (for example, double-precision floating point division is very expensive, and takes a few dozens of cycles to finish).
   - Partition your data for computation in a proper way for balanced workload when doing parallelism.
 
-- **One Report in PDF (10%, No Page Limit)**
+- **One Report in PDF (10%, No Page Limit)**\
   The report does not have to be very long and beautiful to help you get good grade, but you need to include what you have done and what you have learned in this project.
   The following components should be included in the report:
   - How to compile and execute your program to get the expected output on the cluster.
