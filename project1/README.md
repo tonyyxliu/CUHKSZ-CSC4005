@@ -52,7 +52,7 @@ Gray = 0.299 * Red + 0.587 * Green + 0.114 * Blue
     <img src="images/Lena-RGB.jpg" width="45%" alt="Lena RGB"/>
     <img src="images/Lena-Gray.jpg" width="45%" align="right" alt="Lena Gray"/>
 </div>
-<p style="font-size: medium;text-align:center;">
+<p style="font-size: medium;" align="center">
     <strong>Convert Lena JPEG image (256x256) from RGB to Grayscale</strong>
 </p>
 
@@ -116,7 +116,7 @@ In this project, students are required to apply the simplest size-3 low-pass fil
 
 ### Benchmark Image
 
-The image used for performance evaluation is a 20K JPEG image with around 250 million pixels (19200 x 12995) retrieved by doing upper sampling on the 4K image, and the image has been uploaded to BlackBoard. Do not use Lena or the 4K image to do the performance evaluation on your report, because the problem size is too small to get the parallel speedup.
+The image used for performance evaluation is a 20K JPEG image with around 250 million pixels (19200 x 12995) retrieved by doing upper sampling on the 4K image, and the image has been uploaded to BlackBoard. Please download that image to your docker container or on the cluster. Do not use Lena or the 4K image to do the performance evaluation on your report, because the problem size is too small to get the parallel speedup.
 
 ### Requirements
 
@@ -278,7 +278,7 @@ sbatch ./src/scripts/sbatch_PartA.sh
 | 32                          | N/A        | N/A         | 257 | 62      | 126    | N/A  | N/A     |
 
 <div>
-    <img src="images/performance-evaluation.png" align="center" width="100%" alt="Performance Evaluation PartA"/>
+    <img src="images/performance-evaluation.png" align="center" alt="Performance Evaluation PartA"/>
 </div>
 <p style="font-size: medium;" align="center">
     <strong>Performance Evaluation of PartA (numbers refer to execution time in milliseconds)</strong>

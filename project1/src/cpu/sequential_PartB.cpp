@@ -12,7 +12,7 @@
 #include "utils.hpp"
 
 const int FILTER_SIZE = 3;
-const double smooth_filter[FILTER_SIZE][FILTER_SIZE] = {
+const double filter[FILTER_SIZE][FILTER_SIZE] = {
     {1.0 / 9, 1.0 / 9, 1.0 / 9},
     {1.0 / 9, 1.0 / 9, 1.0 / 9},
     {1.0 / 9, 1.0 / 9, 1.0 / 9}
