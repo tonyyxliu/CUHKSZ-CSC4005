@@ -78,6 +78,22 @@ Image Filtering involves applying a function to every pixel in an image or selec
 - soften
 - distort
 
+Two images below demostrate in detail how the image filtering is done. Basically, we have a filter matrix of given size (3 for example), and we slide that filter matrix across the image to compute the filtered value by element-wise multipling and summation. 
+
+<div>
+  <img src="../docs/images/what-is-image-filtering.png" alt="What is Image Filtering"/>
+  <p style="font-size: medium;" align="center">
+    <strong>How to do image filtering with filter matrix</strong>
+  </p>
+</div>
+
+<div>
+  <img src="../docs/images/image-filtering-example.png" alt="image filtering example"/>
+  <p style="font-size: medium;" align="center">
+    <strong>An example of image filtering of size 3</strong>
+  </p>
+</div>
+
 In this project, students are required to apply the simplest size-3 low-pass filter with equal weights to smooth the input JPEG image, which is shown below. Note that your program should also work for other filter matrices of size 3 with different weights, that means you should not do specific optimization on the 1 / 9 weight, like replacing multiplication with addition.
 
 <table>
@@ -143,9 +159,9 @@ The image used for performance evaluation is a 20K JPEG image with around 250 mi
   The following components should be included in the report:
   - How to compile and execute your program to get the expected output on the cluster.
   - Briefly explain how does each parallel programming model do computation in parallel? What are the similarities and differences between them. Explain these with what you have learned from the lectures (like different types of parallelism, ILP, DLP, TLP, etc).
+  - What kinds of optimizations have you tried to speed up your parallel program for PartB, and how does them work?
   - Show the experiment results you get for **both PartA and PartB**, and do some numerical analysis, such as calculating the speedup and efficiency, demonstrated with tables and figures.
   - What have you found from the experiment results? Is there any difference between the experiment resutls of PartA and PartB? If so, what may cause the differences.
-  - What kinds of optimizations have you tried to speed up your parallel program for PartB, and how does them work?
 
 - **Extra Credits (10%)**\
   If you can use any other methods to achieve a higher speedup than the sample solutions provided by the TA (Baseline peformance to be released).\
