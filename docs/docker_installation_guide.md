@@ -112,6 +112,10 @@ docker exec -it <CONTAINER ID> bash
 echo export 'LD_LIBRARY_PATH'=`echo $LD_LIBRARY_PATH`:'$LD_LIBRARY_PATH' >> ~/.bashrc
 echo export 'PATH'=`echo $PATH`:'$PATH' >> ~/.bashrc
 
+# The followings are essential if your host's cuda driver version is high (e.g., latest 537.xx). In some older versions, they may be not necessary. You can check by yourself. 
+echo "export PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/21.7/cuda/11.4/bin:$PATH" >> ~/.bashrc
+echo "export CUDA_TOOLKIT_PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/21.7/cuda/11.4" >> ~/.bashrc
+
 source ~/.bashrc
 
 # Check if there are a long string output:
