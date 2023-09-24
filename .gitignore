@@ -1,8 +1,10 @@
 # Excluded Directories
-/cmake-build-debug
-/cmake-build-release
-/build
+*/cmake-build-debug
+*/cmake-build-release
+*/build
 .idea
+.vscode
+.DS_Store
 
 # Prerequisites
 *.d
