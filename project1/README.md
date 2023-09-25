@@ -220,7 +220,8 @@ The programs need `cmake3` and `gcc-7` for compilation and execution. These upgr
 ```bash
 # Install cmake3 with yum
 yum install cmake3 -y
-cmake --version # output should be 3.17.5
+cmake3 --version # output should be 3.17.5
+# Note: use cmake3 to build the cmake project in your docker container
 
 # Install gcc/g++-7 with yum
 yum install -y centos-release-scl*
