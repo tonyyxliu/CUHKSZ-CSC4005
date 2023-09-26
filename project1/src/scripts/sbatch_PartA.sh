@@ -7,7 +7,8 @@
 #SBATCH --gres=gpu:1
 
 # Get the current directory
-CURRENT_DIR=$(cd $(dirname $0); pwd)
+
+CURRENT_DIR=$(pwd)/src/scripts
 echo "Current directory: ${CURRENT_DIR}"
 
 # Sequential PartA
