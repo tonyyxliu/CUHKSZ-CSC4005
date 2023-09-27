@@ -15,10 +15,8 @@
 JPEGMeta read_from_jpeg(const char* filepath) {
     // Open file to read from
     FILE* file = fopen(filepath, "rb");
-    if (file == NULL) {
-        std::cout << "无法打开图像文件" << std::endl;
+    if (file == NULL)
         return {NULL, 0, 0, 0};
-    }
     // Initialize JPEG Decoder
     struct jpeg_decompress_struct cinfo{};
     struct jpeg_error_mgr jerr{};
@@ -50,10 +48,8 @@ JPEGMeta read_from_jpeg(const char* filepath) {
 int write_to_jpeg(const JPEGMeta &data, const char* filepath) {
     // Open jpeg file to write to
     FILE* outputFile = fopen(filepath, "wb");
-    if (outputFile == NULL) {
-        std::cout << "无法创建输出图像文件" << std::endl;
+    if (outputFile == NULL)
         return -1;
-    }
     // Initialize JPEG Header
     struct jpeg_compress_struct cinfoOut{};
     struct jpeg_error_mgr jerrOut{};
