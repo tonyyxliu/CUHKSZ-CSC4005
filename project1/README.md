@@ -177,7 +177,7 @@ According to the professor, the extra credits in project 1 cannot be added to ot
 
 ### Dependency Installation
 
-#### Libjpeg
+#### Libjpeg (In docker container only)
 
 Libjpeg is a tool that we use to manipulate JPEG images. You need to install its packages with yum in your docker container instead of your host OS (Windows or MacOS). This package has been installed on the cluster, so feel free to use it there.
 
@@ -227,7 +227,8 @@ cmake3 --version # output should be 3.17.5
 yum install -y centos-release-scl*
 yum install -y devtoolset-7-gcc*
 scl -l
-scl enable devtoolset-7 bash
+echo "export PATH=/opt/rh/devtoolset-7/root/usr/bin:$PATH" >> ~/.bashrc
+source ~/.bashrc
 gcc -v # output should be 7.3.1
 ```
 

@@ -108,14 +108,15 @@ docker container ps
 docker exec -it <CONTAINER ID> bash
 
 # Now, you can interact with the docker container just like a normal linux machine.
-# You need to do some manipulations on the system path for your nvcc and pgc++ to work as expected
-echo export 'LD_LIBRARY_PATH'=`echo $LD_LIBRARY_PATH`:'$LD_LIBRARY_PATH' >> ~/.bashrc
-echo export 'PATH'=`echo $PATH`:'$PATH' >> ~/.bashrc
-
 # The followings are essential if your host's cuda driver version is high (e.g., latest 537.xx). In some older versions, they may be not necessary. You can check by yourself. 
+echo "export PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/21.7/compilers/bin:$PATH" >> ~/.bashrc
 echo "export PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/21.7/cuda/11.4/bin:$PATH" >> ~/.bashrc
 echo "export CUDA_TOOLKIT_PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/21.7/cuda/11.4" >> ~/.bashrc
+source ~/.bashrc
 
+# [Optional] If you login the cluster with SSH, your $PATH may be incomplete. In this case, please execute the following commands
+echo export 'LD_LIBRARY_PATH'=`echo $LD_LIBRARY_PATH`:'$LD_LIBRARY_PATH' >> ~/.bashrc
+echo export 'PATH'=`echo $PATH`:'$PATH' >> ~/.bashrc
 source ~/.bashrc
 
 # Check if there are a long string output:
@@ -178,6 +179,25 @@ docker container ps
 docker exec -it <CONTAINER ID> bash
 ```
 
+## How to upgrade gcc and cmake in docker container
+
+The programs of our projects need `cmake3` and `gcc-7` for compilation and execution.
+
+```bash
+# Install cmake3 with yum
+yum install cmake3 -y
+cmake3 --version # output should be 3.17.5
+# Note: use cmake3 to build the cmake project in your docker container
+
+# Install gcc/g++-7 with yum
+yum install -y centos-release-scl*
+yum install -y devtoolset-7-gcc*
+scl -l
+echo "export PATH=/opt/rh/devtoolset-7/root/usr/bin:$PATH" >> ~/.bashrc
+source ~/.bashrc
+gcc -v # output should be 7.3.1
+```
+
 ## [Optional] How to connect to your docker container with SSH
 
 This is just an alternative to write programs on your docker container.
@@ -213,6 +233,16 @@ passwd root
 ```
 
 ## Change the docker default image location
+
+### Method-1: Configure in Docker Desktop
+
+Please refer to the official document and the GitHub issue raised by SummerSunnyNight for more details.
+
+Official Document: https://docs.docker.com/desktop/settings/windows/#resources
+
+GitHub Issue #14: https://github.com/tonyyxliu/CSC4005-2023Fall/issues/14
+
+### Method-2: Configure in the Terminal [Windows Only]
 
 This method was verified in Windows 10 Professional Edition (higher than or equal to version 19044) and the method needs the docker installation with WSL 2.
 
