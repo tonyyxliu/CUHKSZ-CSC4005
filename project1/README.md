@@ -296,10 +296,41 @@ sbatch ./src/scripts/sbatch_PartA.sh
 | 32                          | N/A        | N/A         | 257 | 62      | 126    | N/A  | N/A     |
 
 <div>
-    <img src="images/performance-evaluation.png" align="center" alt="Performance Evaluation PartA"/>
+    <img src="images/performance-evaluation-PartA.png" align="center" alt="Performance Evaluation PartA"/>
 </div>
 <p style="font-size: medium;" align="center">
     <strong>Performance Evaluation of PartA (numbers refer to execution time in milliseconds)</strong>
+</p>
+
+### PartB (Baseline Performance)
+
+If your program can achieve similar performance to the baseline shown below, you can get full mark for your performance part, which weights for 30%.
+
+If your program can achieve better performance (should be obvious, not 1-2%) with reasonable justification in your report, you can get extra credits.
+
+If your program behaves poor performance to the baseline, points will be deducted in performance part.
+
+**Experiment Setup**
+
+- On the cluster
+- JPEG image (19200 x 12995 = 250 million pixels)
+- [sbatch file here](src/scripts/sbatch_PartB.sh)
+- Performance measured as execution time in milliseconds
+
+| Number of Processes / Cores | Sequential | SIMD (AVX2) | MPI  | Pthread | OpenMP | CUDA | OpenACC |
+|-----------------------------|------------|-------------|------|---------|--------|------|---------|
+| 1                           | 7247       | 4335        | 7324 | 8066    | 8542   | 32   | 23      |
+| 2                           | N/A        | N/A         | 7134 | 7229    | 7299   | N/A  | N/A     |
+| 4                           | N/A        | N/A         | 3764 | 3836    | 3886   | N/A  | N/A     |
+| 8                           | N/A        | N/A         | 2093 | 1835    | 1862   | N/A  | N/A     |
+| 16                          | N/A        | N/A         | 1083 | 924     | 1089   | N/A  | N/A     |
+| 32                          | N/A        | N/A         | 694  | 535     | 605    | N/A  | N/A     |
+
+<div style="display:flex;justify-content:space-around; align-items:center;">
+    <img src="images/performance-evaluation-PartB.png" alt="Performance Evaluation PartB"/>
+</div>
+<p style="font-size: medium;" align="center">
+    <strong>Performance Evaluation of PartB (numbers refer to execution time in milliseconds)</strong>
 </p>
 
 ## Appendix

@@ -1,13 +1,12 @@
 #!/bin/bash
 #SBATCH -o ./Project1-PartA-Results.txt
-#SBATCH -p Debug
+#SBATCH -p Project
 #SBATCH -J Project1-PartA
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=32
 #SBATCH --gres=gpu:1
 
 # Get the current directory
-
 CURRENT_DIR=$(pwd)/src/scripts
 echo "Current directory: ${CURRENT_DIR}"
 
