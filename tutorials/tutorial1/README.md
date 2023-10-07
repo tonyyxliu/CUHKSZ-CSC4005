@@ -14,7 +14,7 @@ mpic++ ./mpi_vector_addition.cpp -o ./mpi_vector_addition
 g++ -fopenmp ./openmp_vector_addition.cpp -o ./openmp_vector_addition
 
 # Pthread
-g++ lpthread ./pthread_vector_addition.cpp -o ./pthread_vector_addition
+g++ -lpthread ./pthread_vector_addition.cpp -o ./pthread_vector_addition
 
 # CUDA
 nvcc ./cuda_vector_addition.cu -o ./cuda_vector_addition
