@@ -28,17 +28,13 @@ int main(int argc, char **argv)
     int width = input_jpeg.width;
     int height = input_jpeg.height;
     int num_channels = input_jpeg.num_channels;
+    unsigned char *buffer = input_jpeg.buffer;
     unsigned char *grayImage = new unsigned char[width * height];
-    unsigned char *buffer = new unsigned char[width * height * num_channels];
-    for (int i = 0; i < width * height * num_channels; i++)
-    {
-        buffer[i] = input_jpeg.buffer[i];
-    }
 #pragma acc enter data copyin(grayImage[0 : width * height], \
                               buffer[0 : width * height * num_channels])
 
 #pragma acc update device(grayImage[0 : width * height], \
-                          buffer[0 : width * height * num_channels])
+                              buffer[0 : width * height * num_channels])
 
     auto start_time = std::chrono::high_resolution_clock::now();
 #pragma acc parallel present(grayImage[0 : width * height],             \
@@ -75,7 +71,6 @@ int main(int argc, char **argv)
     // Release allocated memory
     delete[] input_jpeg.buffer;
     delete[] grayImage;
-    delete[] buffer;
     std::cout << "Transformation Complete!" << std::endl;
     std::cout << "Execution Time: " << elapsed_time.count()
               << " milliseconds\n";
