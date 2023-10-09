@@ -30,28 +30,28 @@ int main(int argc, char **argv)
     int num_channels = input_jpeg.num_channels;
     unsigned char *buffer = input_jpeg.buffer;
     unsigned char *grayImage = new unsigned char[width * height];
-#pragma acc enter data copyin(grayImage[0 : width * height], \
-                              buffer[0 : width * height * num_channels])
+    std::chrono::milliseconds elapsed_time;
 
-    auto start_time = std::chrono::high_resolution_clock::now();
-#pragma acc parallel present(grayImage[0 : width * height],             \
-                             buffer[0 : width * height * num_channels]) \
-    num_gangs(1024)
+// create space and copy to device without write to host
+#pragma acc data copyin(buffer[0 : width * height * num_channels])
+
+// create space and copy to device, and write to host at the end of data scope
+#pragma acc data copy(grayImage[0 : width * height])
     {
-#pragma acc loop independent
+        auto start_time = std::chrono::high_resolution_clock::now();
+
+#pragma acc parallel loop independent num_gangs(1024)
         for (int i = 0; i < width * height; i++)
         {
             grayImage[i] = (0.299 * buffer[i * num_channels] +
                             0.587 * buffer[i * num_channels + 1] +
                             0.114 * buffer[i * num_channels + 2]);
         }
+
+        auto end_time = std::chrono::high_resolution_clock::now();
+        elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(
+            end_time - start_time);
     }
-    auto end_time = std::chrono::high_resolution_clock::now();
-
-#pragma acc exit data copyout(grayImage[0 : width * height])
-
-    auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(
-        end_time - start_time);
 
     // Write GrayImage to output JPEG
     const char *output_filepath = argv[2];
