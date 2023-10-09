@@ -33,9 +33,6 @@ int main(int argc, char **argv)
 #pragma acc enter data copyin(grayImage[0 : width * height], \
                               buffer[0 : width * height * num_channels])
 
-#pragma acc update device(grayImage[0 : width * height], \
-                              buffer[0 : width * height * num_channels])
-
     auto start_time = std::chrono::high_resolution_clock::now();
 #pragma acc parallel present(grayImage[0 : width * height],             \
                              buffer[0 : width * height * num_channels]) \
@@ -50,8 +47,6 @@ int main(int argc, char **argv)
         }
     }
     auto end_time = std::chrono::high_resolution_clock::now();
-#pragma acc update self(grayImage[0 : width * height], \
-                        buffer[0 : width * height * num_channels])
 
 #pragma acc exit data copyout(grayImage[0 : width * height])
 
