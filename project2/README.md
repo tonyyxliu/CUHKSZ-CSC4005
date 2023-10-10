@@ -116,9 +116,8 @@ As part of the bonus task, you should submit detailed instructions in your repor
       **Note:** The raw profiling results may be very long. Please extract some of the useful items to show in your report, and remember to carry all the raw profiling results for your programs when you submit your project on BB.
 
 - **Extra Credits (10%)**
-  - CUDA  Implementation (10%)
-  - OpenACC Implementation (10%)
-   If you can pass all the testcases we provide, you can get the points. Optimized performance is not required. Choose one from CUDA and OpenACC to implement is enough to get full mark for extra credits.
+  - CUDA  Implementation (10%) or OpenACC Implementation (10%)
+  - If you can pass all the testcases we provide, you can get the points. Optimized performance is not required. Choose one from CUDA and OpenACC to implement is enough to get full mark for extra credits.
   - Any interesting discoveries or discussions regarding the experiment results.
 
 ### The Extra Credit Policy
