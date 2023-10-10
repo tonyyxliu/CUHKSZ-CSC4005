@@ -173,6 +173,36 @@ The image used for performance evaluation is a 20K JPEG image with around 250 mi
 ### The Extra Credit Policy
 According to the professor, the extra credits in project 1 cannot be added to other projects to make them full mark. The credits are the honor you received from the professor and the teaching stuff, and the professor may help raise you to a higher grade level if you are at the boundary of two grade levels and he think you deserve a better grade with your extra credits. For example, if you are the top students with B+ grade, and get enough extra credits, the professor may raise you to A- grade.
 
+### Grading Policy for Performance Part
+
+Note that the performance weights for 30% in total and each program accounts for 5%. Each program is graded independently so that even a highly optimized MPI program cannot save a poor OpenMP program.
+
+Suppose the execution time of your program is T, then
+
+- For SIMD program,
+  - Case-1: T <= 125% * Baseline                  --> 5%
+  - Case-2: T in [125% - 150%] of Baseline   --> 2.5%
+  - Case-3: T > 150% * Baseline                    --> 0%
+
+- For MPI, OpenMP, and Pthread
+All the 6 experiment setup will be graded (number of cores/processes from 1, 2, 4, 8, 16 to 32). Each experiment setup weights for 1%, and the maximum you can get for each program is 5%. For each experiment setup, the grading policy is:
+  - Case-1: T  > 125% * Baseline                   --> 0%
+  - Case-2: T in [100% - 125%] of Baseline  --> 1%
+  - Case-3: T < 90% * Baseline                      --> 2%   (The 90% requirement here is to avoid the performance instability for different trials)
+  The 2% in Case-3 means that you have an extra 1% that can fill the point deduction of another experiment setup. Therefore, even your program is slow for 1 and 2 cores/processes, you can still get all the 5% for this program if you have highly optimzed parallel version using more computing resources.
+
+- For the 2 GPU programs (CUDA and OpenACC),
+  - Case-1: T <= 200% * Baseline                  --> 5%
+  - Case-2: T in [200% - 300%] of Baseline   --> 2.5%
+  - Case-3: T > 300% * Baseline                    --> 0%
+
+### Grading Policy for Late Submission
+1. late submission for less than 10 minutes after then DDL is tolerated for possible issues during submission.
+2. 10 Points deduction for each day after the DDL (11 minutes late will be considered as one day, so be careful)
+3. Zero point if you submitted your project late for more than two days
+
+If you have some special reasaons for late submission, please send email to the professor and c.c to TA Liu Yuxuan.
+
 ## How to execute the sample programs in PartA?
 
 ### Dependency Installation
