@@ -373,11 +373,3 @@ Download here: https://developer.nvidia.com/nsight-systems/get-started
 You can open the `qdrep` file generated on the cluster and get a visualization result similar to the following:
 
 ![Nsight System GUI](images/profiling/Nsight-System.png)
-
-
-## TODO: Profiling of Power Consumption on Slurm
-
-Besides, as mentioned by Prof.Hsu, the power budget is becoming increasingly important, very likely more important than the budget to buy those machines for a HPC cluster. As a result, we also need to find way to profile the power consumption of our programs.
-
-Many of you may have heard of the Moore's law, and know that the number of transistors on a chip is increasing very slowly in recent years. However, another important law that is often ignored is the Dennard Scaling, which states that the power density per area on the chip stay unchanged no matter how many transistors are there. The Dennard Scaling has been correct for a few decades, but in recent years it seems that this law no longer holds since we can no longer lower the voltage in the transistors. As a result,...
-
