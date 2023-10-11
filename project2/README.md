@@ -4,11 +4,11 @@
 
 ### Release Date:
 
-October 10th，2023 (Beijing Time, UTC+08:00)
+October 11th，2023 (Beijing Time, UTC+08:00)
 
 ### Deadline:
 
-11:59 P.M., October 23rd, 2023 (Beijing Time, UTC+08:00)
+11:59 P.M., October 27th, 2023 (Beijing Time, UTC+08:00)
 
 ### TA In Charge of This Assignment
 
