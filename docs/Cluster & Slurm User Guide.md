@@ -196,12 +196,12 @@ There are two partitions in our cluster: **Debug** and **Project**.
   </tr>
   <tr>
     <td align="center">Max Node Limit</td>
-    <td align="center">1</td>
-    <td align="center">1</td>
+    <td align="center">2</td>
+    <td align="center">4</td>
   </tr>
   <tr>
-    <td align="center">Max Logical Core Limit</td>
-    <td align="center">8</td>
+    <td align="center">Max Logical Core Limit Per Node</td>
+    <td align="center">40</td>
     <td align="center">40</td>
   </tr>
   <tr>
@@ -251,7 +251,7 @@ try `salloc --help` or `srun --help`.
     <td>
       number of nodes on which to run
       <br/>
-      <strong>Max Limit: 1 for both Debug and Project partitions</strong> 
+      <strong>Max Limit: 2 for Debug partition and 4 for Project partition</strong> 
     </td>
   </tr>
   <tr>
@@ -259,7 +259,7 @@ try `salloc --help` or `srun --help`.
     <td>
       number of processors required
       <br/>
-      <strong>Max Limit: 8 for Debug partition and 40 for Project partition</strong>
+      <strong>Max Limit: 2x40=80 for Debug partition and 4x40=160 for Project partition</strong>
     </td>
   </tr>
   <tr>
