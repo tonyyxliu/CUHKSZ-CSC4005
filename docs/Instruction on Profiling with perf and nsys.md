@@ -113,6 +113,22 @@ Execution Time: 7210 milliseconds
        1.331405000 seconds sys
 ```
 
+##### Multi-Process Profiling with MPI
+
+Since MPI is Multi-Process program, and we need to do profiling on each of the processes with the following command:
+
+**On Docker Container**
+```bash
+mpirun -np {Num of Processes} perf stat -e cpu-cycles,cache-misses,page-faults ./src/cpu/mpi_PartA /path/to/input.jpg /path/to/output.jpg
+```
+
+**On the Cluster**
+```bash
+srun -np {Num of Processes} perf stat -e cpu-cycles,cache-misses,page-faults ./src/cpu/mpi_PartA /path/to/input.jpg /path/to/output.jpg
+```
+
+By executing the command above, you will get several program counter outputs in the terminal, each representing one rank or process in your MPI program. The terminal output may be out-of-order due to the independence between each process. If you think the output is hard to analyze, you don't need to include that in your report.
+
 #### Method-2：Detailed Profiling with `perf record` and `perf report`
 
 The basic command to do perf recoding is the following. If you want to profile programs on the cluster with slurm, then you simply add the slurm command and options in front of the perf record.
@@ -157,6 +173,9 @@ By clicking each of the three items, you can get the detailed profiling results 
 
 ![perf-report-page-faults](images/profiling/perf-report-page-faults.png)
 
+##### Multi-Process Profiling with MPI
+
+`perf` can follow spawned child processes, and we can use `perf record` to get one single `perf.data` file containing the profiling information for all the local MPI processes. However, we cannot use `perf record` to profile the individual MPI ranks, and we can only use `perf stat`.
 
 #### Configure `perf` for Customized Profiling
 
@@ -199,6 +218,16 @@ List of pre-defined events (to be used in -e):
   L1-icache-load-misses                              [Hardware cache event]
   LLC-load-misses                                    [Hardware cache event]
 ```
+
+### [Optional] Virtualization of `perf` Profiling Results
+
+`FlameGraph` is a very popular tool used for visualizing your profiling results with `perf` and some other profiling tools. Please learn from the internet on how to use it if you are interested.
+
+GitHub link: https://github.com/brendangregg/FlameGraph
+
+A demo output SVG may look like the following:
+
+![FlamGraph Demo SVG](images/profiling/flamegraph-demo.png)
 
 
 ## `nsys` for GPU Profiling
@@ -364,7 +393,7 @@ Running [/opt/nvidia/hpc_sdk/Linux_x86_64/21.7/profilers/Nsight_Systems/target-l
      0.0            1,597          1        1,597.0        1,597        1,597           0.0  bind
 ```
 
-#### Method-2: Use Nsight System GUI Window [Optional]
+#### [Optional] Method-2: Use Nsight System GUI Window
 
 If you are interested and want to have a try, you can download the NVIDIA Nsight System on your personal computer for GUI Visualization of the profiling results:
 
