@@ -75,8 +75,15 @@ Finally, you are tasked with introducing process-level parallelism to your dense
 
 1. Complete the `Matrix matrix_multiply_mpi(const Matrix& matrix1, const Matrix& matrix2)` function in `mpi.cpp` to extend the application of process-level parallelism to your implementation using MPI. Additionally, you need to edit the `main` function to incorporate other MPI-specific logic, such as process communication.
    1. **Note: You should build upon the work from Task 3.**
-2. In your experiments, keep the total thread num fixed at 32 (where process num * thread num per process = 32), but adjust the process num and thread num per process accordingly (1 x 32, 2 x 16, 4 x 8, 8 x 4, 16 x 2, 32 x 1). Observe the performance changes. 
+2. In your experiments, keep the total thread num fixed at 32 (where `process num` * `thread num per process` = 32), but adjust the process num and thread num per process accordingly (1 x 32, 2 x 16, 4 x 8, 8 x 4, 16 x 2, 32 x 1). Observe the performance changes. 
 3. In your report, demonstrate the performance improvements (if any) achieved after implementing these changes.
+
+### Extended Experiment for MPI using 64 Threads on Multiple Nodes
+
+You may wonder why message passing is needed in our project since we run programs in one single node, and your concern is correct.
+Basically, message passing is unable to give you performance as good ad shared memory programs like Pthread and OpenMP. However, what if we want more threads than one node can provide? That is what the MPI is good at, that is, scalability, which is very important for parallel programming and high-performance computing.
+
+In your assignment, you need to do a extra experiment on Task 4 using 64 threads in total (where `process num` * `thread num per process` = 64). We have reconfigured the cluster so that everyone can allocate at most 2 nodes in Debug partition, and 4 nodes in Project partition. Please cherish the computing resources and release them once you finished the computation, especially on the DDL day.
 
 ## Extra Credits: GPU Matrix Multiplication
 
@@ -123,11 +130,28 @@ As part of the bonus task, you should submit detailed instructions in your repor
 ### The Extra Credit Policy
 According to the professor, the extra credits in project 1 cannot be added to other projects to make them full mark. The credits are the honor you received from the professor and the teaching stuff, and the professor may help raise you to a higher grade level if you are at the boundary of two grade levels and he think you deserve a better grade with your extra credits. For example, if you are the top students with B+ grade, and get enough extra credits, the professor may raise you to A- grade.
 
+### Grading Policy for Performance
+Note that the performance weights for 30% in total and each program accounts for 5%. Each program is graded independently so that even a highly optimized MPI program cannot save a poor OpenMP program.
+
+Suppose the execution time of your program is T, then
+
+# For Task 1 & 2,
+Case-1: T <= 125% * Baseline                  --> 5%
+Case-2: T in [125% - 150%] of Baseline        --> 2.5%
+Case-3: T > 150% * Baseline                   --> 0%
+
+# For Task 3 & 4
+All the 6 experiment setup will be graded (number of cores/processes from 1, 2, 4, 8, 16 to 32). Each experiment setup weights for 1%, and the maximum you can get for each program is 5%. For each experiment setup, the grading policy is:
+Case-1: T  > 125% * Baseline                   --> 0%
+Case-2: T in [100% - 125%] of Baseline         --> 1%
+Case-3: T < 90% * Baseline                     --> 2%   (The 90% requirement here is to avoid the performance instability for different trials)
+The 2% in Case-3 means that you have an extra 1% that can fill the point deduction of another experiment setup. Therefore, even your program is slow for 1 and 2 cores/processes, you can still get all the 5% for this program if you have highly optimized parallel version using more computing resources.
+
 ### Grading Policy for Late Submission
 1. late submission for less than 10 minutes after then DDL is tolerated for possible issues during submission.
 2. 10 Points deduction for each day after the DDL (11 minutes late will be considered as one day, so be careful)
 3. Zero point if you submitted your project late for more than two days
-If you have some special reasaons for late submission, please send email to the professor and c.c to TA Liu Yuxuan.
+If you have some special reasons for late submission, please send email to the professor and c.c to TA Liu Yuxuan.
 
 ### File Structure to Submit on BlackBoard
 
