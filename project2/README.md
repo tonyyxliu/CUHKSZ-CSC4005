@@ -83,7 +83,9 @@ Finally, you are tasked with introducing process-level parallelism to your dense
 You may wonder why message passing is needed in our project since we run programs in one single node, and your concern is correct.
 Basically, message passing is unable to give you performance as good ad shared memory programs like Pthread and OpenMP. However, what if we want more threads than one node can provide? That is what the MPI is good at, that is, scalability, which is very important for parallel programming and high-performance computing.
 
-In your assignment, you need to do a extra experiment on Task 4 using 64 threads in total (where `process num` * `thread num per process` = 64). We have reconfigured the cluster so that everyone can allocate at most 2 nodes in Debug partition, and 4 nodes in Project partition. Please cherish the computing resources and release them once you finished the computation, especially on the DDL day.
+In your assignment, you need to do an extra experiment on Task 4 using 64 threads in total (where `process num` * `thread num per process` = 64). We have reconfigured the cluster so that everyone can allocate at most 2 nodes in Debug partition, and 4 nodes in Project partition. Please cherish the computing resources and release them once you finished the computation, especially on the DDL day.
+
+**Note:** the 64-thread performance is not graded, so you just need to run the experiment and include the experiment results in your report.
 
 ## Extra Credits: GPU Matrix Multiplication
 
@@ -135,17 +137,12 @@ Note that the performance weights for 30% in total and each program accounts for
 
 Suppose the execution time of your program is T, then
 
-# For Task 1 & 2,
+# For Task 1 & 2 & 3 & 4
 Case-1: T <= 125% * Baseline                  --> 5%
 Case-2: T in [125% - 150%] of Baseline        --> 2.5%
 Case-3: T > 150% * Baseline                   --> 0%
 
-# For Task 3 & 4
-All the 6 experiment setup will be graded (number of cores/processes from 1, 2, 4, 8, 16 to 32). Each experiment setup weights for 1%, and the maximum you can get for each program is 5%. For each experiment setup, the grading policy is:
-Case-1: T  > 125% * Baseline                   --> 0%
-Case-2: T in [100% - 125%] of Baseline         --> 1%
-Case-3: T < 90% * Baseline                     --> 2%   (The 90% requirement here is to avoid the performance instability for different trials)
-The 2% in Case-3 means that you have an extra 1% that can fill the point deduction of another experiment setup. Therefore, even your program is slow for 1 and 2 cores/processes, you can still get all the 5% for this program if you have highly optimized parallel version using more computing resources.
+**Note:** This time, for task 3 & 4 (OpenMP and MPI), only the 32 thread performance will be graded to make life easier.
 
 ### Grading Policy for Late Submission
 1. late submission for less than 10 minutes after then DDL is tolerated for possible issues during submission.
