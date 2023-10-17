@@ -78,7 +78,7 @@ Finally, you are tasked with introducing process-level parallelism to your dense
 2. In your experiments, keep the total thread num fixed at 32 (where `process num` * `thread num per process` = 32), but adjust the process num and thread num per process accordingly (1 x 32, 2 x 16, 4 x 8, 8 x 4, 16 x 2, 32 x 1). Observe the performance changes. 
 3. In your report, demonstrate the performance improvements (if any) achieved after implementing these changes.
 
-### Extended Experiment for MPI using 64 Threads on Multiple Nodes
+### Extended Experiment for MPI using 64 Threads on Multiple Nodes [Not Graded]
 
 You may wonder why message passing is needed in our project since we run programs in one single node, and your concern is correct.
 Basically, message passing is unable to give you performance as good ad shared memory programs like Pthread and OpenMP. However, what if we want more threads than one node can provide? That is what the MPI is good at, that is, scalability, which is very important for parallel programming and high-performance computing.
@@ -138,9 +138,9 @@ Note that the performance weights for 30% in total and each program accounts for
 Suppose the execution time of your program is T, then
 
 # For Task 1 & 2 & 3 & 4
-Case-1: T <= 125% * Baseline                  --> 5%
-Case-2: T in [125% - 150%] of Baseline        --> 2.5%
-Case-3: T > 150% * Baseline                   --> 0%
+- Case-1: T <= 125% * Baseline                  --> 5%
+- Case-2: T in [125% - 150%] of Baseline        --> 2.5%
+- Case-3: T > 150% * Baseline                   --> 0%
 
 **Note:** This time, for task 3 & 4 (OpenMP and MPI), only the 32 thread performance will be graded to make life easier.
 
