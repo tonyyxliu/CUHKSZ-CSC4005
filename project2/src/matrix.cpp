@@ -25,10 +25,12 @@ Matrix::Matrix(size_t rows, size_t cols) : rows(rows), cols(cols) {
 
 Matrix::~Matrix() {
     // Destructor to free memory
-    for (size_t i = 0; i < rows; ++i) {
-        delete[] data[i];
+    if (data != nullptr) {
+        for (size_t i = 0; i < rows; ++i) {
+            delete[] data[i];
+        }
+        delete[] data;
     }
-    delete[] data;
 }
 
 int* Matrix::operator[](size_t rowIndex) {
@@ -102,4 +104,32 @@ void Matrix::saveToFile(const std::string& filename) const {
     }
 
     outputFile.close();
+}
+
+Matrix::Matrix(Matrix&& other) noexcept {
+    data = other.data;
+    rows = other.rows;
+    cols = other.cols;
+    other.data = nullptr;
+    other.rows = 0;
+    other.cols = 0;
+}
+
+Matrix& Matrix::operator=(Matrix&& other) noexcept {
+    // Free the memory of the current object
+    if (data != nullptr) {
+        for (size_t i = 0; i < rows; ++i) {
+            delete[] data[i];
+        }
+        delete[] data;
+    }
+    // Move the data from the other object
+    data = other.data;
+    rows = other.rows;
+    cols = other.cols;
+    // Reset the other object
+    other.data = nullptr;
+    other.rows = 0;
+    other.cols = 0;
+    return *this;
 }
