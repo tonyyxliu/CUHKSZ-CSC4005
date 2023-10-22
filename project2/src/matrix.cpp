@@ -116,6 +116,10 @@ Matrix::Matrix(Matrix&& other) noexcept {
 }
 
 Matrix& Matrix::operator=(Matrix&& other) noexcept {
+    // prevent self-assignment
+    if (this == &other) {
+        return *this;
+    }
     // Free the memory of the current object
     if (data != nullptr) {
         for (size_t i = 0; i < rows; ++i) {
