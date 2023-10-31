@@ -4,11 +4,11 @@
 
 ### Release Date:
 
-October 31rd，2023 (Beijing Time, UTC+08:00)
+October 31st，2023 (Beijing Time, UTC+08:00)
 
 ### Deadline:
 
-11:59 P.M., November 18th, 2023 (Beijing Time, UTC+08:00)
+11:59 P.M., November 17th, 2023 (Beijing Time, UTC+08:00)
 
 ### Teaching Stuff In Charge of This Assignment
 
@@ -297,7 +297,7 @@ void mergeSort(std::vector<int>& vec, int l, int r) {
 }
 ```
 
-Above is the sequential version of merge sort, and your task is to implement a **thread-level parallel merge sort** in `src/mergesort/parallel.cpp`. You can choose to use `OpenMP`, `Pthreads`, `std::thread`, or even a combination of them to complete the task.
+Above is the sequential version of merge sort, and your task is to implement a **thread-level parallel merge sort** in `src/mergesort/bonus.cpp`. You can choose to use `OpenMP`, `Pthreads`, `std::thread`, or even a combination of them to complete the task.
 
 #### Hints:
 
