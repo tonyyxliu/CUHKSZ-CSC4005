@@ -44,6 +44,14 @@ class Matrix {
 
     // Save a matrix to a file
     void saveToFile(const std::string& filename) const;
+
+    // disable copy
+    Matrix(const Matrix&) = delete;
+    Matrix& operator=(const Matrix&) = delete;
+
+    // enable move
+    Matrix(Matrix&&) noexcept;
+    Matrix& operator=(Matrix&&) noexcept;
 };
 
 #endif
