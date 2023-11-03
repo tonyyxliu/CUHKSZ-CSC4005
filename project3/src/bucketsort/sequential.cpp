@@ -31,7 +31,7 @@ void bucketSort(std::vector<int>& vec, int num_buckets) {
     int small_bucket_size = range / num_buckets;
     int large_bucket_size = small_bucket_size + 1;
     int large_bucket_num = range - small_bucket_size * num_buckets;
-    int boundary = large_bucket_num * large_bucket_size;
+    int boundary = min_val + large_bucket_num * large_bucket_size;
 
     std::vector<std::vector<int>> buckets(num_buckets);
     // Pre-allocate space to avoid re-allocation
