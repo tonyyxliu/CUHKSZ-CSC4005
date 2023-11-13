@@ -36,7 +36,7 @@ void bucketSort(std::vector<int>& vec, int num_buckets) {
     std::vector<std::vector<int>> buckets(num_buckets);
     // Pre-allocate space to avoid re-allocation
     for (std::vector<int>& bucket : buckets) {
-        bucket.reserve(large_bucket_num);
+        bucket.reserve(large_bucket_size);
     }
 
     // Place each element in the appropriate bucket
