@@ -8,7 +8,7 @@ November 21th，2023 (Beijing Time, UTC+08:00)
 
 ### Deadline:
 
-11:59 P.M., December 10th, 2023 (Beijing Time, UTC+08:00)
+11:59 P.M., December 8th, 2023 (Beijing Time, UTC+08:00)
 
 ### TA/USTF In Charge of This Assignment
 
