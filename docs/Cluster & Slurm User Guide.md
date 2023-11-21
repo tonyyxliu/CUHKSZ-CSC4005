@@ -107,7 +107,7 @@ The following information holds for every machine in the cluster.
   </tr>
   <tr>
     <td align="center">CMake</td>
-    <td>3.14.1</td>
+    <td>3.27.8</td>
   </tr>
 </table>
 </html>
