@@ -70,13 +70,13 @@ $ tree .
 
 Suppose we have an input vector $x \in R^n$, and we want to classify it into one of $K$ different classes.
 
-For each class $j$, we have a weight vector $w_j \in R^n$ and a bias term $b_j$. 
+For each class $j$, we have a weight vector $\theta_j \in R^n$. 
 
-We can compute the unnormalized log probabilities $o_j$ for $x$ belonging to class $j$ as follows:
+We can compute the unnormalized log probabilities $z_j$ for $x$ belonging to class $j$ as follows:
 
-$$ z_j = x^T\theta_j  + b_j $$
+$$ z_j = x^T\theta_j$$
 
-This gives us an output vector $\theta \in R^K$, where each element $o_j$ represents the unnormalized log probability of $x$ belonging to class $j$.
+This gives us an output vector $\theta \in R^K$, where each element $z_j$ represents the unnormalized log probability of $x$ belonging to class $j$.
 
 We can then convert these unnormalized log probabilities into probabilities using the softmax function. The softmax function is defined as follows:
 
@@ -94,13 +94,15 @@ $$ \ell_{\mathrm{softmax}}(z, y) = \log\sum_{i=1}^k \exp z_i - z_y $$
 
 $$ \nabla_\Theta \ell_{\mathrm{softmax}}(X \Theta, y) = \frac{1}{m} X^T (Z - I_y) $$
 
+$$ \theta' = \theta - \alpha \nabla_\Theta \ell_{\mathrm{softmax}}(X \Theta, y) $$
+
 where
 
 $$ Z = normalize(\exp(X \Theta)) \quad \mbox{(normalization applied row-wise)} $$
 
-denotes the matrix of logits, and $I_y \in \mathbb{R}^{m \times k}$ represents a concatenation of one-hot bases for the labels in $y$.
+denotes the matrix of logits, $I_y \in \mathbb{R}^{m \times k}$ represents a concatenation of one-hot bases for the labels in $y$, and $\alpha$ is the learning rate.
 
-Here is the given training code in Python:
+Here is the sample training code in Python:
 
 ```python
 def softmax_regression_epoch(X, y, theta, lr=0.1, batch=100):
@@ -128,7 +130,7 @@ There are some functions inside the softmax function that you also need to fill 
 | `matrix_div_scalar(A, scalar, m, n)`                         | divides all elements of matrix $A$ by the scalar value $scalar$ |
 | `matrix_mul_scalar(A, scalar, m, n)`                         | multiply all elements of matrix $A$ by the scalar value $scalar$ |
 | `matrix_minus(A, B, m, n)`                                   | subtracts matrix $A$ from matrix $B$ element-wise, , with the result stored in matrix $A$ |
-| `softmax_regression_epoch_cpp(X, y, theta, m, n, k, lr, batch)` | train $theta$ of softmax regression for 1 epoch              |
+| `softmax_regression_epoch_cpp(X, y, theta, m, n, k, lr, batch)` | train $\theta$ of softmax regression for 1 epoch              |
 | `train_softmax(train_data, test_data, num_classes, epochs, lr, batch)` | train a softmax classifier                                   |
 
 In the implementation, you are allowed to define your variables and functions to facilitate your programming.
@@ -180,11 +182,11 @@ $$ b^{(l)} = b^{(l)} - \alpha \frac{\partial{L}}{\partial{b^{(l)}}} $$
 
    Here, $\alpha$ is the learning rate, which controls the step size of the update.
 
-In this project, we are going to implement a 2-layer NN with SGD.
+In this project, we are going to implement a 2-layer NN without bias by using the SGD method. The target function is below:
 
 $$ Z = W_2^T ReLU(W_1^T x) $$
 
-where $W_1 \in \mathbb{R}^{n \times d}$ and $W_2 \in \mathbb{R}^{d \times k}$ represent the weights of the network (which has a $d$-dimensional hidden unit), and where $z \in \mathbb{R}^k$ represents the logits output by the network. We again use the softmax / cross-entropy loss, meaning that we want to solve the optimization problem.
+where $W_1 \in \mathbb{R}^{n \times d}$ and $W_2 \in \mathbb{R}^{d \times k}$ represent the weights of the network (which has a $d$-dimensional hidden unit), and where $z \in \mathbb{R}^k$ represents the logits output by the network. The formula of ReLU activation function is $f(x) = \max(0,x)$. We again use the softmax / cross-entropy loss, meaning that we want to solve the optimization problem.
 
 Using the chain rule, we can derive the backpropagation updates for this network (we'll briefly cover these in class, on 9/8, but also provide the final form here for ease of implementation).  Specifically, let
 
@@ -200,7 +202,7 @@ $$ \nabla_{W_1} \ell_{\mathrm{softmax}}(\mathrm{ReLU}(X W_1) W_2, y) = \frac{1}{
 
 $$ \nabla_{W_2} \ell_{\mathrm{softmax}}(\mathrm{ReLU}(X W_1) W_2, y) = \frac{1}{m} Z_1^T G_2 $$
 
-Here is the given training code in Python:
+Here is the sample training code in Python:
 
 ```python
 def nn_epoch(X, y, W1, W2, lr=0.1, batch=100):
@@ -289,8 +291,6 @@ Since the calculating precisions on CPU and GPU platforms are different, there i
 You need to implement and accelerate the  `train_cnn` function and the functions inside the `cnn_epoch_cpp` function with OpenACC. You can use any hyperparameters and filters as you like. Note that your performance of CNN should be better in accuracy than the previous 2-layer NN.
 
 **Hint**: You can accelerate the program by applying OpenACC to each function. Filters in static when compiling may help a lot in time performance.
-
-
 
 ## How to Execute the Program
 
