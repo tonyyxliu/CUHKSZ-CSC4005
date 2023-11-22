@@ -81,12 +81,11 @@ void train_softmax_openacc(const DataSet *train_data, const DataSet *test_data, 
     float train_loss, train_err, test_loss, test_err;
     std::cout << "| Epoch | Train Loss | Train Err | Test Loss | Test Err |" << std::endl;
     std::chrono::milliseconds elapsed_time;
+    // BEGIN YOUR CODE
+  
     auto start_time = std::chrono::high_resolution_clock::now();
     for (size_t epoch = 0; epoch < epochs; epoch++)
     {
-        // BEGIN YOUR CODE
-
-        // END YOUR CODE
         train_loss = mean_softmax_loss_openacc(train_result, train_data->labels_array, train_data->images_num, num_classes);
         test_loss = mean_softmax_loss_openacc(test_result, test_data->labels_array, test_data->images_num, num_classes);
         train_err = mean_err_openacc(train_result, train_data->labels_array, train_data->images_num, num_classes);
@@ -103,6 +102,8 @@ void train_softmax_openacc(const DataSet *train_data, const DataSet *test_data, 
                                                               start_time);
     std::cout << "Execution Time: " << elapsed_time.count()
               << " milliseconds\n";
+  
+   // END YOUR CODE
     delete[] theta;
     delete[] train_result;
     delete[] test_result;
@@ -162,12 +163,11 @@ void train_nn_openacc(const DataSet *train_data, const DataSet *test_data, size_
     float train_loss, train_err, test_loss, test_err;
     std::cout << "| Epoch | Train Loss | Train Err | Test Loss | Test Err |" << std::endl;
     std::chrono::milliseconds elapsed_time;
+    // BEGIN YOUR CODE
+  
     auto start_time = std::chrono::high_resolution_clock::now();
     for (size_t epoch = 0; epoch < epochs; epoch++)
     {
-        // BEGIN YOUR CODE
-
-        // END YOUR CODE
         train_loss = mean_softmax_loss_openacc(train_result, train_data->labels_array, train_data->images_num, num_classes);
         test_loss = mean_softmax_loss_openacc(test_result, test_data->labels_array, test_data->images_num, num_classes);
         train_err = mean_err_openacc(train_result, train_data->labels_array, train_data->images_num, num_classes);
@@ -184,6 +184,8 @@ void train_nn_openacc(const DataSet *train_data, const DataSet *test_data, size_
                                                               start_time);
     std::cout << "Execution Time: " << elapsed_time.count()
               << " milliseconds\n";
+  
+    // END YOUR CODE
     delete[] W1;
     delete[] W2;
     delete[] train_result;
