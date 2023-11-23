@@ -68,9 +68,6 @@ void softmax_regression_epoch_openacc(const float *X, const unsigned char *y,
 
 void train_softmax_openacc(const DataSet *train_data, const DataSet *test_data, size_t num_classes, size_t epochs, float lr, size_t batch)
 {
-    /*
-    Example function to fully train a softmax regression classifier
-    */
     size_t size = train_data->input_dim * num_classes;
     float *theta = new float[size];
     memset(theta, 0, size * sizeof(float));
