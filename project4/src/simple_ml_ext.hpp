@@ -60,7 +60,7 @@ void matrix_div_scalar(float *C, float scalar, size_t m, size_t n);
 
 void matrix_softmax_normalize(float *C, size_t m, size_t n);
 
-void vector_to_one_hot_matrix(const unsigned char *y, float *Y, size_t m, size_t k);
+void vector_to_one_hot_matrix(const unsigned char *y, float *Y, size_t m, size_t n);
 
 void softmax_regression_epoch_cpp(const float *X,
                                   const unsigned char *y,
