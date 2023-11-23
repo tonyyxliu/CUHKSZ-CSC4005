@@ -183,9 +183,10 @@ void matrix_softmax_normalize(float *C, size_t m, size_t n)
  * Vector to One-Hot Matrix
  * Transform a label vector y to the one-hot encoding matrix Y
  * Args:
- *     C (float*): Matrix of size m * n
+ *     y (unsigned char *): vector of size m * 1
+ *     Y (float*): Matrix of size m * n
  **/
-void vector_to_one_hot_matrix(const unsigned char *y, float *Y, size_t m, size_t k)
+void vector_to_one_hot_matrix(const unsigned char *y, float *Y, size_t m, size_t n)
 {
     // BEGIN YOUR CODE
 
