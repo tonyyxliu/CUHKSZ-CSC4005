@@ -209,7 +209,7 @@ void vector_to_one_hot_matrix(const unsigned char *y, float *Y, size_t m, size_t
  *     n (size_t): input dimension
  *     k (size_t): number of classes
  *     lr (float): learning rate / SGD step size
- *     batch (int): SGD minibatch size
+ *     batch (int): size of SGD batch
  *
  * Returns:
  *     (None)
@@ -333,7 +333,7 @@ Args:
     l: hidden_dim
     k: num_classes
     lr (float): step size (learning rate) for SGD
-    batch (int): size of SGD minibatch
+    batch (int): size of SGD batch
 */
 void nn_epoch_cpp(const float *X, const unsigned char *y, float *W1, float *W2, size_t m, size_t n, size_t l, size_t k, float lr, size_t batch)
 {
