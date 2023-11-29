@@ -302,7 +302,7 @@ float mean_err(float *result, const unsigned char *labels_array, size_t images_n
 /**
  * Matrix Multiplication
  * Efficiently compute A = A * B
- * For each element A[i], B[i] of A and B, A[i] -= B[i]
+ * For each element A[i], B[i] of A and B, A[i] *= B[i]
  * Args:
  *     A (float*): Matrix of size m * n
  *     B (const float*): Matrix of size m * n
