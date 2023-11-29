@@ -238,6 +238,7 @@ void train_softmax(const DataSet *train_data, const DataSet *test_data, size_t n
     {
         // BEGIN YOUR CODE
 
+        // result = X @ theta
         // END YOUR CODE
         train_loss = mean_softmax_loss(train_result, train_data->labels_array, train_data->images_num, num_classes);
         test_loss = mean_softmax_loss(test_result, test_data->labels_array, test_data->images_num, num_classes);
