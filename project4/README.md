@@ -361,6 +361,7 @@ If you have some special reasons for late submission, please send an email to th
 <Your StudentID>.pdf  # Report
 <Your StudentID>.zip  # Codes
 ├── sbatch.sh
+├── profiling
 ├── src
 │   ├── nn_classifier.cpp
 │   ├── nn_classifier_openacc.cpp
