@@ -22,13 +22,13 @@ For both containers, you can use either `docker pull` from Docker Hub online (ma
 or download the .tar file from the cluster login node, and use `docker load` to build image
 
 **Directory of Images .tar file on the Cluster**
+
 - With NVIDIA card (about 9GB):\
-  10.26.200.21:/CSC4005-resources/nvhpc:21.7-devel-cuda11.4-centos7.tar\
+  10.26.200.1:/CSC4005-resources/nvhpc:21.7-devel-cuda11.4-centos7.tar\
   All six parallel languages supported
 
-
 - Without NVIDIA card (about 670MB):\
-  10.26.200.21:/CSC4005-resources/centos7_csc4005.tar\
+  10.26.200.1:/CSC4005-resources/centos7_csc4005.tar\
   Only vectorization, MPI, Pthread, and OpenMP supported
 
 **Notes:**
@@ -78,7 +78,7 @@ Otherwise, you need to update your NVIDIA driver first if you want to use the nv
 # Pull docker image from nvidia
 # It may be slow pulling images from Docker hub.
 # As an alternative, we can download the .tar file from the cluster
-#   Directory on the cluster: 10.26.200.21:/CSC4005-resources/nvhpc:21.7-devel-cuda11.4-centos7.tar
+#   Directory on the cluster: 10.26.200.1:/CSC4005-resources/nvhpc:21.7-devel-cuda11.4-centos7.tar
 # After downloading, use docker load to build docker image from the .tar file
 docker pull nvcr.io/nvidia/nvhpc:21.7-devel-cuda11.4-centos7
 # or
@@ -108,7 +108,7 @@ docker container ps
 docker exec -it <CONTAINER ID> bash
 
 # Now, you can interact with the docker container just like a normal linux machine.
-# The followings are essential if your host's cuda driver version is high (e.g., latest 537.xx). In some older versions, they may be not necessary. You can check by yourself. 
+# The followings are essential if your host's cuda driver version is high (e.g., latest 537.xx). In some older versions, they may be not necessary. You can check by yourself.
 echo "export PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/21.7/compilers/bin:$PATH" >> ~/.bashrc
 echo "export PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/21.7/cuda/11.4/bin:$PATH" >> ~/.bashrc
 echo "export CUDA_TOOLKIT_PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/21.7/cuda/11.4" >> ~/.bashrc
@@ -126,13 +126,13 @@ echo $LD_LIBRARY_PATH
 # We should see expected output for the following commands
 nvcc --version
 # nvcc: NVIDIA (R) Cuda compiler driver
-# Copyright (c) 2005-2021 NVIDIA Corporation    
+# Copyright (c) 2005-2021 NVIDIA Corporation
 # Built on Wed_Jun__2_19:15:15_PDT_2021
 # Cuda compilation tools, release 11.4, V11.4.48
-# Build cuda_11.4.r11.4/compiler.30033411_0     
+# Build cuda_11.4.r11.4/compiler.30033411_0
 
 pgc++ --version
-# pgc++ (aka nvc++) 21.7-0 64-bit target on x86-64 Linux -tp haswell 
+# pgc++ (aka nvc++) 21.7-0 64-bit target on x86-64 Linux -tp haswell
 # PGI Compilers and Tools
 # Copyright (c) 2021, NVIDIA CORPORATION & AFFILIATES.  All rights reserved.
 
@@ -157,7 +157,7 @@ This docker cannot compile & execute CUDA and OpenACC programs, but are fine wit
 # Pull a docker image of CentOS7 with basic MPI, Pthread, and OpenMP installed
 # It may be slow pulling images from Docker hub.
 # As an alternative, we can download the .tar file from the cluster
-#   Directory on the cluster: 10.26.200.21:/CSC4005-resources/centos7_csc4005.tar
+#   Directory on the cluster: 10.26.200.1:/CSC4005-resources/centos7_csc4005.tar
 # After downloading from the cluster, use docker load to build the image
 docker pull tonyyxliu/csc4005:centos7
 # or
@@ -256,17 +256,23 @@ docker info
 Docker Root Dir: /var/lib/docker
 ...
 ```
+
 This means that docker relies on WSL for file mapping, so we need to modify docker's file mapping path through wsl, which can be understood as file mounting.
 
 The docker-desktop-data disk image in WSL 2 mode is usually located at the following location:
+
 ```text
 C:\Users\<Your Name>\AppData\Local\Docker\wsl\data\ext4.vhdx
 ```
+
 Follow the instructions below to relocate it to a different drive/directory and keep all existing Docker data.
+
 - Exit Docker Desktop, then, open a command prompt (cmd):
+
 ```cmd
 wsl --list -v
 ```
+
 You should be able to see the states and make sure all states are stopped.
 
 ```cmd
@@ -276,13 +282,14 @@ docker-desktop-data   Stopped      2
 ```
 
 - Export docker-desktop-data to a file (backup image and related files) and then import back to WSL2, and set the path you want, use the following command:
+
 ```cmd
 wsl --export docker-desktop-data "D:\\docker-desktop-data.tar"
 wsl --unregister docker-desktop-data
 wsl --import docker-desktop-data "D:\\<You like>" "D:\\docker-desktop-data.tar" --version 2
 ```
+
 Please note that the C:\\Users\\<Your Name>\\AppData\\Local\\Docker\\wsl\\data\\ext4.vhdx file will be automatically deleted.
 
 Now start Docker Desktop and it will work normally.
 Don't forget to delete the D:\\docker-desktop-data.tar file last.
-
