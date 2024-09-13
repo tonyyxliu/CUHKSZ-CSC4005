@@ -24,9 +24,24 @@ add_executable(sequential_PartA
 target_compile_options(sequential_PartA PRIVATE -O2)
 
 add_executable(sequential_PartB
-        sequential_PartB_optimized.cpp
+        sequential_PartB.cpp
         ../utils.cpp ../utils.hpp)
 target_compile_options(sequential_PartB PRIVATE -O2)
+
+add_executable(sequential_PartB_soa
+        sequential_PartB_soa.cpp
+        ../utils.cpp ../utils.hpp)
+target_compile_options(sequential_PartB_soa PRIVATE -O2)
+
+add_executable(sequential_PartC_aos
+        sequential_PartC_aos.cpp
+        ../utils.cpp ../utils.hpp)
+target_compile_options(sequential_PartC_aos PRIVATE -O2)
+
+add_executable(sequential_PartC_soa
+        sequential_PartC_soa.cpp
+        ../utils.cpp ../utils.hpp)
+target_compile_options(sequential_PartC_soa PRIVATE -O2)
 
 ## SIMD Vectorization (AVX2)
 add_executable(simd_PartA
@@ -38,6 +53,11 @@ add_executable(simd_PartB
         simd_PartB.cpp
         ../utils.cpp ../utils.hpp)
 target_compile_options(simd_PartB PRIVATE -O2 -mavx2)
+
+add_executable(simd_PartC
+        simd_PartC.cpp
+        ../utils.cpp ../utils.hpp)
+target_compile_options(simd_PartC PRIVATE -O2 -mavx2)
 
 ## MPI
 add_executable(mpi_PartA
@@ -54,6 +74,13 @@ target_compile_options(mpi_PartB PRIVATE -O2)
 target_include_directories(mpi_PartB PRIVATE ${MPI_CXX_INCLUDE_DIRS})
 target_link_libraries(mpi_PartB ${MPI_LIBRARIES})
 
+add_executable(mpi_PartC
+        mpi_PartC.cpp
+        ../utils.cpp ../utils.hpp)
+target_compile_options(mpi_PartC PRIVATE -O2)
+target_include_directories(mpi_PartC PRIVATE ${MPI_CXX_INCLUDE_DIRS})
+target_link_libraries(mpi_PartC ${MPI_LIBRARIES})
+
 ## Pthread
 add_executable(pthread_PartA
         pthread_PartA.cpp
@@ -66,6 +93,12 @@ add_executable(pthread_PartB
         ../utils.cpp ../utils.hpp)
 target_compile_options(pthread_PartB PRIVATE -O2)
 target_link_libraries(pthread_PartB PRIVATE pthread)
+
+add_executable(pthread_PartC
+        pthread_PartC.cpp
+        ../utils.cpp ../utils.hpp)
+target_compile_options(pthread_PartC PRIVATE -O2)
+target_link_libraries(pthread_PartC PRIVATE pthread)
 
 ## OpenMP
 add_executable(openmp_PartA
@@ -81,3 +114,10 @@ add_executable(openmp_PartB
 target_compile_options(openmp_PartB PRIVATE -O2 -fopenmp)
 target_include_directories(openmp_PartB PRIVATE ${OpenMP_CXX_INCLUDE_DIRS})
 target_link_libraries(openmp_PartB PRIVATE ${OpenMP_CXX_LIBRARIES})
+
+add_executable(openmp_PartC
+        openmp_PartC.cpp
+        ../utils.cpp ../utils.hpp)
+target_compile_options(openmp_PartC PRIVATE -O2 -fopenmp)
+target_include_directories(openmp_PartC PRIVATE ${OpenMP_CXX_INCLUDE_DIRS})
+target_link_libraries(openmp_PartC PRIVATE ${OpenMP_CXX_LIBRARIES})

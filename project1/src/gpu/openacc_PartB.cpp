@@ -11,12 +11,13 @@
 #include <cmath>
 #include <iostream>
 #include <openacc.h>
-#include "utils.hpp"
+
+#include "../utils.hpp"
 
 #pragma acc routine seq
-float acc_get_pixel_matrix_sum(unsigned char* image_buffer,
-                               const float (&filter)[FILTERSIZE][FILTERSIZE],
-                               int pixel_id, int width, int num_channels)
+float acc_linear_filter(unsigned char* image_buffer,
+                        const float (&filter)[FILTERSIZE][FILTERSIZE],
+                        int pixel_id, int width, int num_channels)
 {
     float sum = 0;
     int line_width = width * num_channels;
@@ -87,14 +88,14 @@ int main(int argc, char** argv)
                 int g_id = r_id + 1;
                 int b_id = r_id + 2;
 
-                float r_sum = acc_get_pixel_matrix_sum(buffer, filter, r_id,
-                                                       width, num_channels);
+                float r_sum = acc_linear_filter(buffer, filter, r_id, width,
+                                                num_channels);
 
-                float g_sum = acc_get_pixel_matrix_sum(buffer, filter, g_id,
-                                                       width, num_channels);
+                float g_sum = acc_linear_filter(buffer, filter, g_id, width,
+                                                num_channels);
 
-                float b_sum = acc_get_pixel_matrix_sum(buffer, filter, b_id,
-                                                       width, num_channels);
+                float b_sum = acc_linear_filter(buffer, filter, b_id, width,
+                                                num_channels);
 
                 filteredImage[r_id] = acc_clamp_pixel_value(r_sum);
                 filteredImage[g_id] = acc_clamp_pixel_value(g_sum);
@@ -115,7 +116,7 @@ int main(int argc, char** argv)
     std::cout << "Output file to: " << output_filepath << "\n";
     JPEGMeta output_jpeg{filteredImage, input_jpeg.width, input_jpeg.height,
                          input_jpeg.num_channels, input_jpeg.color_space};
-    if (write_to_jpeg(output_jpeg, output_filepath))
+    if (export_jpeg(output_jpeg, output_filepath))
     {
         std::cerr << "Failed to write output JPEG\n";
         return -1;

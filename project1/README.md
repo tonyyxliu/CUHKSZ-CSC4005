@@ -3,16 +3,22 @@
 ## This project weights 12.5% for your final grade (4 Projects for 50%)
 
 #### Release Date:
-September 22nd, 2023 (Beijing Time, UTC+8)
+September 13th *(Friday)*, 2024 (UTC+8)
 
 #### Deadline (Submit on BlackBoard):
-11:59 P.M., October 10th, 2023 (Beijing Time, UTC+8)
+11:59 P.M., September 30th *(Monday)*, 2024 (UTC+8)
+
+#### Suff Responsible for This Project
+
+- TA Liu Yuxuan *(For all languages except Triton)*
+- TA Zhang Qihang *(Triton PartC)*
+- USTF Hou Tianci *(Triton PartA & B)*
 
 ## Prologue
 
-As the first programming project, students are required to solve embarrassingly parallel problem with six different parallel programming languages to get an intuitive understanding and hands-on experience on how the simplest parallel programming works. A very popular and representative application of embarrassingly parallel problem is image processing since the computation of each pixel is completely or nearly independent with each other.
+As the first programming project, students are required to solve embarrassingly parallel problem with all parallel programming languages to get an intuitive understanding and hands-on experience on how the simplest parallel programming works. A very popular and representative application of embarrassingly parallel problem is image processing since the computation of each pixel is completely or almost independent with each other.
 
-This programming project consists of two parts:
+This programming project consists of three parts (A, B, and C). PartA and PartB have already been implemented, and you can learn how to write each parallel programming language by analyzing those programs. Finally, what you need to do is to implement PartC by the experience and lessons from the previous two parts.
 
 ## Part-A: RGB to Grayscale
 
@@ -65,9 +71,11 @@ Gray = 0.299 * Red + 0.587 * Green + 0.114 * Blue
     <strong>Convert 4K JPEG image (3840x2599) from RGB to Grayscale</strong>
 </p>
 
-## Part-B: Image Filtering (Soften with Equal Weight Filter)
+## Part-B: Linear Image Filtering (Soften with Equal Weight Filter)
 
-In part B, students are asked to implement parallel programs by themselves do embarrassingly parallel image filtering, which is slightly harder than PartA. This time, they need to take the information of the pixel's neighbors into consideration instead of doing computation on the pixel itself. Although two pixels may share the same neighbors, the read-only property still makes the computation embarrassingly parallel.
+#### Note: You do not need to modify the codes in this part. Just compile and execute them on the cluster to get the experiment results, and include that in your report.
+
+In part B, we move on to parallelize image filtering, which is slightly harder than PartA. This time, the information of each pixel's neighbors are brought into consideration instead of doing computation on the pixel itself. The good news is that: although two adjacent pixels share some neighbors, the read-only property still makes the computation embarrassingly parallel.
 
 ### Problem Description
 
@@ -130,78 +138,88 @@ In this project, students are required to apply the simplest size-3 low-pass fil
     <strong>Lena RGB Original and Smooth from left to right</strong>
 </p>
 
+## Part-C: Non-Linear Image Filtering (Bilateral Filtering)
+
+In part C, students are asked to implement parallel programs by themselves do embarrassingly parallel bilateral filtering, which is harder than PartA and PartB.
+
+### Problem Description
+
+The Bilateral Filter is a non-linear, edge-preserving smoothing filter that is commonly used in Computer Vision as a simple noise-reduction stage in a pipeline. It calculates the intensity of each output pixel as a weighted average of intensity values from nearby pixels in the input image. Crucially, the weights depend not only on the Euclidean distance between current and neighbor pixels, but also on the radiometric differences (e.g., color intensity differences) between them. The outcome is that edges are preserved while regions with similar intensities are smoothed out.
+
+<div style="display:flex;justify-content:space-around; align-items:center;">
+  <img src="images/BilateralFilter.jpg" width="90%" alt="BilateralFilter"/>
+</div>
+<p style="font-size: medium;" align="center">
+    <strong>Lena RGB Original and Smooth from left to right</strong>
+</p>
+
+$$ I'(p) = \frac{1}{W_p}\displaystyle\sum_{q\in\Omega}I(p)k_r(||I(q)-I(p)||)k_s(||q-p||)$$
+
+for normalization term W is 
+
+$$ \displaystyle\sum_{q\in\Omega}k_r(||I(q)-I(p)||)k_s(||q-p||) $$
+
+where 
+$I$ is the iamge, 
+$p$ and $q$ is the pixel position,
+$\Omega$ is the kernel
+$k_r$ and $k_s$ is the range and spatial kernel, and $k_r(p) = \exp^{-\frac{||p||^2}{2\sigma_r^2}}$, $k_s(p) = \exp^{-\frac{||p||^2}{2\sigma_s^2}}$
+
+**Reference:** 
+1. [Triton](https://triton-lang.org/main/index.html)
+2. [Bilateral Filter Info](https://docs.nvidia.com/vpi/algo_bilat_filter.html)
+3. You may need some api like exp func in [triton api document](https://triton-lang.org/main/python-api/triton.language.html)
+
 ### Benchmark Image
 
-The image used for performance evaluation is a 20K JPEG image with around 250 million pixels (19200 x 12995) retrieved by doing upper sampling on the 4K image, and the image has been uploaded to BlackBoard. Please download that image to your docker container or on the cluster. Do not use Lena or the 4K image to do the performance evaluation on your report, because the problem size is too small to get the parallel speedup.
+The image used for performance evaluation is the 4K JPEG image with around 10 million pixels (3840 x 2599), which has been uploaded to BlackBoard. Please download that image to your docker container or on the cluster. Do not use Lena for your performance evaluation report, because its size is too small to get the parallel speedup. However, you can use Lena to verify the correctness of your programs by identifying the change on the image.
 
-### Requirements
+### Requirements & Grading Policy
 
-- **Six parallel programming implementations for PartB (60%)**
+- **Six parallel programming implementations for PartB (70%)**
   - SIMD (10%)
   - MPI (10%)
   - Pthread (10%)
   - OpenMP (10%)
   - CUDA (10%)
   - OpenACC (10%)
+  - Triton (10%)
 
-  As long as your programs can compile and execute to get the expected output image by the command you give in the report, you can get full mark.
+  You can get full mark for each section as long as your program can compile and execute to get the expected output image by the command you give in the report.
 
-- **Performance of Your Program (30%)**
-  Try your best to do optimization on your parallel programs for higher speedup.If your programs shows similar performance to the sample solutions provided by the teaching stuff, then you can get full mark. Points will be deduted if your parallel programs perform poor while no justification can be found in the report. (Target Peformance will be released soon).
+- **Performance of Your Program (20%)**
+  Try your best to optimize the performance your parallel programs.If your programs show similar performance to the baseline provided by the teaching stuff, then you can get full mark. Points will be deduted if your parallel programs perform poor while no justification can be found in the report. (Target Peformance will be released soon).
   Some hints to optimize your program are listed below:
   - Try to avoid nested for loop, which often leads to bad parallelism.
-  - Change the way that image data or filter matrix are storred for more efficient memory access.
+  - Change the way that image data or filter matrix are storred for more efficient memory access *(Array-of-Structure / Structure-of-Array)*.
   - Try to avoid expensive arithmetic operations (for example, double-precision floating point division is very expensive, and takes a few dozens of cycles to finish).
-  - Partition your data for computation in a proper way for balanced workload when doing parallelism.
+  - Partition your data for computation in a proper way for balanced workload for parallelism.
 
 - **One Report in PDF (10%, No Page Limit)**\
-  The report does not have to be very long and beautiful to help you get good grade, but you need to include what you have done and what you have learned in this project.
+  The report does not have to be very long and beautiful to get good grade, but you need to include what you have done and what you have found or learned in this project.
   The following components should be included in the report:
-  - How to compile and execute your program to get the expected output on the cluster.
+  - How to compile and execute your program to get the expected output image on the cluster?
   - Briefly explain how does each parallel programming model do computation in parallel? What are the similarities and differences between them. Explain these with what you have learned from the lectures (like different types of parallelism, ILP, DLP, TLP, etc).
-  - What kinds of optimizations have you tried to speed up your parallel program for PartB, and how does them work?
-  - Show the experiment results you get for **both PartA and PartB**, and do some numerical analysis, such as calculating the speedup and efficiency, demonstrated with tables and figures.
-  - What have you found from the experiment results? Is there any difference between the experiment resutls of PartA and PartB? If so, what may cause the differences.
+  - What kinds of optimizations have you tried to speed up your parallel program for PartB, and how do them work?
+  - Show the experiment results you get for **PartC Only**, and do some numerical analysis, such as calculating the speedup and efficiency, demonstrated with tables and figures.
+  - What have you found from the experiment results? Is there any difference between the experiment resutls of PartC and PartA&B? If so, what may be the reasons?
 
 - **Extra Credits (10%)**\
   If you can use any other methods to achieve a higher speedup than the sample solutions provided by the TA (Baseline peformance to be released).\
   Some possible ways are listed below:
   - A combination of multiple parallel programming models, like combining MPI and OpenMP together.
   - Try to bind program to a specific CPU core for better performance. Refer to: https://slurm.schedmd.com/mc_support.html
-  - For SIMD, maybe you can have a try with different ISA (Instruction Set Architecture) to do ILP (Instruction-Level-Parallelism).
+  - For GPU programs like CUDA, feel free to change the block size and grid size for better performance.
+  - For SIMD, you may parallelize more computation workload.
 
 ### The Extra Credit Policy
-According to the professor, the extra credits in project 1 cannot be added to other projects to make them full mark. The credits are the honor you received from the professor and the teaching stuff, and the professor may help raise you to a higher grade level if you are at the boundary of two grade levels and he think you deserve a better grade with your extra credits. For example, if you are the top students with B+ grade, and get enough extra credits, the professor may raise you to A- grade.
-
-### Grading Policy for Performance Part
-
-Note that the performance weights for 30% in total and each program accounts for 5%. Each program is graded independently so that even a highly optimized MPI program cannot save a poor OpenMP program.
-
-Suppose the execution time of your program is T, then
-
-- For SIMD program,
-  - Case-1: T <= 125% * Baseline                  --> 5%
-  - Case-2: T in [125% - 150%] of Baseline   --> 2.5%
-  - Case-3: T > 150% * Baseline                    --> 0%
-
-- For MPI, OpenMP, and Pthread
-All the 6 experiment setup will be graded (number of cores/processes from 1, 2, 4, 8, 16 to 32). Each experiment setup weights for 1%, and the maximum you can get for each program is 5%. For each experiment setup, the grading policy is:
-  - Case-1: T  > 125% * Baseline                   --> 0%
-  - Case-2: T in [100% - 125%] of Baseline  --> 1%
-  - Case-3: T < 90% * Baseline                      --> 2%   (The 90% requirement here is to avoid the performance instability for different trials)
-  The 2% in Case-3 means that you have an extra 1% that can fill the point deduction of another experiment setup. Therefore, even your program is slow for 1 and 2 cores/processes, you can still get all the 5% for this program if you have highly optimzed parallel version using more computing resources.
-
-- For the 2 GPU programs (CUDA and OpenACC),
-  - Case-1: T <= 200% * Baseline                  --> 5%
-  - Case-2: T in [200% - 300%] of Baseline   --> 2.5%
-  - Case-3: T > 300% * Baseline                    --> 0%
+According to the professor, the extra credits for all projects cannot be added to the final grade or other projects, which determines your rank. The credits are the honor you received from the professor and the teaching stuff, and the professor may help raise you to a higher grade level if you are at the boundary of two grade levels and he think you deserve a better grade with your extra credits. For example, if you are the top students with B+ grade, and get enough extra credits, the professor may raise you to a A-.
 
 ### Grading Policy for Late Submission
 1. late submission for less than 10 minutes after then DDL is tolerated for possible issues during submission.
-2. 10 Points deduction for each day after the DDL (11 minutes late will be considered as one day, so be careful)
-3. Zero point if you submitted your project late for more than two days
-
-If you have some special reasaons for late submission, please send email to the professor and c.c to TA Liu Yuxuan.
+2. 10 Points deduction for each day after the DDL (11 minutes later than DDL will be considered as one day, so be careful)
+3. Zero point if you submitted your project late for more than two days. 
+4. If you have some special reasaons for late submission, please send email to the professor and c.c to the TA responsible for that project.
 
 ## How to execute the sample programs in PartA?
 
@@ -362,6 +380,30 @@ If your program behaves poor performance to the baseline, points will be deducte
 <p style="font-size: medium;" align="center">
     <strong>Performance Evaluation of PartB (numbers refer to execution time in milliseconds)</strong>
 </p>
+
+### PartC (Baseline Performance)
+
+If your program can achieve similar performance (around 5% tolerance) to the baseline shown below, you can get full mark for your performance part, which weights for 20%.
+
+If your program can achieve better performance (should be obvious, not 1-2%) with reasonable justification in your report, you can get extra credits.
+
+If your program behaves poor performance to the baseline, points will be deducted in performance part.
+
+**Experiment Setup**
+
+- On the cluster
+- JPEG image (3840 x 2599 ~ 10 million pixels)
+- [sbatch file here](src/scripts/sbatch_PartC.sh)
+- Performance measured as execution time in milliseconds
+
+| Number of Processes / Cores | Sequential (AOS, -O0) | Sequential (SOA, -O0) | Sequential (-O2) |  SIMD (AVX2) | MPI  | Pthread | OpenMP | CUDA | OpenACC |
+|-----------------------------|-----------------------|-----------------------|------------------|--------------|------|---------|--------|------|---------|
+| 1                           | 8383                  | 7911                  | 3745             | 1865         | 3792 | 3736    | 3729   | 15.8 | 50      |
+| 2                           | N/A                   | N/A                   | N/A              | N/A          | 3130 | 3173    | 3375   | N/A  | N/A     |
+| 4                           | N/A                   | N/A                   | N/A              | N/A          | 1544 | 1628    | 1998   | N/A  | N/A     |
+| 8                           | N/A                   | N/A                   | N/A              | N/A          | 773  | 826     | 1319   | N/A  | N/A     |
+| 16                          | N/A                   | N/A                   | N/A              | N/A          | 387  | 423     | 1300   | N/A  | N/A     |
+| 32                          | N/A                   | N/A                   | N/A              | N/A          | 198  | 261     | 1301   | N/A  | N/A     |
 
 ## Appendix
 

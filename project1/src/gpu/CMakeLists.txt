@@ -26,6 +26,11 @@ cuda_add_executable(cuda_PartB
         ../utils.cpp ../utils.hpp)
 target_link_libraries(cuda_PartB cudart)
 
+cuda_add_executable(cuda_PartC
+        cuda_PartC.cu
+        ../utils.cpp ../utils.hpp)
+target_link_libraries(cuda_PartC cudart)
+
 ## OpenACC
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -acc")
 add_executable(openacc_PartA
@@ -34,4 +39,8 @@ add_executable(openacc_PartA
 
 add_executable(openacc_PartB
         openacc_PartB.cpp
+        ../utils.cpp ../utils.hpp)
+
+add_executable(openacc_PartC
+        openacc_PartC.cpp
         ../utils.cpp ../utils.hpp)

@@ -9,7 +9,7 @@
 
 #include <cuda_runtime.h> // CUDA Header
 
-#include "utils.hpp"
+#include "../utils.hpp"
 
 // CUDA kernel functon：RGB to Gray
 __global__ void rgbToGray(const unsigned char* input, unsigned char* output,
@@ -40,7 +40,8 @@ int main(int argc, char** argv)
     std::cout << "Input file from: " << input_filepath << "\n";
     auto input_jpeg = read_from_jpeg(input_filepath);
     // Allocate memory on host (CPU)
-    auto grayImage = new unsigned char[input_jpeg.width * input_jpeg.height];   // num_channels = 1
+    auto grayImage = new unsigned char[input_jpeg.width *
+                                       input_jpeg.height]; // num_channels = 1
     // Allocate memory on device (GPU)
     unsigned char* d_input;
     unsigned char* d_output;
@@ -80,7 +81,7 @@ int main(int argc, char** argv)
     std::cout << "Output file to: " << output_filepath << "\n";
     JPEGMeta output_jpeg{grayImage, input_jpeg.width, input_jpeg.height, 1,
                          JCS_GRAYSCALE};
-    if (write_to_jpeg(output_jpeg, output_filepath))
+    if (export_jpeg(output_jpeg, output_filepath))
     {
         std::cerr << "Failed to write output JPEG\n";
         return -1;
@@ -91,7 +92,8 @@ int main(int argc, char** argv)
     delete[] input_jpeg.buffer;
     delete[] grayImage;
     std::cout << "Transformation Complete!" << std::endl;
-    std::cout << "GPU Execution Time: " << gpuDuration << " milliseconds" << std::endl;
+    std::cout << "GPU Execution Time: " << gpuDuration << " milliseconds"
+              << std::endl;
     cudaEventDestroy(start);
     cudaEventDestroy(stop);
     return 0;

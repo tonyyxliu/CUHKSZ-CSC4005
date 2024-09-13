@@ -6,7 +6,7 @@
 //
 
 #include <memory.h>
-#include <mpi.h>  // MPI Header
+#include <mpi.h> // MPI Header
 
 #include <chrono>
 #include <iostream>
@@ -21,9 +21,11 @@ void set_filtered_image(unsigned char* filtered_image, unsigned char* image,
                         int width, int num_chanels, int start_line,
                         int end_line, int offset);
 
-int main(int argc, char** argv) {
+int main(int argc, char** argv)
+{
     // Verify input argument format
-    if (argc != 3) {
+    if (argc != 3)
+    {
         std::cerr << "Invalid argument, should be: ./executable "
                      "/path/to/input/jpeg /path/to/output/jpeg\n";
         return -1;
@@ -44,9 +46,9 @@ int main(int argc, char** argv) {
 
     // Read JPEG File
     const char* input_filepath = argv[1];
-    std::cout << "Input file from: " << input_filepath << "\n";
     auto input_jpeg = read_from_jpeg(input_filepath);
-    if (input_jpeg.buffer == NULL) {
+    if (input_jpeg.buffer == NULL)
+    {
         std::cerr << "Failed to read input JPEG image\n";
         return -1;
     }
@@ -61,11 +63,14 @@ int main(int argc, char** argv) {
     std::vector<int> cuts(numtasks + 1, 1);
     int divided_left_line_num = 0;
 
-    for (int i = 0; i < numtasks; i++) {
-        if (divided_left_line_num < left_line_num) {
+    for (int i = 0; i < numtasks; i++)
+    {
+        if (divided_left_line_num < left_line_num)
+        {
             cuts[i + 1] = cuts[i] + line_per_task + 1;
             divided_left_line_num++;
-        } else
+        }
+        else
             cuts[i + 1] = cuts[i] + line_per_task;
     }
 
@@ -73,7 +78,9 @@ int main(int argc, char** argv) {
     // 1. Filter the first division of the contents
     // 2. Receive the filtered contents from slave executors
     // 3. Write the filtered contents to the JPEG File
-    if (taskid == MASTER) {
+    if (taskid == MASTER)
+    {
+        std::cout << "Input file from: " << input_filepath << "\n";
         auto filteredImage =
             new unsigned char[input_jpeg.width * input_jpeg.height *
                               input_jpeg.num_channels];
@@ -88,7 +95,8 @@ int main(int argc, char** argv) {
                            cuts[taskid + 1], 0);
 
         // Receive the transformed Gray contents from each slave executors
-        for (int i = MASTER + 1; i < numtasks; i++) {
+        for (int i = MASTER + 1; i < numtasks; i++)
+        {
             int line_width = input_jpeg.width * input_jpeg.num_channels;
             unsigned char* start_pos = filteredImage + cuts[i] * line_width;
             int length = (cuts[i + 1] - cuts[i]) * line_width;
@@ -106,7 +114,8 @@ int main(int argc, char** argv) {
         std::cout << "Output file to: " << output_filepath << "\n";
         JPEGMeta output_jpeg{filteredImage, input_jpeg.width, input_jpeg.height,
                              input_jpeg.num_channels, input_jpeg.color_space};
-        if (write_to_jpeg(output_jpeg, output_filepath)) {
+        if (export_jpeg(output_jpeg, output_filepath))
+        {
             std::cerr << "Failed to write output JPEG\n";
             return -1;
         }
@@ -120,7 +129,8 @@ int main(int argc, char** argv) {
     // The tasks for the slave executor
     // 1. Filter a division of image
     // 2. Send the Filterd contents back to the master executor
-    else {
+    else
+    {
         // Intialize the filtered image
         int length = input_jpeg.width * (cuts[taskid + 1] - cuts[taskid]) *
                      input_jpeg.num_channels;
@@ -148,21 +158,24 @@ int main(int argc, char** argv) {
 
 void set_filtered_image(unsigned char* filtered_image, unsigned char* image,
                         int width, int num_chanels, int start_line,
-                        int end_line, int offset) {
-    for (int y = start_line; y < end_line; y++) {
-        for (int x = 1; x < width - 1; x++) {
+                        int end_line, int offset)
+{
+    for (int y = start_line; y < end_line; y++)
+    {
+        for (int x = 1; x < width - 1; x++)
+        {
             int r_id = (y * width + x) * num_chanels;
             int g_id = r_id + 1;
             int b_id = r_id + 2;
 
             float r_sum =
-                get_pixel_matrix_sum(image, filter, r_id, width, num_chanels);
+                linear_filter(image, filter, r_id, width, num_chanels);
 
             float g_sum =
-                get_pixel_matrix_sum(image, filter, g_id, width, num_chanels);
+                linear_filter(image, filter, g_id, width, num_chanels);
 
             float b_sum =
-                get_pixel_matrix_sum(image, filter, b_id, width, num_chanels);
+                linear_filter(image, filter, b_id, width, num_chanels);
 
             filtered_image[r_id - offset] = clamp_pixel_value(r_sum);
             filtered_image[g_id - offset] = clamp_pixel_value(g_sum);

@@ -76,7 +76,7 @@ int main(int argc, char** argv) {
     const char* output_filepath = argv[2];
     std::cout << "Output file to: " << output_filepath << "\n";
     JPEGMeta output_jpeg{grayImage, input_jpeg.width, input_jpeg.height, 1, JCS_GRAYSCALE};
-    if (write_to_jpeg(output_jpeg, output_filepath)) {
+    if (export_jpeg(output_jpeg, output_filepath)) {
         std::cerr << "Failed to write output JPEG\n";
         return -1;
     }

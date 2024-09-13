@@ -11,10 +11,9 @@
 #include <cuda_runtime.h>
 #include "../utils.hpp"
 
-__device__ float d_get_pixel_matrix_sum(unsigned char* image_buffer,
-                                        const float (*d_filter)[FILTERSIZE],
-                                        int pixel_id, int width,
-                                        int num_channels)
+__device__ float d_linear_filter(unsigned char* image_buffer,
+                                 const float (*d_filter)[FILTERSIZE],
+                                 int pixel_id, int width, int num_channels)
 {
     float sum = 0;
     int line_width = width * num_channels;
@@ -51,12 +50,12 @@ __global__ void apply_filter_kernel(unsigned char* input_buffer,
         int g_id = r_id + 1;
         int b_id = r_id + 2;
 
-        float r_sum = d_get_pixel_matrix_sum(input_buffer, d_filter, r_id,
-                                             width, num_channels);
-        float g_sum = d_get_pixel_matrix_sum(input_buffer, d_filter, g_id,
-                                             width, num_channels);
-        float b_sum = d_get_pixel_matrix_sum(input_buffer, d_filter, b_id,
-                                             width, num_channels);
+        float r_sum =
+            d_linear_filter(input_buffer, d_filter, r_id, width, num_channels);
+        float g_sum =
+            d_linear_filter(input_buffer, d_filter, g_id, width, num_channels);
+        float b_sum =
+            d_linear_filter(input_buffer, d_filter, b_id, width, num_channels);
 
         filtered_image[r_id] = d_clamp_pixel_value(r_sum);
         filtered_image[g_id] = d_clamp_pixel_value(g_sum);
@@ -126,7 +125,7 @@ int main(int argc, char** argv)
     std::cout << "Output file to: " << output_filepath << "\n";
     JPEGMeta output_jpeg{filteredImage, input_jpeg.width, input_jpeg.height,
                          input_jpeg.num_channels, input_jpeg.color_space};
-    if (write_to_jpeg(output_jpeg, output_filepath))
+    if (export_jpeg(output_jpeg, output_filepath))
     {
         std::cerr << "Failed to write output JPEG\n";
         return -1;

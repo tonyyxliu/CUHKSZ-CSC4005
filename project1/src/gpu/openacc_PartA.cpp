@@ -7,9 +7,9 @@
 
 #include <iostream>
 #include <chrono>
+#include <openacc.h> // OpenACC Header
 
-#include "utils.hpp"
-// #include <openacc.h> // OpenACC Header
+#include "../utils.hpp"
 
 int main(int argc, char **argv)
 {
@@ -28,44 +28,53 @@ int main(int argc, char **argv)
     int width = input_jpeg.width;
     int height = input_jpeg.height;
     int num_channels = input_jpeg.num_channels;
-    unsigned char *buffer = input_jpeg.buffer;
     unsigned char *grayImage = new unsigned char[width * height];
-    std::chrono::milliseconds elapsed_time;
-
-// create space and copy to device without write to host
-#pragma acc data copyin(buffer[0 : width * height * num_channels])
-
-// create space and copy to device, and write to host at the end of data scope
-#pragma acc data copy(grayImage[0 : width * height])
+    unsigned char *buffer = new unsigned char[width * height * num_channels];
+    for (int i = 0; i < width * height * num_channels; i++)
     {
-        auto start_time = std::chrono::high_resolution_clock::now();
+        buffer[i] = input_jpeg.buffer[i];
+    }
+    delete[] input_jpeg.buffer;
+#pragma acc enter data copyin(grayImage[0 : width * height], \
+                              buffer[0 : width * height * num_channels])
 
-#pragma acc parallel loop independent num_gangs(1024)
+#pragma acc update device(grayImage[0 : width * height], \
+                          buffer[0 : width * height * num_channels])
+
+    auto start_time = std::chrono::high_resolution_clock::now();
+#pragma acc parallel present(grayImage[0 : width * height],             \
+                             buffer[0 : width * height * num_channels]) \
+    num_gangs(1024)
+    {
+#pragma acc loop independent
         for (int i = 0; i < width * height; i++)
         {
             grayImage[i] = (0.299 * buffer[i * num_channels] +
                             0.587 * buffer[i * num_channels + 1] +
                             0.114 * buffer[i * num_channels + 2]);
         }
-
-        auto end_time = std::chrono::high_resolution_clock::now();
-        elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(
-            end_time - start_time);
     }
+    auto end_time = std::chrono::high_resolution_clock::now();
+#pragma acc update self(grayImage[0 : width * height])
+
+#pragma acc exit data copyout(grayImage[0 : width * height])
+
+    auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(
+        end_time - start_time);
 
     // Write GrayImage to output JPEG
     const char *output_filepath = argv[2];
     std::cout << "Output file to: " << output_filepath << "\n";
     JPEGMeta output_jpeg{grayImage, input_jpeg.width, input_jpeg.height, 1,
                          JCS_GRAYSCALE};
-    if (write_to_jpeg(output_jpeg, output_filepath))
+    if (export_jpeg(output_jpeg, output_filepath))
     {
         std::cerr << "Failed to write output JPEG\n";
         return -1;
     }
     // Release allocated memory
-    delete[] input_jpeg.buffer;
     delete[] grayImage;
+    delete[] buffer;
     std::cout << "Transformation Complete!" << std::endl;
     std::cout << "Execution Time: " << elapsed_time.count()
               << " milliseconds\n";

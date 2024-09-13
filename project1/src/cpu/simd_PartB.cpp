@@ -11,7 +11,7 @@
 #include <chrono>
 #include <iostream>
 
-#include "utils.hpp"
+#include "../utils.hpp"
 
 int main(int argc, char** argv) {
     // Verify input argument format
@@ -120,7 +120,7 @@ int main(int argc, char** argv) {
     std::cout << "Output file to: " << output_filepath << "\n";
     JPEGMeta output_jpeg{filteredImage, input_jpeg.width, input_jpeg.height,
                          input_jpeg.num_channels, input_jpeg.color_space};
-    if (write_to_jpeg(output_jpeg, output_filepath)) {
+    if (export_jpeg(output_jpeg, output_filepath)) {
         std::cerr << "Failed to write output JPEG\n";
         return -1;
     }
