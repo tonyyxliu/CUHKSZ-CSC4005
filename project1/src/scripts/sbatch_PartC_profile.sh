@@ -89,3 +89,8 @@ echo "OpenACC PartC"
 srun -n 1 --gpus 1 nsys profile -t cuda,nvtx,osrt -o ./profile/openacc_PartC.qdrep ${CURRENT_DIR}/../../build/src/gpu/openacc_PartC ${CURRENT_DIR}/../../images/4K-RGB.jpg ${CURRENT_DIR}/../../images/4K-Bilateral.jpg
 srun -n 1 perf stat ./profile/openacc_PartC.qdrep
 echo ""
+
+# Triton PartC
+echo "Triton PartC"
+srun -n 1 --gpus 1 python3 ${CURRENT_DIR}/../gpu/triton_PartC.py ${CURRENT_DIR}/../../images/kodim08_grayscale.png ${CURRENT_DIR}/../../images/kodim08_grayscale_bilateral_filter.png
+echo ""
