@@ -183,9 +183,11 @@ The image used for performance evaluation is the 4K JPEG image with around 10 mi
   - OpenMP (10%)
   - CUDA (10%)
   - OpenACC (10%)
-  - Triton (10%)
+  - Triton *(10%, Optional for undergraduates but compulsotry for postgraduates)*
 
   You can get full mark for each section as long as your program can compile and execute to get the expected output image by the command you give in the report.
+
+  **Triton PartC is optional for undergraduate students enrolled in CSC4005, but compulsory for postgraduate students enrolled in CSC6115. The other six parallel programming languages (SIMD, MPI, Pthread, OpenMP, CUDA, and OpenACC) are required for both groups of students. The 10% of Triton for undergraduate students will be transfered to the performance part.**
 
 - **Performance of Your Program (20%)**
   Try your best to optimize the performance your parallel programs.If your programs show similar performance to the baseline provided by the teaching stuff, then you can get full mark. Points will be deduted if your parallel programs perform poor while no justification can be found in the report. (Target Peformance will be released soon).
