@@ -11,8 +11,8 @@ September 13th *(Friday)*, 2024 (UTC+8)
 #### Suff Responsible for This Project
 
 - TA Liu Yuxuan *(For all languages except Triton)*
-- TA Zhang Qihang *(Triton PartC)*
-- USTF Hou Tianci *(Triton PartA & B)*
+- TA Zhang Qihang *(Triton PartB & C)*
+- USTF Hou Tianci *(Triton PartA)*
 
 ## Prologue
 
