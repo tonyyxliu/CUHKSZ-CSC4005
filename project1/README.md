@@ -400,12 +400,12 @@ If your program behaves poor performance to the baseline, points will be deducte
 
 | Number of Processes / Cores | Sequential (AOS, -O0) | Sequential (SOA, -O0) | Sequential (-O2) |  SIMD (AVX2) | MPI  | Pthread | OpenMP | CUDA | OpenACC |
 |-----------------------------|-----------------------|-----------------------|------------------|--------------|------|---------|--------|------|---------|
-| 1                           | 8383                  | 7911                  | 3745             | 1865         | 3792 | 3736    | 3729   | 15.8 | 50      |
-| 2                           | N/A                   | N/A                   | N/A              | N/A          | 3130 | 3173    | 3375   | N/A  | N/A     |
-| 4                           | N/A                   | N/A                   | N/A              | N/A          | 1544 | 1628    | 1998   | N/A  | N/A     |
-| 8                           | N/A                   | N/A                   | N/A              | N/A          | 773  | 826     | 1319   | N/A  | N/A     |
-| 16                          | N/A                   | N/A                   | N/A              | N/A          | 387  | 423     | 1300   | N/A  | N/A     |
-| 32                          | N/A                   | N/A                   | N/A              | N/A          | 198  | 261     | 1301   | N/A  | N/A     |
+| 1                           | 10326                  | 9773                  | 3745             | 1422         | 3640 | 3661    | 3654   | 9.6 | 43      |
+| 2                           | N/A                   | N/A                   | N/A              | N/A          | 2838 | 2804    | 3088   | N/A  | N/A     |
+| 4                           | N/A                   | N/A                   | N/A              | N/A          | 1428 | 1560    | 1834   | N/A  | N/A     |
+| 8                           | N/A                   | N/A                   | N/A              | N/A          | 719  | 736     | 1262   | N/A  | N/A     |
+| 16                          | N/A                   | N/A                   | N/A              | N/A          | 361  | 396     | 1265   | N/A  | N/A     |
+| 32                          | N/A                   | N/A                   | N/A              | N/A          | 182  | 217     | 1241   | N/A  | N/A     |
 
 ## Appendix
 
