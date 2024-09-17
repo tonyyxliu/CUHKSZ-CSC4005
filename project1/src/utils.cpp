@@ -361,7 +361,7 @@ ColorValue bilateral_filter(const Pixel* pixels, int row, int col, int width,
                                          (-2 * powf(SIGMA_R, 2)));
     float w_32 = w_spatial_border * expf(powf(center_value - value_32, 2) /
                                          (-2 * powf(SIGMA_R, 2)));
-    float w_33 = w_spatial_border * expf(powf(center_value - value_33, 2) /
+    float w_33 = w_spatial_corner * expf(powf(center_value - value_33, 2) /
                                          (-2 * powf(SIGMA_R, 2)));
     float sum_weights =
         w_11 + w_12 + w_13 + w_21 + w_22 + w_23 + w_31 + w_32 + w_33;
@@ -411,7 +411,7 @@ ColorValue bilateral_filter(const ColorValue* values, int row, int col,
                                          (-2 * powf(SIGMA_R, 2)));
     float w_32 = w_spatial_border * expf(powf(center_value - value_32, 2) /
                                          (-2 * powf(SIGMA_R, 2)));
-    float w_33 = w_spatial_border * expf(powf(center_value - value_33, 2) /
+    float w_33 = w_spatial_corner * expf(powf(center_value - value_33, 2) /
                                          (-2 * powf(SIGMA_R, 2)));
     float sum_weights =
         w_11 + w_12 + w_13 + w_21 + w_22 + w_23 + w_31 + w_32 + w_33;
