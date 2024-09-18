@@ -70,5 +70,5 @@ echo ""
 
 # Triton PartC
 echo "Triton PartC"
-srun -n 1 --gpus 1 python3 ${CURRENT_DIR}/../gpu/triton_PartC.py ${CURRENT_DIR}/../../images/kodim08_grayscale.png ${CURRENT_DIR}/../../images/kodim08_grayscale_bilateral_filter.png
+srun -n 1 --gpus 1 python3 ${CURRENT_DIR}/../gpu/triton_PartC.py ${CURRENT_DIR}/../../images/4K-RGB.jpg ${CURRENT_DIR}/../../images/4K-Bilateral.jpg
 echo ""

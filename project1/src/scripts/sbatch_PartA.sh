@@ -66,5 +66,5 @@ echo ""
 
 # Triton PartA
 echo "Triton PartA"
-srun -n 1 --gpus 1 python3 ${CURRENT_DIR}/../gpu/triton_PartA.py ${CURRENT_DIR}/../../images/4K-RGB.jpg ${CURRENT_DIR}/../../images/4K-Gray.jpg
+srun -n 1 --gpus 1 python3 ${CURRENT_DIR}/../gpu/triton_PartA.py ${CURRENT_DIR}/../../images/20K-RGB.jpg ${CURRENT_DIR}/../../images/20K-Gray.jpg
 echo ""
