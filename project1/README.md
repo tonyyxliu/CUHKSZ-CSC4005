@@ -63,9 +63,9 @@ Gray = 0.299 * Red + 0.587 * Green + 0.114 * Blue
 </p>
 
 <div>
-    <img src="images/4k-RGB.jpg" alt="4K Picture RGB"/>
+    <img src="images/4K-RGB.jpg" alt="4K Picture RGB"/>
     <br />
-    <img src="images/4k-Gray.jpg" alt="4K Picture Grayscale"/>
+    <img src="images/4K-Gray.jpg" alt="4K Picture Grayscale"/>
 </div>
 <p style="font-size: medium;" align="center">
     <strong>Convert 4K JPEG image (3840x2599) from RGB to Grayscale</strong>
