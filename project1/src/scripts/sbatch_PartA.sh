@@ -1,10 +1,9 @@
 #!/bin/bash
-#SBATCH -o ./Project1-PartA-Results-triton.txt
+#SBATCH -o ./Project1-PartA-Results.txt
 #SBATCH -p Project
 #SBATCH -J Project1-PartA
 #SBATCH --nodes=1
-#SBATCH --nodelist=node02
-#SBATCH --ntasks-per-node=4
+#SBATCH --ntasks-per-node=32
 #SBATCH --gres=gpu:1
 
 # Necessary Environment Variables for Triton
