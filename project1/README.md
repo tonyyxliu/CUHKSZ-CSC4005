@@ -398,14 +398,14 @@ If your program behaves poor performance to the baseline, points will be deducte
 - [sbatch file here](src/scripts/sbatch_PartC.sh)
 - Performance measured as execution time in milliseconds
 
-| Number of Processes / Cores | Sequential (AOS, -O0) | Sequential (SOA, -O0) | Sequential (-O2) |  SIMD (AVX2) | MPI  | Pthread | OpenMP | CUDA | OpenACC |
-|-----------------------------|-----------------------|-----------------------|------------------|--------------|------|---------|--------|------|---------|
-| 1                           | 10326                  | 9773                  | 3745             | 1422         | 3640 | 3661    | 3654   | 9.6 | 43      |
-| 2                           | N/A                   | N/A                   | N/A              | N/A          | 2838 | 2804    | 3088   | N/A  | N/A     |
-| 4                           | N/A                   | N/A                   | N/A              | N/A          | 1428 | 1560    | 1834   | N/A  | N/A     |
-| 8                           | N/A                   | N/A                   | N/A              | N/A          | 719  | 736     | 1262   | N/A  | N/A     |
-| 16                          | N/A                   | N/A                   | N/A              | N/A          | 361  | 396     | 1265   | N/A  | N/A     |
-| 32                          | N/A                   | N/A                   | N/A              | N/A          | 182  | 217     | 1241   | N/A  | N/A     |
+| Number of Processes / Cores | Sequential (AOS, -O0) | Sequential (SOA, -O0) | Sequential (-O2) | SIMD (AVX2, -O0) |  SIMD (AVX2, -O2) | MPI (-O2)  | Pthread (-O2) | OpenMP (-O2) | CUDA | OpenACC |
+|-----------------------------|-----------------------|-----------------------|------------------|------------------|-------------------|------------|---------------|--------------|------|---------|
+| 1                           | 10326                  | 9773                  | 3745            | 3685             | 3674              | 3640       | 3661          | 3654         | 9.6 | 43      |
+| 2                           | N/A                   | N/A                   | N/A              | N/A              | N/A               | 2838       | 2804          | 2799         | N/A  | N/A     |
+| 4                           | N/A                   | N/A                   | N/A              | N/A              | N/A               | 1428       | 1560          | 1452         | N/A  | N/A     |
+| 8                           | N/A                   | N/A                   | N/A              | N/A              | N/A               | 719        | 736           | 756          | N/A  | N/A     |
+| 16                          | N/A                   | N/A                   | N/A              | N/A              | N/A               | 361        | 396           | 501          | N/A  | N/A     |
+| 32                          | N/A                   | N/A                   | N/A              | N/A              | N/A               | 182        | 217           | 247          | N/A  | N/A     |
 
 ## Appendix
 
