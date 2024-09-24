@@ -67,3 +67,8 @@ echo ""
 echo "OpenACC PartC"
 srun -n 1 --gpus 1 ${CURRENT_DIR}/../../build/src/gpu/openacc_PartC ${CURRENT_DIR}/../../images/4K-RGB.jpg ${CURRENT_DIR}/../../images/4K-Bilateral.jpg
 echo ""
+
+# Triton PartC
+echo "Triton PartC"
+srun -n 1 --gpus 1 python3 ${CURRENT_DIR}/../gpu/triton_PartC.py ${CURRENT_DIR}/../../images/4K-RGB.jpg ${CURRENT_DIR}/../../images/4K-Bilateral.jpg
+echo ""

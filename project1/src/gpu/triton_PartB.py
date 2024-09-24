@@ -38,14 +38,14 @@ def blur_filter(img_pad, k_size, activation=""):
     )
     return output
 
-def main():
+def main(input_image_path, output_image_path, output_time_image_path):
     '''
     Code for image processing
     '''
     # kernel size
     ksize = 3
     # read image
-    img = cv2.imread("kodim08_grayscale.png", cv2.IMREAD_GRAYSCALE).astype(np.float32)
+    img = cv2.imread(input_image_path, cv2.IMREAD_GRAYSCALE).astype(np.float32)
     # add padding to the image
     pad = (ksize-1) // 2
     pad_img = cv2.copyMakeBorder(img, pad, pad, pad, pad, cv2.BORDER_REFLECT)
@@ -53,7 +53,7 @@ def main():
     # apply the filter
     output_triton = blur_filter(pad_img, ksize)
     # save the output
-    cv2.imwrite("kodim08_grayscale_blur.png", output_triton.cpu().numpy())
+    cv2.imwrite(output_image_path, output_triton.cpu().numpy())
 
     '''
     Code for time comparison
@@ -75,7 +75,11 @@ def main():
     # draw the time list in a graph, you can uncomment the line below to see the graph from 10-100 iterations
     # plt.plot(time_list[10:], label='triton')
     plt.legend()
-    plt.savefig("time.png")
+    plt.savefig(output_time_image_path)
 
 if __name__ == "__main__":
-    main()
+    import sys
+    if len(sys.argv) != 4:
+        print("Invalid argument, should be: python3 script.py /path/to/input/jpeg /path/to/output/jpeg_1 /path/to/output/jpeg_2")
+        sys.exit(-1)
+    main(sys.argv[1], sys.argv[2], sys.argv[3])

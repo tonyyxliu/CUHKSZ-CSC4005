@@ -342,27 +342,27 @@ ColorValue bilateral_filter(const Pixel* pixels, int row, int col, int width,
     ColorValue value_33 =
         pixels[(row + 1) * width + (col + 1)].get_channel(channel);
     // Spatial Weights
-    float w_spatial_border = expf(-1 / 2 * powf(SIGMA_D, 2));
-    float w_spatial_corner = expf(2 * -1 / 2 * powf(SIGMA_D, 2));
+    float w_spatial_border = expf(-0.5 / powf(SIGMA_D, 2));
+    float w_spatial_corner = expf(-1.0 / powf(SIGMA_D, 2));
     // Intensity Weights
     ColorValue center_value = value_22;
-    float w_11 = w_spatial_corner * expf(powf(center_value - value_11, 2) *
-                                         -0.5 * powf(SIGMA_R, 2));
-    float w_12 = w_spatial_border * expf(powf(center_value - value_12, 2) *
-                                         -0.5 * powf(SIGMA_R, 2));
-    float w_13 = w_spatial_corner * expf(powf(center_value - value_13, 2) *
-                                         -0.5 * powf(SIGMA_R, 2));
-    float w_21 = w_spatial_border * expf(powf(center_value - value_21, 2) *
-                                         -0.5 * powf(SIGMA_R, 2));
+    float w_11 = w_spatial_corner * expf(powf(center_value - value_11, 2) /
+                                         (-2 * powf(SIGMA_R, 2)));
+    float w_12 = w_spatial_border * expf(powf(center_value - value_12, 2) /
+                                         (-2 * powf(SIGMA_R, 2)));
+    float w_13 = w_spatial_corner * expf(powf(center_value - value_13, 2) /
+                                         (-2 * powf(SIGMA_R, 2)));
+    float w_21 = w_spatial_border * expf(powf(center_value - value_21, 2) /
+                                         (-2 * powf(SIGMA_R, 2)));
     float w_22 = 1.0;
-    float w_23 = w_spatial_border * expf(powf(center_value - value_23, 2) *
-                                         -0.5 * powf(SIGMA_R, 2));
-    float w_31 = w_spatial_corner * expf(powf(center_value - value_31, 2) *
-                                         -0.5 * powf(SIGMA_R, 2));
-    float w_32 = w_spatial_border * expf(powf(center_value - value_32, 2) *
-                                         -0.5 * powf(SIGMA_R, 2));
-    float w_33 = w_spatial_border * expf(powf(center_value - value_33, 2) *
-                                         -0.5 * powf(SIGMA_R, 2));
+    float w_23 = w_spatial_border * expf(powf(center_value - value_23, 2) /
+                                         (-2 * powf(SIGMA_R, 2)));
+    float w_31 = w_spatial_corner * expf(powf(center_value - value_31, 2) /
+                                         (-2 * powf(SIGMA_R, 2)));
+    float w_32 = w_spatial_border * expf(powf(center_value - value_32, 2) /
+                                         (-2 * powf(SIGMA_R, 2)));
+    float w_33 = w_spatial_corner * expf(powf(center_value - value_33, 2) /
+                                         (-2 * powf(SIGMA_R, 2)));
     float sum_weights =
         w_11 + w_12 + w_13 + w_21 + w_22 + w_23 + w_31 + w_32 + w_33;
     // Calculate filtered value
@@ -392,27 +392,27 @@ ColorValue bilateral_filter(const ColorValue* values, int row, int col,
     ColorValue value_32 = values[(row + 1) * width + col];
     ColorValue value_33 = values[(row + 1) * width + (col + 1)];
     // Spatial Weights
-    float w_spatial_border = expf(-1 / 2 * powf(SIGMA_D, 2));
-    float w_spatial_corner = expf(2 * -1 / 2 * powf(SIGMA_D, 2));
+    float w_spatial_border = expf(-0.5 / powf(SIGMA_D, 2));
+    float w_spatial_corner = expf(-1.0 / powf(SIGMA_D, 2));
     // Intensity Weights
     ColorValue center_value = value_22;
-    float w_11 = w_spatial_corner * expf(powf(center_value - value_11, 2) *
-                                         -0.5 * powf(SIGMA_R, 2));
-    float w_12 = w_spatial_border * expf(powf(center_value - value_12, 2) *
-                                         -0.5 * powf(SIGMA_R, 2));
-    float w_13 = w_spatial_corner * expf(powf(center_value - value_13, 2) *
-                                         -0.5 * powf(SIGMA_R, 2));
-    float w_21 = w_spatial_border * expf(powf(center_value - value_21, 2) *
-                                         -0.5 * powf(SIGMA_R, 2));
+    float w_11 = w_spatial_corner * expf(powf(center_value - value_11, 2) /
+                                         (-2 * powf(SIGMA_R, 2)));
+    float w_12 = w_spatial_border * expf(powf(center_value - value_12, 2) /
+                                         (-2 * powf(SIGMA_R, 2)));
+    float w_13 = w_spatial_corner * expf(powf(center_value - value_13, 2) /
+                                         (-2 * powf(SIGMA_R, 2)));
+    float w_21 = w_spatial_border * expf(powf(center_value - value_21, 2) /
+                                         (-2 * powf(SIGMA_R, 2)));
     float w_22 = 1.0;
-    float w_23 = w_spatial_border * expf(powf(center_value - value_23, 2) *
-                                         -0.5 * powf(SIGMA_R, 2));
-    float w_31 = w_spatial_corner * expf(powf(center_value - value_31, 2) *
-                                         -0.5 * powf(SIGMA_R, 2));
-    float w_32 = w_spatial_border * expf(powf(center_value - value_32, 2) *
-                                         -0.5 * powf(SIGMA_R, 2));
-    float w_33 = w_spatial_border * expf(powf(center_value - value_33, 2) *
-                                         -0.5 * powf(SIGMA_R, 2));
+    float w_23 = w_spatial_border * expf(powf(center_value - value_23, 2) /
+                                         (-2 * powf(SIGMA_R, 2)));
+    float w_31 = w_spatial_corner * expf(powf(center_value - value_31, 2) /
+                                         (-2 * powf(SIGMA_R, 2)));
+    float w_32 = w_spatial_border * expf(powf(center_value - value_32, 2) /
+                                         (-2 * powf(SIGMA_R, 2)));
+    float w_33 = w_spatial_corner * expf(powf(center_value - value_33, 2) /
+                                         (-2 * powf(SIGMA_R, 2)));
     float sum_weights =
         w_11 + w_12 + w_13 + w_21 + w_22 + w_23 + w_31 + w_32 + w_33;
     // Calculate filtered value

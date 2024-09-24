@@ -11,8 +11,8 @@ September 13th *(Friday)*, 2024 (UTC+8)
 #### Suff Responsible for This Project
 
 - TA Liu Yuxuan *(For all languages except Triton)*
-- TA Zhang Qihang *(Triton PartC)*
-- USTF Hou Tianci *(Triton PartA & B)*
+- TA Zhang Qihang *(Triton PartB & C)*
+- USTF Hou Tianci *(Triton PartA)*
 
 ## Prologue
 
@@ -63,9 +63,9 @@ Gray = 0.299 * Red + 0.587 * Green + 0.114 * Blue
 </p>
 
 <div>
-    <img src="images/4k-RGB.jpg" alt="4K Picture RGB"/>
+    <img src="images/4K-RGB.jpg" alt="4K Picture RGB"/>
     <br />
-    <img src="images/4k-Gray.jpg" alt="4K Picture Grayscale"/>
+    <img src="images/4K-Gray.jpg" alt="4K Picture Grayscale"/>
 </div>
 <p style="font-size: medium;" align="center">
     <strong>Convert 4K JPEG image (3840x2599) from RGB to Grayscale</strong>
@@ -398,14 +398,14 @@ If your program behaves poor performance to the baseline, points will be deducte
 - [sbatch file here](src/scripts/sbatch_PartC.sh)
 - Performance measured as execution time in milliseconds
 
-| Number of Processes / Cores | Sequential (AOS, -O0) | Sequential (SOA, -O0) | Sequential (-O2) |  SIMD (AVX2) | MPI  | Pthread | OpenMP | CUDA | OpenACC |
-|-----------------------------|-----------------------|-----------------------|------------------|--------------|------|---------|--------|------|---------|
-| 1                           | 8383                  | 7911                  | 3745             | 1865         | 3792 | 3736    | 3729   | 15.8 | 50      |
-| 2                           | N/A                   | N/A                   | N/A              | N/A          | 3130 | 3173    | 3375   | N/A  | N/A     |
-| 4                           | N/A                   | N/A                   | N/A              | N/A          | 1544 | 1628    | 1998   | N/A  | N/A     |
-| 8                           | N/A                   | N/A                   | N/A              | N/A          | 773  | 826     | 1319   | N/A  | N/A     |
-| 16                          | N/A                   | N/A                   | N/A              | N/A          | 387  | 423     | 1300   | N/A  | N/A     |
-| 32                          | N/A                   | N/A                   | N/A              | N/A          | 198  | 261     | 1301   | N/A  | N/A     |
+| Number of Processes / Cores | Sequential (AOS, -O0) | Sequential (SOA, -O0) | Sequential (-O2) | SIMD (AVX2, -O0) |  SIMD (AVX2, -O2) | MPI (-O2)  | Pthread (-O2) | OpenMP (-O2) | CUDA | OpenACC |
+|-----------------------------|-----------------------|-----------------------|------------------|------------------|-------------------|------------|---------------|--------------|------|---------|
+| 1                           | 10326                  | 9773                  | 3745            | 3685             | 3674              | 3640       | 3661          | 3654         | 9.6 | 43      |
+| 2                           | N/A                   | N/A                   | N/A              | N/A              | N/A               | 2838       | 2804          | 2799         | N/A  | N/A     |
+| 4                           | N/A                   | N/A                   | N/A              | N/A              | N/A               | 1428       | 1560          | 1452         | N/A  | N/A     |
+| 8                           | N/A                   | N/A                   | N/A              | N/A              | N/A               | 719        | 736           | 756          | N/A  | N/A     |
+| 16                          | N/A                   | N/A                   | N/A              | N/A              | N/A               | 361        | 396           | 501          | N/A  | N/A     |
+| 32                          | N/A                   | N/A                   | N/A              | N/A              | N/A               | 182        | 217           | 247          | N/A  | N/A     |
 
 ## Appendix
 
