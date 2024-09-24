@@ -93,9 +93,9 @@ int main(int argc, char** argv) {
             _mm256_storeu_ps(added_array, add_results);
 
             __m128i left_ints =
-                _mm_set_epi32(input_jpeg.buffer[r_id - line_width + 2],
-                              input_jpeg.buffer[r_id + 2],
-                              input_jpeg.buffer[r_id + line_width + 2], 0);
+                _mm_set_epi32(input_jpeg.buffer[r_id - line_width + 5],
+                              input_jpeg.buffer[r_id + 5],
+                              input_jpeg.buffer[r_id + line_width + 5], 0);
             __m128 left_floats = _mm_cvtepi32_ps(left_ints);
             __m128 left_results = _mm_mul_ps(left_floats, filter_register4);
             _mm_storeu_ps(left_array, left_results);
@@ -103,7 +103,7 @@ int main(int argc, char** argv) {
             r_sum += (added_array[0] + added_array[3] + added_array[6]);
             g_sum += (added_array[1] + added_array[4] + added_array[7]);
             b_sum += (added_array[2] + added_array[5]);
-            b_sum += (left_array[1] + left_array[2] + left_array[3]);
+            b_sum += (left_array[0] + left_array[1] + left_array[2]);
 
             filteredImage[r_id] = clamp_pixel_value(r_sum);
             filteredImage[g_id] = clamp_pixel_value(g_sum);
