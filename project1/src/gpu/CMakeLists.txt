@@ -16,6 +16,7 @@ endif ()
 SET(CMAKE_CXX_COMPILER pgc++)
 
 ## CUDA
+list(APPEND CUDA_NVCC_FLAGS "-fmad=false")
 cuda_add_executable(cuda_PartA
         cuda_PartA.cu
         ../utils.cpp ../utils.hpp)
@@ -32,7 +33,7 @@ cuda_add_executable(cuda_PartC
 target_link_libraries(cuda_PartC cudart)
 
 ## OpenACC
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -acc")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -acc -ta=tesla:nofma")
 add_executable(openacc_PartA
         openacc_PartA.cpp
         ../utils.cpp ../utils.hpp)
