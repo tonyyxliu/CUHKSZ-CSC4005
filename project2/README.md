@@ -12,9 +12,8 @@ October 11th，2024 (Beijing Time, UTC+08:00)
 
 ### TA In Charge of This Assignment
 
-**Mr. Yang Yufan** for Parallel Program Implementation (yufanyang1@link.cuhk.edu.cn)
+**Mr. Seigei Kudria** (sergeikudria@link.cuhk.edu.cn)
 
-**Mr. Liu Yuxuan** for Profiling (yuxuanliu1@link.cuhk.edu.cn)
 
 ## Prologue
 
