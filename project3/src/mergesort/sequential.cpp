@@ -5,7 +5,6 @@
 // Sequential Merge Sort
 //
 
-
 #include <iostream>
 #include <vector>
 #include "../utils.hpp"
@@ -84,9 +83,7 @@ int main(int argc, char** argv) {
 
     const int size = atoi(argv[1]);
 
-    const int seed = 4005;
-
-    std::vector<int> vec = createRandomVec(size, seed);
+    std::vector<int> vec = createUniformVec(size);
     std::vector<int> vec_clone = vec;
 
     auto start_time = std::chrono::high_resolution_clock::now();
@@ -102,6 +99,5 @@ int main(int argc, char** argv) {
               << std::endl;
     
     checkSortResult(vec_clone, vec);
-
     return 0;
 }

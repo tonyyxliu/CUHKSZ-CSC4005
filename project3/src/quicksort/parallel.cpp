@@ -35,7 +35,7 @@ int main(int argc, char** argv) {
 
     const int seed = 4005;
 
-    std::vector<int> vec = createRandomVec(size, seed);
+    std::vector<int> vec = createUniformVec(size, seed);
     std::vector<int> vec_clone = vec;
 
     auto start_time = std::chrono::high_resolution_clock::now();

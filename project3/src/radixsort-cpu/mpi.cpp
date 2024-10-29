@@ -1,21 +1,27 @@
 //
-// Created by Yang Yufan on 2023/10/31.
-// Email: yufanyang1@link.cuhk.edu.cn
+// Created by Lyu You on 2024/10/17
+// Email: 121090404@link.cuhk.edu.cn
 //
-// Parallel Odd-Even Sort with MPI
+// Task #6 (Extra Credits): Parallel Radix Sort with MPI
 //
 
 #include <iostream>
 #include <vector>
+#include <queue>
+#include <tuple>
+
 #include <mpi.h>
+
 #include "../utils.hpp"
 
 #define MASTER 0
+#define BASE 256
 
-void oddEvenSort(std::vector<int>& vec, int numtasks, int taskid, MPI_Status* status) {
-    /* Your code here!
-       Implement parallel odd-even sort with MPI
-    */
+/**
+ * TODO: Parallel Radix Sort using MPI
+ */
+void radixSort(std::vector<int>& vec, int numtasks, int taskid, MPI_Status* status) {
+    /* Your codes here */
 }
 
 int main(int argc, char** argv) {
@@ -43,22 +49,22 @@ int main(int argc, char** argv) {
 
     const int seed = 4005;
 
-    std::vector<int> vec = createRandomVec(size, seed);
+    std::vector<int> vec = createUniformVec(size, seed);
     std::vector<int> vec_clone = vec;
 
     auto start_time = std::chrono::high_resolution_clock::now();
 
-    oddEvenSort(vec, numtasks, taskid, &status);
+    radixSort(vec, numtasks, taskid, &status);
 
     if (taskid == MASTER) {
         auto end_time = std::chrono::high_resolution_clock::now();
         auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(
             end_time - start_time);
         
-        std::cout << "Odd-Even Sort Complete!" << std::endl;
+        std::cout << "Radix Sort Complete!" << std::endl;
         std::cout << "Execution Time: " << elapsed_time.count() << " milliseconds"
                 << std::endl;
-        
+
         checkSortResult(vec_clone, vec);
     }
 
