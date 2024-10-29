@@ -18,27 +18,12 @@ programs.
 - OpenACC
 - Triton *(Newly added this semester)*
 
-## Grading Scheme
-
-### Projects (50%)
+## Projects
 
 - **Project 1:**(September 13th *(Friday)* to October 7th *(Monday)*) Embarrassingly Parallel Programming (Image Processing implemented with all six parallel programming languages)
 - **Project 2:**(October 8th *(Tuesday)* to October 25st *(Friday)*) Parallel Programming with Reduction (Parallel Matrix Multiplication)
-- **Project 3:**(October 25st *(Friday)* to November 11th *(Monday)*) Parallel Programming with Synchronization (Parallel Merge Sort & Radix Sort)
-- **Project 4:**(November 12th *(Tuesday)* to November 29th *(Friday)*) New Technologies & Applications of Parallel Programming (like AI, implemented with CUDA/OpenACC/Triton)
-
-**Final Week**(TBA)
-
-### Final Exam (30%)
-
-The exam covers the course materials through the whole semester. Exact date to be determined.
-
-### Quizzes (15%)
-- Random quizzes, with no notification in advance
-- Details to be determined
-
-### Participation (5%)
-- Details to be determined
+- **Project 3:**(October 30th *(Wednesday)* to November 17th *(Sunday)*) Parallel Programming with Synchronization (Parallel Sorting)
+- **Project 4:**(November 20th *(Wednesday)* to December 8th *(Sunday)*) New Technologies & Applications of Parallel Programming (like AI, implemented with OpenACC & Triton)
 
 ## Teaching Stuff
 
