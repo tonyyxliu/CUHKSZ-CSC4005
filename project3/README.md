@@ -30,7 +30,7 @@ In this project, we have prepared four classic sorting algorithms for you. You n
 4. **Thread-Level Parallel Merge Sort in OpenMP**
 5. (Optional) **Dynamic Thread-Level Parallel Quick Sort**
 6. (Optional) **Parallel Radix Sort on CPU**
-7. (Optional) **GPU Radix Sort with Decoupled Look-back**
+7. (Undergraduate Optional, Graduate Required) **GPU Radix Sort with Decoupled Look-back**
 
 ## Task #1: Process-Level Parallel Bucket Sort (Assume Uniformly Distributed Data)
 
@@ -410,7 +410,7 @@ The sequential version of radix sort has been provided in `src/radixsort-cpu/seq
 
 ### Task #7: Parallel Radix Sort on GPU
 
-In this task, please implement a radix sort for GPU accelerator in CUDA which could support sorting for an array of length $N = 10^8$. 
+In this task, please implement a radix sort for GPU accelerator in CUDA which could support sorting for an array of length $N = 10^8$. Undergraduate student can earn extra credit from this task and graduate students are required to finish the task. 
 
 #### Requirements
 
