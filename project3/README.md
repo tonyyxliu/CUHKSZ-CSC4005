@@ -586,12 +586,12 @@ Here are the performance baselines (in milliseconds) for Project 3:
 
 *Params: low = 0, high = SIZE*
 
-| Workers | std::sort | BucketSort(MPI) | QuickSort(MPI) | PSRS (MPI) | MergeSort (OpenMP) | QuickSort(Threads) |
-| :-----: | :-------: | :-------------: | :------------: | :--------: | :----------------: | :----------------: |
-|    1    | 11777     |     10104       |      13583     | 12639      |       19535        |       13006        |
-|    4    | N/A       |      4592       |      9187      | 4771       |       9312         |        7804        |
-|   16    | N/A       |      2457       |      8403      | 1696       |        3242        |        3808        |
-|   32    | N/A       |      2213       |      9133      | 1453       |        2099        |        3597        |
+| Workers | std::sort | BucketSort(MPI) | QuickSort(MPI) | PSRS (MPI) | MergeSort (OpenMP) | QuickSort(Threads) | RadixSort (MPI) | RadixSort (OpenMP) |
+| :-----: | :-------: | :-------------: | :------------: | :--------: | :----------------: | :----------------: | :-------------: | :----------------: |
+|    1    | 11777     |     10104       |      13583     | 12639      |       19535        |       13006        |      10012      |        2300        |
+|    4    | N/A       |      4592       |      9187      | 4771       |       9312         |        7804        |       8529      |        1375        |
+|   16    | N/A       |      2457       |      8403      | 1696       |        3242        |        3808        |       8730      |         763        |
+|   32    | N/A       |      2213       |      9133      | 1453       |        2099        |        3597        |       9283      |         624        |
 
 #### Normally Distributed Dataset
 
@@ -602,9 +602,9 @@ Note: According to the empirical law of normal distribution:
 - Around 95% of data appear within [mean - 2 * stddev, mean + 2 * stddev]
 - Around 99.7% of data appear within [mean - 3 * stddev, mean + 3 * stddev]
 
-| Workers | std::sort | BucketSort(MPI) | QuickSort(MPI) | PSRS (MPI) | MergeSort (OpenMP) | QuickSort(Threads) |
-| :-----: | :-------: | :-------------: | :------------: | :--------: | :----------------: | :----------------: |
-|    1    | 11740     |     12375       |      13440     | 12620      |       19450        |       N/A          |
-|    4    | N/A       |      9174       |      9479      | 4752       |       9784         |        N/A         |
-|   16    | N/A       |      5904       |      9022      | 1695       |        3179        |        N/A         |
-|   32    | N/A       |      4040       |      9985      | 1456       |        2027        |        N/A         |
+| Workers | std::sort | BucketSort(MPI) | QuickSort(MPI) | PSRS (MPI) | MergeSort (OpenMP) | QuickSort(Threads) | RadixSort (MPI) | RadixSort (OpenMP) |
+| :-----: | :-------: | :-------------: | :------------: | :--------: | :----------------: | :----------------: | :-------------: | :----------------: |
+|    1    | 11740     |     12375       |      13440     | 12620      |       19450        |       N/A          |      N/A        |         N/A        |
+|    4    | N/A       |      9174       |      9479      | 4752       |       9784         |        N/A         |      N/A        |         N/A        |
+|   16    | N/A       |      5904       |      9022      | 1695       |        3179        |        N/A         |      N/A        |         N/A        |
+|   32    | N/A       |      4040       |      9985      | 1456       |        2027        |        N/A         |      N/A        |         N/A        |
