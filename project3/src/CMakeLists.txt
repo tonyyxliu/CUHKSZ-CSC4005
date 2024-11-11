@@ -18,3 +18,6 @@ add_subdirectory(psrs)
 
 ## CPU Radix Sort
 add_subdirectory(radixsort-cpu)
+
+## GPU Radix Sort
+add_subdirectory(radixsort-gpu)
