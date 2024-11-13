@@ -37,7 +37,8 @@ int main(int argc, char** argv)
         n <<= 1; 
         b += 1; 
     }
-    std::vector<int> vec = createRandomVec(size, seed);
+    std::vector<int> vec = createUniformVec(size, seed); // this line is to generate uniform dataset
+    // std::vector<int> vec = createNormalVec(size, seed); // swtich to this line if you want to generate normal dataset
     std::vector<int> vec_clone = vec;
     for (int i = 0; i < size; i++) inp[i] = vec[i];
     memset(inp + size, 0, (n-size) * sizeof(unsigned int));
