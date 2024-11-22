@@ -1,0 +1,128 @@
+#ifndef OPS_HPP
+#define OPS_HPP
+
+#include "utlis.hpp"
+
+/**
+ * @brief GEMM (General Matrix Multiply) operation.
+ * 
+ * @param A 1D input array of size (batch_num * (m * n)).
+ * @param B 1D input array of size ((m * n) * k).
+ * @param Out 1D output array of size (batch_num * k).
+ * @param batch Number of batch.
+ * @param mn Number of (m * n).
+ * @param k Number of k.
+ */
+void gemm(const float* A, const float* B, float* Out, size_t batch, size_t mn, size_t k);
+
+/**
+ * @brief Add_bias operation.
+ * 
+ * @param A 1D input array of size (batch_num * out_dim).
+ * @param B 1D output array of size (batch_num * out_dim).
+ * @param bias 1D input array of size out_dim.
+ * @param batch Number of batch.
+ * @param out_dim Number of output dimension.
+ */
+void add_bias(float* A, float* B, const float* bias, size_t batch, size_t out_dim);
+
+/**
+ * @brief Relu operation.
+ * 
+ * @param A 1D input array of size (batch_num * out_dim).
+ * @param B 1D output array of size (batch_num * out_dim).
+ * @param size Size of A.
+ */
+void Relu(float* A, float* B, size_t size);
+
+/**
+ * @brief Softmax operation.
+ * 
+ * @param A 1D input array of size (batch_num * out_dim).
+ * @param B 1D output array of size (batch_num * out_dim).
+ * @param batch Number of batch.
+ * @param out_dim Number of output dimension.
+ */
+void Softmax(float* A, float* B, size_t batch, size_t out_dim);
+
+/**
+ * @brief Vector to one hot matrix operation.
+ * 
+ * @param A 1D input array of size (batch_num).
+ * @param B 1D output array of size (batch_num * out_dim).
+ * @param batch Number of batch.
+ * @param out_dim Number of output dimension.
+ */
+void vector_to_one_hot_matrix(const unsigned char* A, float* B, size_t batch, size_t out_dim);
+
+/**
+ * @brief Cross entropy loss operation.
+ * 
+ * @param A 1D input array of size (batch_num * out_dim).
+ * @param B 1D input array of size (batch_num * out_dim).
+ * @param Loss 1D output array of size (batch_num).
+ * @param batch Number of batch.
+ * @param out_dim Number of output dimension.
+ */
+void cross_entropy_loss(const float* A, const float* B, float* Loss, size_t batch, size_t out_dim);
+
+/**
+ * @brief Cross entropy loss gradient operation.
+ * 
+ * @param A 1D input array of size (batch_num * out_dim). Predicted value.
+ * @param B 1D input array of size (batch_num * out_dim). True value.
+ * @param Grad 1D output array of size (batch_num * out_dim).
+ * @param batch Number of batch.
+ * @param out_dim Number of output dimension.
+ */
+void cross_entropy_loss_grad(const float* A, const float* B, float* Grad, size_t batch, size_t out_dim);
+
+/**
+ * @brief Update bias operation.
+ * 
+ * @param Bias 1D input array of size out_dim.
+ * @param Output_Loss 1D input array of size (batch_num * out_dim).
+ * @param batch Number of batch.
+ * @param lr Learning rate.
+ * @param out_dim Number of output dimension.
+ */
+void update_bias(float* Bias, const float* Output_Loss, size_t batch, float lr, size_t out_dim);
+
+/**
+ * @brief Get Input Gradient from Output Grad.
+ * 
+ * @param Weight 1D input array of size (in_dim * out_dim).
+ * @param Output_Loss 1D input array of size (batch_num * out_dim).
+ * @param Input 1D input array of size (batch_num * in_dim).
+ * @param Grad 1D output array of size (batch_num * in_dim).
+ * @param batch Number of batch.
+ * @param in_dim Number of input dimension.
+ * @param out_dim Number of output dimension.
+ */
+void input_grad(const float* Weight, const float* Output_Loss, float* Input, float* Grad, size_t batch, size_t in_dim, size_t out_dim);
+
+/**
+ * @brief Update weight operation.
+ * 
+ * @param Weight 1D input array of size (in_dim * out_dim).
+ * @param Output_Loss 1D input array of size (batch_num * out_dim).
+ * @param Input 1D input array of size (batch_num * in_dim).
+ * @param batch Number of batch.
+ * @param lr Learning rate.
+ * @param in_dim Number of input dimension.
+ * @param out_dim Number of output dimension.
+ */
+void update_weight(float* Weight, const float* Output_Loss, const float* Input, size_t batch, float lr, size_t in_dim, size_t out_dim);
+
+/**
+ * @brief Relu Gradient operation.
+ * 
+ * @param A 1D input array of size (batch_num * out_dim).
+ * @param Grad 1D output array of size (batch_num * out_dim).
+ * @param batch Number of batch.
+ * @param out_dim Number of output dimension.
+ */
+void relu_grad(const float* A, float* Grad, size_t batch, size_t out_dim);
+
+
+#endif // OPS_HPP
