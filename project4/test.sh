@@ -22,6 +22,14 @@ EPOCHS=10
 LEARNING_RATE=0.001
 BATCH=32
 
-echo "Running"
-srun -n 1 --cpus-per-task 1 ${CURRENT_DIR}/build/mlp $TRAIN_X $TRAIN_Y $TEST_X $TEST_Y $HIDDEN_DIM $EPOCHS $LEARNING_RATE $BATCH
+echo "Sequential (Optimized with -O2)"
+srun -n 1 --cpus-per-task 1 ${CURRENT_DIR}/build/sequential $TRAIN_X $TRAIN_Y $TEST_X $TEST_Y $HIDDEN_DIM $EPOCHS $LEARNING_RATE $BATCH
+echo ""
+
+echo "OpenACC kernel"
+srun -n 1 --gpus 1 ${CURRENT_DIR}/build/openacc_kernel $TRAIN_X $TRAIN_Y $TEST_X $TEST_Y $HIDDEN_DIM $EPOCHS $LEARNING_RATE $BATCH
+echo ""
+
+echo "OpenACC fusion"
+srun -n 1 --gpus 1 ${CURRENT_DIR}/build/openacc_fusion $TRAIN_X $TRAIN_Y $TEST_X $TEST_Y $HIDDEN_DIM $EPOCHS $LEARNING_RATE $BATCH
 echo ""

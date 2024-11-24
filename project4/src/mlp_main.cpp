@@ -1,4 +1,4 @@
-#include "utlis.hpp"
+#include "utils.hpp"
 #include "mlp_network.hpp"
 
 int main(int argc, char* argv[])

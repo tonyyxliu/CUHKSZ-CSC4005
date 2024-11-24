@@ -2,7 +2,7 @@
 #ifndef NETWORK_HPP
 #define NETWORK_HPP
 
-#include "utlis.hpp"
+#include "utils.hpp"
 #include "ops.hpp"
 
 /**
@@ -51,18 +51,5 @@ void nn_epoch_cpp(const float* input_array, const unsigned char* label_array, fl
  * @param num_classes Number of output classes.
  * @return float Mean accuracy rate.
  */
-float mean_acc(const unsigned char* result, const unsigned char* labels_array, size_t images_num, size_t num_classes);
-
-/**
- * @brief Perform the argmax operation.
- * 
- * This function finds the index of the maximum value in each row of the input array.
- * 
- * @param A 1D input array of size (images_num * num_classes).
- * @param B 1D output array of size (images_num).
- * @param num_classes Number of output dimensions.
- * @param images_num Number of images.
- */
-void argmax(const float* A, unsigned char* B, size_t num_classes, size_t images_num);
 
 #endif // NETWORK_HPP

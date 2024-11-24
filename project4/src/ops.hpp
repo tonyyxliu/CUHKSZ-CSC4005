@@ -1,7 +1,7 @@
 #ifndef OPS_HPP
 #define OPS_HPP
 
-#include "utlis.hpp"
+#include "utils.hpp"
 
 /**
  * @brief GEMM (General Matrix Multiply) operation.
@@ -124,5 +124,24 @@ void update_weight(float* Weight, const float* Output_Loss, const float* Input, 
  */
 void relu_grad(const float* A, float* Grad, size_t batch, size_t out_dim);
 
+/**
+ * @brief Compute mean accuracy operation.
+ *
+ * @param result 1D input array of size (batch_num).
+ * @param labels_array 1D input array of size (batch_num).
+ * @param images_num Number of images(per batch).
+ * @param num_classes Number of classes.
+ */
+float mean_acc(const unsigned char* result, const unsigned char* labels_array, size_t images_num, size_t num_classes);
+
+/**
+ * @brief Argmax operation. You can see this function like one-hot matrix to vector.
+ * 
+ * @param A 1D input array of size (num_classes * batch_num).
+ * @param B 1D output array of size batch_num.
+ * @param num_classes Number of classes.
+ * @param images_num Number of images(per batch).
+ */
+void argmax(const float* A, unsigned char* B, size_t num_classes, size_t images_num);
 
 #endif // OPS_HPP
