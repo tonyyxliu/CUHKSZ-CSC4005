@@ -4,12 +4,11 @@
 
 ### Release Date:
 
-November 22th, 2024 (Beijing Time, UTC+08:00)
+November 24th, 2024 (Beijing Time, UTC+08:00)
 
 ### Deadline:
 
-TBD
-<!-- 11:59 P.M., December 8th, 2023 (Beijing Time, UTC+08:00) -->
+11:59 P.M., December 10th, 2024 (Beijing Time, UTC+08:00)
 
 ### TA/USTF In Charge of This Assignment
 
