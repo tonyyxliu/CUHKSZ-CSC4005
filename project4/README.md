@@ -161,10 +161,23 @@ You can use any hyperparameters and filters as you like.
 
 ## How to Execute the Program
 
+### Compilation
+
+```bash
+cd /path/to/project4
+mkdir build && cd build
+cmake ..
+make
+```
+
+Compilation with `cmake` may fail in docker container, if so, please compile with `gcc` and `pgc++` in the terminal with the correct optimization options.
+
+### Job Submission
+
 Execute the bash script.
 
 ```bash
-bash ./test.sh
+sbatch ./test.sh
 ```
 
 ## Baseline
