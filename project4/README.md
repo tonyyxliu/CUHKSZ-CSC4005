@@ -47,7 +47,6 @@ The structure of working directory should look like below:
 │   └── mlp_pytorch.py
 ├── src
 │   ├── mlp_main.cpp
-│   ├── mlp_network.cpp
 │   ├── mlp_network.hpp
 │   ├── mlp_openacc_fusion.cpp
 │   ├── mlp_openacc_kernel.cpp
@@ -251,7 +250,6 @@ Do not upload build file and dataset.
 <Your StudentID>.zip  # Codes
 ├── src
 │   ├── mlp_main.cpp
-│   ├── mlp_network.cpp
 │   ├── mlp_network.hpp
 │   ├── mlp_openacc_fusion.cpp
 │   ├── mlp_openacc_kernel.cpp
