@@ -132,7 +132,7 @@ Complete the code and use these function to do MLP training in `mlp_sequential.c
 
 ## Task2: Accelerate MLP with OpenAcc
 
-First, copy your code in `ops.cpp` and `mlp_sequential.cpp` to OpenAcc version code!
+First, copy your code in `ops_sequential.cpp` and `mlp_sequential.cpp` to OpenAcc version code!
 
 ### 2.1 Accelerate with Kernel
 
