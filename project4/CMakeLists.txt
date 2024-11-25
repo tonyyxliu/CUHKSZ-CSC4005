@@ -25,7 +25,7 @@ endif ()
 add_executable(sequential
         src/mlp_main.cpp 
         src/mlp_sequential.cpp 
-        src/ops.cpp 
+        src/ops_sequential.cpp 
         src/utils.cpp)
 target_include_directories(sequential PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_compile_options(sequential PRIVATE -O2)
