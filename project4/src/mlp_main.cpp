@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
     DataSet* test_data = parse_mnist(path_test_data_x,
                                      path_test_data_y);
     std::cout << "Training two layer neural network "<< hidden_dim <<" hidden units" << std::endl;
-    train_nn(train_data, test_data, 10, hidden_dim, epochs, learning_rate, batch);
+    train_nn(train_data, test_data, num_classes, hidden_dim, epochs, learning_rate, batch);
 
     delete train_data;
     delete test_data;

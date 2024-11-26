@@ -18,6 +18,7 @@ void nn_epoch_cpp(const float* input_array, const unsigned char* label_array, fl
         const float* array_batch = input_array + offset * input_dim;
         const unsigned char* label_batch = label_array + offset;
         size_t m_b = input_num - offset > batch_num ? batch_num : input_num - offset;
+        // Hint: You only need to copy the following code from mlp_sequnetial.cpp and accelerate *EACH KERNEL* using OpenACC
         // BEGIN YOUR CODE HERE ->
             // First FC Layer
             // ...
@@ -100,6 +101,7 @@ void train_nn(const DataSet* train_data, const DataSet* test_data, size_t num_cl
         {
             const float* array_batch = test_data->images_matrix + offset * test_data->input_dim;
             size_t m_b = test_input_num - offset > batch ? batch : test_input_num - offset;
+            // Hint: You only need to copy the following code from mlp_sequnetial.cpp and accelerate *EACH KERNEL* using OpenACC
             // BEGIN YOUR CODE HERE ->
                 // You can use fc1_temp to store the intermediate result of the FC layer
                 // First FC Layer
@@ -109,8 +111,8 @@ void train_nn(const DataSet* train_data, const DataSet* test_data, size_t num_cl
             // END YOUR CODE HERE <-
         }
         
+        // Optional: Accelerate the argmax & mean_acc using OpenACC
         argmax(test_result, test_result_class, num_classes, test_data->images_num);
-
         test_err = 100 * mean_acc(test_result_class, test_data->labels_array, test_data->images_num, num_classes);
 
         auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(time_2 - time_1);

@@ -51,15 +51,12 @@ The structure of working directory should look like below:
 │   ├── mlp_openacc_fusion.cpp
 │   ├── mlp_openacc_kernel.cpp
 │   ├── mlp_sequential.cpp
-│   ├── ops.cpp
 │   ├── ops.hpp
 │   ├── ops_openacc_fusion.cpp
 │   ├── ops_openacc_kernel.cpp
 │   ├── ops_sequential.cpp
 │   ├── utils.cpp
 │   ├── utils.hpp
-│   ├── utlis.cpp
-│   └── utlis.hpp
 ├── test.sh
 └── triton
     ├── mlp_triton.py
@@ -69,8 +66,6 @@ The structure of working directory should look like below:
         ├── op_relu.py
         ├── op_relu_backward.py
         └── op_sum.py
-
-7 directories, 30 files
 
 ```
 
@@ -126,13 +121,13 @@ class MLP(nn.Module):
         return out
 ```
 
-We already define **all functions** you need in the MLP in `ops.cpp` file. Also, the brief introduction and parameters for function are in `ops.hpp`.
+We already define **all functions** you need in the MLP in `ops_sequential.cpp` file (Also for OpenAcc Version). Also, the brief introduction and parameters for function are in `ops.hpp`.
 
 Complete the code and use these function to do MLP training in `mlp_sequential.cpp`.
 
 ## Task2: Accelerate MLP with OpenAcc
 
-First, copy your code in `ops_sequential.cpp` and `mlp_sequential.cpp` to OpenAcc version code!
+First, copy your code in `ops_sequential.cpp` and `mlp_sequential.cpp` to OpenAcc version code! We have hint in code files for what you need to change for different sub-task.
 
 ### 2.1 Accelerate with Kernel
 
@@ -154,7 +149,7 @@ You can use Triton to overload functions for backpropagation, thereby leveraging
 
 ## Extra Credit: Extend Neural Network to Convolutional Neural Network with&without OpenAcc
 
-You need to implement and accelerate the  `conv` function in `op.cpp` with&without OpenAcc. Copy and rename the `mlp_main.cpp` and `mlp_XXX.cpp` to run the CNN training.
+You need to implement and accelerate the  `conv` function in `ops_sequential.cpp` with&without OpenAcc. Copy and rename the `mlp_main.cpp` and `mlp_XXX.cpp` to run the CNN training.
 
 You can use any hyperparameters and filters as you like.
 
@@ -175,6 +170,8 @@ Compilation with `cmake` may fail in docker container, if so, please compile wit
 
 Execute the bash script.
 
+Make sure you are in the `project4` dir.
+
 ```bash
 sbatch ./test.sh
 ```
@@ -186,6 +183,59 @@ For **1 epoch** with **400** hidden layer:
 | MLP Sequential | MLP OpenAcc(kernel) | MLP OpenAcc(fusion) |
 | -------------- | ------------------- | ------------------- |
 | ~50000 ms      | ~9000 ms            | ~6500 ms            |
+
+## Appendix
+
+If you use the same random seed for init the network, the acc rate will be:
+
+(The output for `hidden layer: 400`, `learning rate: 0.001`, `batch number=32`)
+
+```
+Sequential (Optimized with -O2)
+Training two layer neural network 400 hidden units
+| Epoch |  Acc Rate  |  Training Time
+|     1 |   92.330%  |   47477 ms
+|     2 |   93.950%  |   47482 ms
+|     3 |   95.000%  |   47474 ms
+|     4 |   95.730%  |   47448 ms
+|     5 |   96.310%  |   47392 ms
+|     6 |   96.570%  |   47449 ms
+|     7 |   96.870%  |   47403 ms
+|     8 |   97.090%  |   47437 ms
+|     9 |   97.300%  |   47469 ms
+|    10 |   97.400%  |   47368 ms
+Execution Time: 519906 milliseconds
+
+OpenACC kernel
+Training two layer neural network 400 hidden units
+| Epoch |  Acc Rate  |  Training Time 233
+|     1 |   92.330%  |   9312 ms
+|     2 |   93.950%  |   8220 ms
+|     3 |   94.970%  |   8243 ms
+|     4 |   95.720%  |   8236 ms
+|     5 |   96.300%  |   8279 ms
+|     6 |   96.560%  |   8288 ms
+|     7 |   96.870%  |   8336 ms
+|     8 |   97.100%  |   8303 ms
+|     9 |   97.260%  |   8303 ms
+|    10 |   97.400%  |   8358 ms
+Execution Time: 87501 milliseconds
+
+OpenACC fusion
+Training two layer neural network 400 hidden units
+| Epoch |  Acc Rate  |  Training Time
+|     1 |   92.330%  |   7379 ms
+|     2 |   93.950%  |   6205 ms
+|     3 |   94.970%  |   6213 ms
+|     4 |   95.720%  |   6251 ms
+|     5 |   96.300%  |   6251 ms
+|     6 |   96.560%  |   6298 ms
+|     7 |   96.870%  |   6326 ms
+|     8 |   97.100%  |   6312 ms
+|     9 |   97.260%  |   6340 ms
+|    10 |   97.400%  |   6354 ms
+Execution Time: 67134 milliseconds
+```
 
 ## Requirements & Grading Policy
 
@@ -243,7 +293,9 @@ If you have some special reasons for late submission, please send an email to th
 
 ### File Structure to Submit on BlackBoard
 
-Do not upload build file and dataset.
+Do not upload build file, bash file and dataset.
+
+Only Code and Report Needed!
 
 ```bash
 <Your StudentID>.pdf  # Report
@@ -254,16 +306,12 @@ Do not upload build file and dataset.
 │   ├── mlp_openacc_fusion.cpp
 │   ├── mlp_openacc_kernel.cpp
 │   ├── mlp_sequential.cpp
-│   ├── ops.cpp
 │   ├── ops.hpp
 │   ├── ops_openacc_fusion.cpp
 │   ├── ops_openacc_kernel.cpp
 │   ├── ops_sequential.cpp
 │   ├── utils.cpp
-│   ├── utils.hpp
-│   ├── utlis.cpp
-│   └── utlis.hpp
-├── test.sh
+│   └── utils.hpp
 └── triton(If needed)
     ├── mlp_triton.py
     └── ops
