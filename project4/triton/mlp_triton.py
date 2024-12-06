@@ -4,7 +4,8 @@ import torch.nn.functional as F
 from torch.autograd import Function
 
 import time
-import math
+
+import sys
 
 from torch.utils.data import DataLoader
 
@@ -14,21 +15,24 @@ from ops.op_relu import relu
 from ops.op_sum import sum_dim
 from ops.op_relu_backward import relu_backward
 
+import data_load
+
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 input_size = 784  # Example for MNIST dataset
 hidden_size = 400
 output_size = 10  # Number of classes in MNIST
 
-torch.manual_seed(0)
+# Hyperparameters
+batch_size = 32
+num_epochs = 10
 
-weight_1 = torch.randn(input_size, hidden_size, device='cuda', requires_grad=True) * math.sqrt(2. / input_size)
+weight_1 = torch.randn(input_size, hidden_size, device='cuda', requires_grad=True)
 bias_1 = torch.randn(hidden_size, device='cuda', requires_grad=True)
-weight_2 = torch.randn(hidden_size, output_size, device='cuda', requires_grad=True) * math.sqrt(2. / hidden_size)
+weight_2 = torch.randn(hidden_size, output_size, device='cuda', requires_grad=True)
 bias_2 = torch.randn(output_size, device='cuda', requires_grad=True)
 
 optimizer = torch.optim.SGD([weight_1, bias_1, weight_2, bias_2], lr=0.001*batch_size)
-# optimizer = torch.optim.SGD([weight_1, bias_1, weight_2, bias_2], lr=0.001)
 
 criterion = nn.CrossEntropyLoss()
 
@@ -75,20 +79,20 @@ def forward_pass(x):
     pass
     return None
 
-import torchvision.transforms as transforms
-import torchvision.datasets as datasets
-
-# Hyperparameters
-batch_size = 32
-num_epochs = 10
-
 # MNIST dataset
-transform = transforms.ToTensor()
-train_dataset = datasets.MNIST(root='./data', train=True, transform=transform)
-test_dataset = datasets.MNIST(root='./data', train=False, transform=transform)
+if len(sys.argv) != 2:
+    print("the path to the MNIST dataset is ./MNIST default")
+    data_dir = "./MNIST"
+else:
+    data_dir = sys.argv[1]
+
+train_images, train_labels, test_images, test_labels = data_load.read_dir(data_dir)
+train_dataset = data_load.MNISTDataset(train_images, train_labels, transform=data_load.normalize)
+test_dataset = data_load.MNISTDataset(test_images, test_labels, transform=data_load.normalize)
 
 train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
 test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False)
+
 # Training the model
 for epoch in range(num_epochs):
     print(f"Epoch: {epoch}")
