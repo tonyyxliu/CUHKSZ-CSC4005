@@ -50,21 +50,21 @@ void cross_entropy_loss_grad(const float* A, const float* B, float* Grad, size_t
     // END YOUR CODE HERE <-
 }
 
-void update_bias(float* Bias, const float* Output_Loss, size_t batch, float lr, size_t out_dim)
+void update_bias(float* Bias, const float* Output_Grad, size_t batch, float lr, size_t out_dim)
 {
     // BEGIN YOUR CODE HERE ->
     
     // END YOUR CODE HERE <-
 }
 
-void input_grad(const float* Weight, const float* Output_Loss, float* Input, float* Grad, size_t batch, size_t in_dim, size_t out_dim)
+void input_grad(const float* Weight, const float* Output_Grad, float* Input, float* Input_Grad, size_t batch, size_t in_dim, size_t out_dim)
 {
     // BEGIN YOUR CODE HERE ->
     
     // END YOUR CODE HERE <-
 }
 
-void update_weight(float* Weight, const float* Output_Loss, const float* Input, size_t batch, float lr, size_t in_dim, size_t out_dim)
+void update_weight(float* Weight, const float* Output_Grad, const float* Input, size_t batch, float lr, size_t in_dim, size_t out_dim)
 {
     // BEGIN YOUR CODE HERE ->
     

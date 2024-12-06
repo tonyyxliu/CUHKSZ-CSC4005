@@ -4,6 +4,7 @@ import torch.nn.functional as F
 from torch.autograd import Function
 
 import time
+import math
 
 from torch.utils.data import DataLoader
 
@@ -19,12 +20,14 @@ input_size = 784  # Example for MNIST dataset
 hidden_size = 400
 output_size = 10  # Number of classes in MNIST
 
-weight_1 = torch.randn(input_size, hidden_size, device='cuda', requires_grad=True)
+torch.manual_seed(0)
+
+weight_1 = torch.randn(input_size, hidden_size, device='cuda', requires_grad=True) * math.sqrt(2. / input_size)
 bias_1 = torch.randn(hidden_size, device='cuda', requires_grad=True)
-weight_2 = torch.randn(hidden_size, output_size, device='cuda', requires_grad=True)
+weight_2 = torch.randn(hidden_size, output_size, device='cuda', requires_grad=True) * math.sqrt(2. / hidden_size)
 bias_2 = torch.randn(output_size, device='cuda', requires_grad=True)
 
-optimizer = torch.optim.Adam([weight_1, bias_1, weight_2, bias_2], lr=0.001)
+optimizer = torch.optim.SGD([weight_1, bias_1, weight_2, bias_2], lr=0.001*batch_size)
 # optimizer = torch.optim.SGD([weight_1, bias_1, weight_2, bias_2], lr=0.001)
 
 criterion = nn.CrossEntropyLoss()
@@ -76,12 +79,12 @@ import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 
 # Hyperparameters
-batch_size = 64
-num_epochs = 5
+batch_size = 32
+num_epochs = 10
 
 # MNIST dataset
-transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))])
-train_dataset = datasets.MNIST(root='./data', train=True, transform=transform, download=True)
+transform = transforms.ToTensor()
+train_dataset = datasets.MNIST(root='./data', train=True, transform=transform)
 test_dataset = datasets.MNIST(root='./data', train=False, transform=transform)
 
 train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)

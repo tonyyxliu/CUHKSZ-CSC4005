@@ -9,8 +9,8 @@ void nn_epoch_cpp(const float* input_array, const unsigned char* label_array, fl
     float* fc_2_mid = new float[batch_num * class_num];
     float* fc_2_out = new float[batch_num * class_num];
     float* softmax_out = new float[batch_num * class_num];
-    float* output_loss = new float[batch_num * class_num];
-    float* hidden_loss = new float[batch_num * hidden_num];
+    float* output_grad = new float[batch_num * class_num];
+    float* hidden_grad = new float[batch_num * hidden_num];
     float* loss = new float[batch_num];
     size_t m_b = batch_num;
     for (size_t offset = 0; offset < input_num; offset += batch_num)
@@ -41,8 +41,8 @@ void nn_epoch_cpp(const float* input_array, const unsigned char* label_array, fl
     delete[] fc_2_mid;
     delete[] fc_2_out;
     delete[] softmax_out;
-    delete[] output_loss;
-    delete[] hidden_loss;
+    delete[] output_grad;
+    delete[] hidden_grad;
     delete[] loss;
 }
 
