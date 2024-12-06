@@ -186,6 +186,8 @@ For **1 epoch** with **400** hidden layer:
 
 ## Appendix
 
+### About acc rate
+
 If you use the same random seed for init the network, the acc rate will be:
 
 (The output for `hidden layer: 400`, `learning rate: 0.001`, `batch number=32`)
@@ -236,6 +238,23 @@ Training two layer neural network 400 hidden units
 |    10 |   97.400%  |   6354 ms
 Execution Time: 67134 milliseconds
 ```
+
+Some student may get the result 
+```
+| Epoch |  Acc Rate  |  Training Time
+|     1 |   79.470%  |
+|     2 |   84.470%  |
+|     3 |   86.530%  |
+|     4 |   87.950%  |
+|     5 |   88.850%  |
+|     6 |   89.360%  |
+|     7 |   89.650%  |
+|     8 |   89.950%  |
+|     9 |   90.310%  |
+|    10 |   90.550%  |
+```
+
+This is because, during the implementation, I accounted for the effect of batch size on accuracy by default. If you have any questions, please refer to [this Chinese blog](https://kexue.fm/archives/10542). For students who obtained the above results, please multiply the learning rate by the batch size, and you should achieve a result close to 92%(like first table). If you followed our initialization method and obtained such a result, **you don’t need to worry about losing points**!
 
 ## Requirements & Grading Policy
 
