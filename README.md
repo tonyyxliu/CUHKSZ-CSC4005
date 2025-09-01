@@ -48,7 +48,7 @@ Welcome to take course **CSC4005: Parallel Programming** offered by The Chinese 
   - Location: TA206
 
 - Mr. Mohan LI (李默涵先生)   [[Email](mailto:mohanli1@link.cuhk.edu.cn)]\
-  - Office Hour: 6:00 P.M. to 7:00 P.M. Tuesday
+  - Office Hour: 6:00 P.M. to 7:00 P.M. Friday
   - Location: TA206
 
 - Mr. Mengkang LI (李孟康先生) [[Email](mailto:mengkangli@link.cuhk.edu.cn)]\
