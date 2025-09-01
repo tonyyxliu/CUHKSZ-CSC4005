@@ -1,29 +1,33 @@
-# CSC4005_2024-25Fall
+# CSC4005_2025-26Fall
 
 ## Prologue
 
-Welcome to take course **CSC4005/CSC6115: Parallel Programming** offered by The Chinese University of HongKong, Shenzhen. In
-this semester, you will learn the basic principal and philosophy of parallel programming, including embarrassingly
-parallelism, reduction, synchronization, load balancing and so on. After taking this course, you should be familiar with
-some parallel programming languages, and be able to use them to design efficient parallel
-programs.
+Welcome to take course **CSC4005: Parallel Programming** offered by The Chinese University of HongKong, Shenzhen. In this semester, you will learn the basic principal and philosophy of parallel programming, including embarrassingly parallelism, reduction, synchronization, load balancing and so on. After taking this course, you should be familiar with popular parallel programming languages for both CPU and GPU, and be able to use them to design efficient parallel programs.
 
 ## Parallel Programming Languages Used in This Course
 
-- Vectorization/SIMD
-- MPI (Message Passing Interface)
-- Pthread
-- OpenMP
-- CUDA
-- OpenACC
-- Triton *(Newly added this semester)*
+- **On CPU**
+  - Vectorization
+    - This course now focuses on compiler directed vectorization instead of writing SIMD intrinsics.
+  - MPI (Message Passing Interface)
+    - This course now focuses on shared-memory parallel programming, and we just briefly cover MPI in Project 1.
+  - Pthread
+  - OpenMP
+- **On GPU**
+  - CUDA
+  - OpenACC
+  - Triton
 
-## Projects
+## Programming Projects
 
-- **Project 1:**(September 13th *(Friday)* to October 7th *(Monday)*) Embarrassingly Parallel Programming (Image Processing implemented with all six parallel programming languages)
-- **Project 2:**(October 8th *(Tuesday)* to October 25st *(Friday)*) Parallel Programming with Reduction (Parallel Matrix Multiplication)
-- **Project 3:**(October 30th *(Wednesday)* to November 17th *(Sunday)*) Parallel Programming with Synchronization (Parallel Sorting)
-- **Project 4:**(November 20th *(Wednesday)* to December 8th *(Sunday)*) New Technologies & Applications of Parallel Programming (like AI, implemented with OpenACC & Triton)
+- **Project 1:** Embarrassingly Parallel Programming *(Image Processing)*
+  - Duration: from September 16th *(Tuesday)* to October 6th *(Monday)*
+- **Project 2:** Parallel Programming with Memory Locality and Reduction *(Matrix Multiplication)*
+  - Duration: from October 7th *(Tuesday)* to October 27th *(Monday)*
+- **Project 3:** Parallel Programming with Synchronization *(Sorting and Searching)*
+  - Duration: from October 28th *(Tuesday)* to November 24th *(Monday)*
+- **Project 4:** New Technologies & Applications of GPU Parallel Programming *(FlashAttention)*
+  - Duration: from November 25th *(Tuesday)* to December 22nd *(Monday)*
 
 ## Teaching Stuff
 
@@ -35,26 +39,18 @@ programs.
 
 **Teaching Assistants:**
 - Mr. Yuxuan LIU  (刘宇轩先生, *L*) [[Email](mailto:yuxuanliu1@link.cuhk.edu.cn)]\
-  - Office Hour: 7:00 P.M. to 8:00 P.M., Thursday
-  - Location: Seat No.8, TD409
-
-- Mr. Sergei Kudria [[Email](mailto:sergeikudria@link.cuhk.edu.cn)]\
-  - Office Hour: 17:00 P.M. to infinity, Monday
-  - Location: RB302
-
-- Mr. Qihang Zhang (张启航先生) [[Email](mailto:qihangzhang@link.cuhk.edu.cn)]\
-  - Office Hour: 7:00 P.M. to 8:00 P.M. Wednesday
-  - Location: Daoyuan B102 (underground: using elevator at back door of Daoyuan building to B1F, not 1F 102 room!)
+  - Office Hour: 7:00 P.M. to 8:00 P.M., Wednesday
+  - Location: Seat No.176, Room 429, Zhixin Building（知新楼） (opposite to the former library)
 
 **Undergraduate Student Teaching Fellow (USTF):**
-- Mr. Tianci Hou (侯天赐先生) [[Email](mailto:tiancihou@link.cuhk.edu.cn)]\
-  - Office Hour: 1:30 P.M. to 2:30 P.M. Monday
-  - Location: Old library 1F USTF region
+- Mr. Zihao FANG (方梓豪先生) [[Email](mailto:zihaofang1@link.cuhk.edu.cn)]\
+  - Office Hour: 5:00 P.M. to 6:00 P.M. Friday
+  - Location: TA206
 
-- Mr. You Lyu (吕游先生) [[Email](mailto:youlyu@link.cuhk.edu.cn)]\
-  - Office Hour: 3:30 P.M. to 4:30 P.M. Friday
-  - Location: Seat No.8, TD409
-
-- Mr. Yuan Xu (徐源先生)   [[Email](mailto:yuanxu1@link.cuhk.edu.cn)]\
+- Mr. Mohan LI (李默涵先生)   [[Email](mailto:mohanli1@link.cuhk.edu.cn)]\
   - Office Hour: 6:00 P.M. to 7:00 P.M. Tuesday
-  - Location: Old library 1F USTF region
+  - Location: TA206
+
+- Mr. Mengkang LI (李孟康先生) [[Email](mailto:mengkangli@link.cuhk.edu.cn)]\
+  - Office Hour: 5:00 P.M. to 6:00 P.M. Thursday
+  - Location: Room 522, Zhiren Building （志仁楼）
