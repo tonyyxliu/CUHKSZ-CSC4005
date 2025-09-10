@@ -33,7 +33,7 @@ If you have any questions while using the cluster or following this user guide, 
 
 **Name:** Liu Yuxuan
 
-**Email:** [118010200@link.cuhk.edu.cn](mailto:118010200@link.cuhk.edu.cn)
+**Email:** [yuxuanliu1@link.cuhk.edu.cn](mailto:yuxuanliu1@link.cuhk.edu.cn)
 
 **Position:** Teaching Assistant
 
@@ -64,7 +64,7 @@ node. The slurmd daemons provide fault-tolerant hierarchical communications. In 
 total, therefore, 1 management node + 27 compute nodes.
 ![Slurm Architecture](./images/Slurm_Architecture.png)
 
-### Cluster Environment
+### Cluster Hardware Overview
 
 The following information holds for every machine in the cluster.
 <html>
@@ -78,16 +78,36 @@ The following information holds for every machine in the cluster.
     <td>x86_64</td>
   </tr>
   <tr>
-    <td align="center">Opearing System</td>
-    <td>CentOS Linux release 7.5.1804</td>
-  </tr>
-  <tr>
     <td align="center">CPU</td>
     <td>
       Intel(R) Xeon(R) Silver 4210R CPU @ 2.40GHz
       <br/>
-      20 Cores, 40 Threads
+      20 Cores in 2 Sockets, 40 Threads
     </td>
+  </tr>
+  <tr>
+    <td align="center">NUMA</td>
+    <td>2 NUMA nodes (0-9,20-29) (10-19,30-39)</td>
+  </tr>
+  <tr>
+    <td align="center">L1 Cache</td>
+    <td>L1d: 640KiB, L1i: 640KiB</td>
+  </tr>
+  <tr>
+    <td align="center">L2 Cache</td>
+    <td>20 MiB</td>
+  </tr>
+  <tr>
+    <td align="center">L3 Cache</td>
+    <td>27.5 MiB</td>
+  </tr>
+  <tr>
+    <td align="center">CACHE_LINESIZE</td>
+    <td>64</td>
+  </tr>
+  <tr>
+    <td align="center">PAGE_SIZE</td>
+    <td>4096</td>
   </tr>
   <tr>
     <td align="center">Memory</td>
@@ -96,18 +116,6 @@ The following information holds for every machine in the cluster.
   <tr>
     <td align="center">GPU</td>
     <td>one Nvidia Quadro RTX 4000 GPU card for each node</td>
-  </tr>
-  <tr>
-    <td align="center">CUDA</td>
-    <td>11.7</td>
-  </tr>
-  <tr>
-    <td align="center">GCC</td>
-    <td>Red Hat 7.3.1-5</td>
-  </tr>
-  <tr>
-    <td align="center">CMake</td>
-    <td>3.27.8</td>
   </tr>
 </table>
 </html>
@@ -119,6 +127,10 @@ The following information holds for every machine in the cluster.
   <tr>
     <th>Item</th>
     <th>Configuration / Version</th>
+  </tr>
+  <tr>
+    <td>NVIDIA Driver</td>
+    <td>535.247.01</td>
   </tr>
   <tr>
     <td>GPU Memory</td>
@@ -162,6 +174,49 @@ The following information holds for every machine in the cluster.
 For more details, please refer to
 the [Data Sheet of NVIDIA QUADRO RTX 4000](https://www.nvidia.com/content/dam/en-zz/Solutions/design-visualization/quadro-product-literature/quadro-rtx-4000-datasheet.pdf)
 
+### Software Packages
+
+<html>
+<table>
+  <tr>
+    <th>Item</th>
+    <th>Configuration / Version</th>
+  </tr>
+  <tr>
+    <td align="center">Opearing System</td>
+    <td>Ubuntu 22.04.5 LTS</td>
+  </tr>
+  <tr>
+    <td align="center">GCC</td>
+    <td>11.4.0</td>
+  </tr>
+  <tr>
+    <td align="center">CMake</td>
+    <td>3.22.1</td>
+  </tr>
+  <tr>
+    <td align="center">MPI</td>
+    <td>mpich-4.0</td>
+  </tr>
+  <tr>
+    <td align="center">CUDA</td>
+    <td>12.2 (11.5, 11.8 also installed)</td>
+  </tr>
+  <tr>
+    <td align="center">nvhpc (NVIDIA HPC SDK, for OpenACC)</td>
+    <td>23.7-0</td>
+  </tr>
+  <tr>
+    <td align="center">Python</td>
+    <td>3.10.12</td>
+  </tr>
+  <tr>
+    <td align="center">Triton & PyTorch</td>
+    <td>triton==3.3.1 torch==2.7.1 torchvision==0.22.1 torchaudio==2.7.1</td>
+  </tr>
+</table>
+</html>
+
 ### Slurm Partition and Job
 
 Partitions group nodes into logical sets, and jobs are allocations of resources assigned to a user for a specified
@@ -170,24 +225,24 @@ size limit, job time limit, users permitted to use it, etc. Priority-ordered job
 until the resources (nodes, processors, memory, etc.) within that partition are exhausted. Once a job is assigned a set
 of nodes, the user is able to initiate parallel work within the allocation.
 
-There are two partitions in our cluster: **Debug** and **Project**.
+There are two partitions in our cluster: **Debug** and **Release**.
 
 <html>
 <table>
   <tr>
     <th>Item</th>
     <th>Debug Partition</th>
-    <th>Project Partition</th>
+    <th>Release Partition</th>
   </tr>
   <tr>
     <td align="center">Number of Machines</td>
-    <td align="center">9</td>
-    <td align="center">18</td>
+    <td align="center">4</td>
+    <td align="center">12</td>
   </tr>
   <tr>
     <td align="center">Number of logical CPU cores</td>
-    <td align="center">360</td>
-    <td align="center">720</td>
+    <td align="center">160</td>
+    <td align="center">480</td>
   </tr>
   <tr>
     <td align="center">Usage</td>
@@ -196,8 +251,8 @@ There are two partitions in our cluster: **Debug** and **Project**.
   </tr>
   <tr>
     <td align="center">Max Node Limit</td>
-    <td align="center">2</td>
-    <td align="center">4</td>
+    <td align="center">1 (Since this year we focus on shared-memory not distributed)</td>
+    <td align="center">1 (Since this year we focus on shared-memory not distributed)</td>
   </tr>
   <tr>
     <td align="center">Max Logical Core Limit Per Node</td>
@@ -205,9 +260,9 @@ There are two partitions in our cluster: **Debug** and **Project**.
     <td align="center">40</td>
   </tr>
   <tr>
-    <td align="center">Max Time Limit (Minutes)</td>
-    <td align="center">20</td>
-    <td align="center">10</td>
+    <td align="center">Max Time Limit</td>
+    <td align="center">20 min</td>
+    <td align="center">10 min</td>
   </tr>
 </table>
 </html>
