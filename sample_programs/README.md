@@ -1,5 +1,12 @@
 # How to compile and run these programs
 
+## sbatch execution
+
+You can simply execute all the sample programs as a sbatch script:
+```bash
+sbatch ./sbatch.sh
+```
+
 ## Allocate Computing Resources
 ```bash
 # Allocate 4 processors from 1 node in Debug partition, which lasts for 10 minutes
@@ -64,3 +71,7 @@ pgc++ -acc -mp openacc_parallel.cpp -o openacc_parallel
 # Before further announcement, use `./openacc_parallel` instead to execute locally
 srun -n 4 ./openacc_parallel
 ```
+
+## Triton
+
+See the `triton-tutorials` directory
