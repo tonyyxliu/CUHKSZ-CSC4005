@@ -3,22 +3,70 @@
 ## This project weights 12.5% for your final grade (4 Projects for 50%)
 
 #### Release Date:
-September 13th *(Friday)*, 2024 (UTC+8)
+September 16th *(Tuesday)*, 2025 (UTC+8)
 
 #### Deadline (Submit on BlackBoard):
-11:59 P.M., September 30th *(Monday)*, 2024 (UTC+8)
+11:59 P.M., October 6th *(Monday)*, 2024 (UTC+8)
 
 #### Suff Responsible for This Project
 
-- TA Liu Yuxuan *(For all languages except Triton)*
-- TA Zhang Qihang *(Triton PartB & C)*
-- USTF Hou Tianci *(Triton PartA)*
+- TA Liu Yuxuan
 
 ## Prologue
 
 As the first programming project, students are required to solve embarrassingly parallel problem with all parallel programming languages to get an intuitive understanding and hands-on experience on how the simplest parallel programming works. A very popular and representative application of embarrassingly parallel problem is image processing since the computation of each pixel is completely or almost independent with each other.
 
-This programming project consists of three parts (A, B, and C). PartA and PartB have already been implemented, and you can learn how to write each parallel programming language by analyzing those programs. Finally, what you need to do is to implement PartC by the experience and lessons from the previous two parts.
+This programming project consists of three parts (A, B, and C). PartA and PartB have already been implemented, and you can learn how to write each parallel programming language by analyzing those programs. **Finally, what you need to do is to implement PartC by the experience and lessons from the previous two parts.**
+
+## How to compile the programs?
+
+```bash
+cd /path/to/project1
+mkdir build && cd build
+# Change to -DCMAKE_BUILD_TYPE=Debug for debug build error message logging
+# Here, use cmake on the cluster and cmake3 in your docker container
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make -j8
+```
+
+Compilation with `cmake` may fail in docker container, if so, please compile with `gcc`, `mpic++`, `nvcc` and `pgc++` in the terminal with the correct optimization options.
+
+## How to execute the programs?
+
+### On the Cluster
+
+**Important**: Change the directory of output file in sbatch.sh first
+
+```bash
+# Use sbatch
+cd /path/to/project1
+sbatch ./src/scripts/sbatch_PartC.sh
+```
+
+### In Your Docker Container
+
+```bash
+cd /path/to/project1/build
+# Sequential
+./src/cpu/sequential_PartC /path/to/input.jpg /path/to/output.jpg
+# MPI
+mpirun -np {Num of Processes} ./src/cpu/mpi_PartC /path/to/input.jpg /path/to/output.jpg
+# Pthread
+./src/cpu/pthread_PartC /path/to/input.jpg /path/to/output.jpg {Num of Threads}
+# OpenMP
+./src/cpu/openmp_PartC /path/to/input.jpg /path/to/output.jpg
+# CUDA
+./src/gpu/cuda_PartC /path/to/input.jpg /path/to/output.jpg
+# OpenACC
+./src/gpu/openacc_PartC /path/to/input.jpg /path/to/output.jpg
+# Triton
+python3 ./src/gpu/triton_PartC /path/to/input.jpg /path/to/output.jpg
+```
+
+## Important Notes
+
+1. It's OK to ignore the pixels in the boundary to make our life easier. The reason is that pixels on the boundary do not have all the 8 neighbors, and should be treated differently.
+2. You do not need to run profiling in this project. It is optional.
 
 ## Part-A: RGB to Grayscale
 
@@ -176,18 +224,16 @@ The image used for performance evaluation is the 4K JPEG image with around 10 mi
 
 ### Requirements & Grading Policy
 
-- **Six parallel programming implementations for PartB (70%)**
-  - SIMD (10%)
+- **Seven parallel programming implementations for PartC (70%)**
+  - Auto-Vectorization (10%)
   - MPI (10%)
   - Pthread (10%)
   - OpenMP (10%)
   - CUDA (10%)
   - OpenACC (10%)
-  - Triton *(10%, Optional for undergraduates but compulsotry for postgraduates)*
+  - Triton (10%)
 
   You can get full mark for each section as long as your program can compile and execute to get the expected output image by the command you give in the report.
-
-  **Triton PartC is optional for undergraduate students enrolled in CSC4005, but compulsory for postgraduate students enrolled in CSC6115. The other six parallel programming languages (SIMD, MPI, Pthread, OpenMP, CUDA, and OpenACC) are required for both groups of students. The 10% of Triton for undergraduate students will be transfered to the performance part.**
 
 - **Performance of Your Program (20%)**
   Try your best to optimize the performance your parallel programs.If your programs show similar performance to the baseline provided by the teaching stuff, then you can get full mark. Points will be deduted if your parallel programs perform poor while no justification can be found in the report. (Target Peformance will be released soon).
@@ -202,17 +248,22 @@ The image used for performance evaluation is the 4K JPEG image with around 10 mi
   The following components should be included in the report:
   - How to compile and execute your program to get the expected output image on the cluster?
   - Briefly explain how does each parallel programming model do computation in parallel? What are the similarities and differences between them. Explain these with what you have learned from the lectures (like different types of parallelism, ILP, DLP, TLP, etc).
-  - What kinds of optimizations have you tried to speed up your parallel program for PartB, and how do them work?
+  - What kinds of optimizations have you tried to speed up your parallel program for PartC, and how do them work?
   - Show the experiment results you get for **PartC Only**, and do some numerical analysis, such as calculating the speedup and efficiency, demonstrated with tables and figures.
   - What have you found from the experiment results? Is there any difference between the experiment resutls of PartC and PartA&B? If so, what may be the reasons?
 
 - **Extra Credits (10%)**\
   If you can use any other methods to achieve a higher speedup than the sample solutions provided by the TA (Baseline peformance to be released).\
   Some possible ways are listed below:
-  - A combination of multiple parallel programming models, like combining MPI and OpenMP together.
-  - Try to bind program to a specific CPU core for better performance. Refer to: https://slurm.schedmd.com/mc_support.html
-  - For GPU programs like CUDA, feel free to change the block size and grid size for better performance.
-  - For SIMD, you may parallelize more computation workload.
+  1. A combination of multiple parallel programming models, for example:
+    - combine MPI and OpenMP to utilize both multi-process & multi-threaded parallelism
+    - combine OpenMP and auto vectorization to utilize both multi-threaded & SIMD parallelism
+  2. Faster Math Computation
+    - try to replace floating-point computation with integer ones and shifting operations (example: PartA 0.299 * r = 306 * r / 1024 = 306 * r >> 10)
+    - try to replace complicated computation with approximated version (example: exp can be approximated with a series of Taylor expansion terms). Elaborate the trade-off between performance and speed.
+  3. Try to bind program to a specific CPU core for better performance. Refer to: https://slurm.schedmd.com/mc_support.html
+  4. For GPU programs like CUDA, feel free to change the block size and grid size for better performance.
+  5. For auto vectorization, try more optimization flags and pragmas.
 
 ### The Extra Credit Policy
 According to the professor, the extra credits for all projects cannot be added to the final grade or other projects, which determines your rank. The credits are the honor you received from the professor and the teaching stuff, and the professor may help raise you to a higher grade level if you are at the boundary of two grade levels and he think you deserve a better grade with your extra credits. For example, if you are the top students with B+ grade, and get enough extra credits, the professor may raise you to a A-.
@@ -223,9 +274,9 @@ According to the professor, the extra credits for all projects cannot be added t
 3. Zero point if you submitted your project late for more than two days. 
 4. If you have some special reasaons for late submission, please send email to the professor and c.c to the TA responsible for that project.
 
-## How to execute the sample programs in PartA?
+### [Docker Container Only] Dependency Installation
 
-### Dependency Installation
+If you encounter issue when compiling the codes due to incomplete dependency in your docker container, you may try the following:
 
 #### Libjpeg (In docker container only)
 
@@ -280,49 +331,6 @@ scl -l
 echo "export PATH=/opt/rh/devtoolset-7/root/usr/bin:$PATH" >> ~/.bashrc
 source ~/.bashrc
 gcc -v # output should be 7.3.1
-```
-
-### How to compile the programs?
-
-```bash
-cd /path/to/project1
-mkdir build && cd build
-# Change to -DCMAKE_BUILD_TYPE=Debug for debug build error message logging
-# Here, use cmake on the cluster and cmake3 in your docker container
-cmake ..
-make -j4
-```
-
-Compilation with `cmake` may fail in docker container, if so, please compile with `gcc`, `mpic++`, `nvcc` and `pgc++` in the terminal with the correct optimization options.
-
-### How to execute the programs?
-
-#### In Your Docker Container
-
-```bash
-cd /path/to/project1/build
-# Sequential
-./src/cpu/sequential_PartA /path/to/input.jpg /path/to/output.jpg
-# MPI
-mpirun -np {Num of Processes} ./src/cpu/mpi_PartA /path/to/input.jpg /path/to/output.jpg
-# Pthread
-./src/cpu/pthread_PartA /path/to/input.jpg /path/to/output.jpg {Num of Threads}
-# OpenMP
-./src/cpu/openmp_PartA /path/to/input.jpg /path/to/output.jpg
-# CUDA
-./src/gpu/cuda_PartA /path/to/input.jpg /path/to/output.jpg
-# OpenACC
-./src/gpu/openacc_PartA /path/to/input.jpg /path/to/output.jpg
-```
-
-#### On the Cluster
-
-**Important**: Change the directory of output file in sbatch.sh first
-
-```bash
-# Use sbatch
-cd /path/to/project1
-sbatch ./src/scripts/sbatch_PartA.sh
 ```
 
 ## Performance Evaluation
