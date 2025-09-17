@@ -43,19 +43,35 @@ add_executable(sequential_PartC_soa
         ../utils.cpp ../utils.hpp)
 target_compile_options(sequential_PartC_soa PRIVATE -O2)
 
+## Vectorization
+add_executable(vectorize_PartA
+        vectorize_PartA.cpp
+        ../utils.cpp ../utils.hpp)
+target_compile_options(vectorize_PartA PRIVATE -O2 -mavx2 -march=native -ftree-vectorize -funroll-loops -fopenmp -ffast-math -msse2 -fopt-info-vec-optimized)
+
+add_executable(vectorize_PartB
+        vectorize_PartB.cpp
+        ../utils.cpp ../utils.hpp)
+target_compile_options(vectorize_PartB PRIVATE -O2 -mavx2 -march=native -ftree-vectorize -funroll-loops -fopenmp -ffast-math -msse2 -fopt-info-vec-optimized)
+
+add_executable(vectorize_PartC
+        vectorize_PartC.cpp
+        ../utils.cpp ../utils.hpp)
+target_compile_options(vectorize_PartC PRIVATE -O2 -mavx2 -march=native -ftree-vectorize -funroll-loops -fopenmp -ffast-math -msse2 -fopt-info-vec-optimized)
+
 ## SIMD Vectorization (AVX2)
 add_executable(simd_PartA
-        simd_PartA.cpp
+        ./optional/simd_PartA.cpp
         ../utils.cpp ../utils.hpp)
 target_compile_options(simd_PartA PRIVATE -O2 -mavx2)
 
 add_executable(simd_PartB
-        simd_PartB.cpp
+        ./optional/simd_PartB.cpp
         ../utils.cpp ../utils.hpp)
 target_compile_options(simd_PartB PRIVATE -O2 -mavx2)
 
 add_executable(simd_PartC
-        simd_PartC.cpp
+        ./optional/simd_PartC.cpp
         ../utils.cpp ../utils.hpp)
 target_compile_options(simd_PartC PRIVATE -O2 -mavx2)
 

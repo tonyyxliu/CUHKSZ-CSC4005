@@ -44,7 +44,7 @@ struct Pixel
      *  channel = 2 --> B
      * @return
      */
-    ColorValue get_channel(int channel) const
+    inline ColorValue get_channel(int channel) const
     {
         switch (channel)
         {
@@ -131,7 +131,7 @@ struct JpegSOA
      * channel = 2 --> B
      * @return values of the specific channel
      */
-    ColorValue* get_channel(int channel) const
+    inline ColorValue* get_channel(int channel) const
     {
         switch (channel)
         {
@@ -154,7 +154,7 @@ struct JpegSOA
      * @param index: element index in the array
      * @return
      */
-    ColorValue get_value(int channel, int index) const
+    inline ColorValue get_value(int channel, int index) const
     {
         switch (channel)
         {
@@ -218,6 +218,14 @@ ColorValue linear_filter(const ColorValue* values,
                          const float (&filter)[FILTERSIZE][FILTERSIZE],
                          int index, int width);
 
-ColorValue clamp_pixel_value(float Pixel);
+/**
+ * Limit the range of input fp value within 0-255
+ * @param value
+ * @return integer value within 0-255
+ */
+inline ColorValue clamp_pixel_value(float value)
+{
+    return value > 255 ? 255 : value < 0 ? 0 : static_cast<ColorValue>(value);
+}
 
 #endif // CSC4005_PROJECT_1_UTILS_HPP

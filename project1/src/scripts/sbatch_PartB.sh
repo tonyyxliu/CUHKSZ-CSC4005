@@ -1,16 +1,16 @@
 #!/bin/bash
 #SBATCH -o ./Project1-PartB-Results.txt
-#SBATCH -p Project
+#SBATCH -p Release
 #SBATCH -J Project1-PartB
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=32
 #SBATCH --gres=gpu:1
 
 # Necessary Environment Variables for Triton
-export TRITON_PTXAS_PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/21.7/cuda/11.4/bin/ptxas                                                                      
-export TRITON_CUOBJDUMP_PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/21.7/cuda/11.4/bin/cuobjdump                                                              
-export TRITON_NVDISASM_PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/21.7/cuda/11.4/bin/nvdisasm  
-export PATH=/opt/rh/rh-python38/root/usr/bin:$PATH
+export TRITON_PTXAS_PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/23.7/cuda/12.2/bin/ptxas                                                                      
+export TRITON_CUOBJDUMP_PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/23.7/cuda/12.2/bin/cuobjdump                                                              
+export TRITON_NVDISASM_PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/23.7/cuda/12.2/bin/nvdisasm  
+# export PATH=/opt/rh/rh-python38/root/usr/bin:$PATH
 
 # Get the current directory
 CURRENT_DIR=$(pwd)/src/scripts
@@ -24,6 +24,11 @@ echo ""
 # Sequential PartB (Structure-of-Array)
 echo "Sequential PartB (Structure-of-Array) (Optimized with -O2)"
 srun -n 1 --cpus-per-task 1 ${CURRENT_DIR}/../../build/src/cpu/sequential_PartB_soa ${CURRENT_DIR}/../../images/20K-RGB.jpg ${CURRENT_DIR}/../../images/20K-Smooth.jpg
+echo ""
+
+# Vectorization PartB
+echo "Vectorization PartB (Optimized with -O2)"
+srun -n 1 --cpus-per-task 1 ${CURRENT_DIR}/../../build/src/cpu/vectorize_PartB ${CURRENT_DIR}/../../images/20K-RGB.jpg ${CURRENT_DIR}/../../images/20K-Smooth.jpg
 echo ""
 
 # SIMD PartB

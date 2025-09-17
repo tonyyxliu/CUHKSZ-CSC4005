@@ -11,11 +11,13 @@
 #include <chrono>
 #include <iostream>
 
-#include "../utils.hpp"
+#include "../../utils.hpp"
 
-int main(int argc, char** argv) {
+int main(int argc, char** argv)
+{
     // Verify input argument format
-    if (argc != 3) {
+    if (argc != 3)
+    {
         std::cerr << "Invalid argument, should be: ./executable "
                      "/path/to/input/jpeg /path/to/output/jpeg\n";
         return -1;
@@ -25,7 +27,8 @@ int main(int argc, char** argv) {
     const char* input_filepath = argv[1];
     std::cout << "Input file from: " << input_filepath << "\n";
     auto input_jpeg = read_from_jpeg(input_filepath);
-    if (input_jpeg.buffer == NULL) {
+    if (input_jpeg.buffer == NULL)
+    {
         std::cerr << "Failed to read input JPEG image\n";
         return -1;
     }
@@ -57,8 +60,10 @@ int main(int argc, char** argv) {
 
     auto start_time = std::chrono::high_resolution_clock::now();
 
-    for (int y = 1; y < input_jpeg.height - 1; y++) {
-        for (int x = 1; x < input_jpeg.width - 1; x++) {
+    for (int y = 1; y < input_jpeg.height - 1; y++)
+    {
+        for (int x = 1; x < input_jpeg.width - 1; x++)
+        {
             int r_id = (y * input_jpeg.width + x) * input_jpeg.num_channels;
             int g_id = r_id + 1;
             int b_id = r_id + 2;
@@ -120,7 +125,8 @@ int main(int argc, char** argv) {
     std::cout << "Output file to: " << output_filepath << "\n";
     JPEGMeta output_jpeg{filteredImage, input_jpeg.width, input_jpeg.height,
                          input_jpeg.num_channels, input_jpeg.color_space};
-    if (export_jpeg(output_jpeg, output_filepath)) {
+    if (export_jpeg(output_jpeg, output_filepath))
+    {
         std::cerr << "Failed to write output JPEG\n";
         return -1;
     }

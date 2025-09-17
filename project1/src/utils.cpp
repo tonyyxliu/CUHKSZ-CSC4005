@@ -23,12 +23,8 @@ JPEGMeta read_from_jpeg(const char* filepath)
         return {nullptr, 0, 0, 0};
     }
     // Initialize JPEG Decoder
-    struct jpeg_decompress_struct cinfo
-    {
-    };
-    struct jpeg_error_mgr jerr
-    {
-    };
+    struct jpeg_decompress_struct cinfo{};
+    struct jpeg_error_mgr jerr{};
     cinfo.err = jpeg_std_error(&jerr);
     jpeg_create_decompress(&cinfo);
     jpeg_stdio_src(&cinfo, file);
@@ -457,14 +453,4 @@ ColorValue linear_filter(const ColorValue* values,
     sum += values[index + width] * filter[2][1];
     sum += values[index + width + 1] * filter[2][2];
     return clamp_pixel_value(sum);
-}
-
-/**
- * Limit the range of input fp value within 0-255
- * @param value
- * @return integer value within 0-255
- */
-ColorValue clamp_pixel_value(float value)
-{
-    return value > 255 ? 255 : value < 0 ? 0 : static_cast<ColorValue>(value);
 }
