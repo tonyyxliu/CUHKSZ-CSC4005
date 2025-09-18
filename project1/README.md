@@ -6,7 +6,7 @@
 September 16th *(Tuesday)*, 2025 (UTC+8)
 
 #### Deadline (Submit on BlackBoard):
-11:59 P.M., October 6th *(Monday)*, 2024 (UTC+8)
+11:59 P.M., October 6th *(Monday)*, 2025 (UTC+8)
 
 #### Suff Responsible for This Project
 
@@ -344,20 +344,20 @@ gcc -v # output should be 7.3.1
 - [sbatch file for PartA](src/scripts/sbatch_PartA.sh)
 - Performance measured as execution time in milliseconds
 
-| Number of Processes / Cores | Sequential | SIMD (AVX2) | MPI | Pthread | OpenMP | CUDA | OpenACC |
-|-----------------------------|------------|-------------|-----|---------|--------|------|---------|
-| 1                           | 632        | 416         | 665 | 704     | 475    | 27   | 28      |
-| 2                           | N/A        | N/A         | 767 | 638     | 471    | N/A  | N/A     |
-| 4                           | N/A        | N/A         | 490 | 358     | 448    | N/A  | N/A     |
-| 8                           | N/A        | N/A         | 361 | 178     | 288    | N/A  | N/A     |
-| 16                          | N/A        | N/A         | 288 | 116     | 158    | N/A  | N/A     |
-| 32                          | N/A        | N/A         | 257 | 62      | 126    | N/A  | N/A     |
+| Number of Processes / Cores | Sequential | Auto-Vectorize | SIMD (AVX2) | MPI | Pthread | OpenMP | CUDA | OpenACC | Triton |
+|-----------------------------|------------|----------------|-------------|-----|---------|--------|------|---------|--------|
+| 1                           | 608        | 311            | 311         | 613 | 685     | 542    | 37   | 35      | 2.7    |
+| 2                           | N/A        | N/A            | N/A         | 747 | 630     | 542    | N/A  | N/A     | N/A    |
+| 4                           | N/A        | N/A            | N/A         | 461 | 329     | 289    | N/A  | N/A     | N/A    |
+| 8                           | N/A        | N/A            | N/A         | 334 | 172     | 153    | N/A  | N/A     | N/A    |
+| 16                          | N/A        | N/A            | N/A         | 285 | 95      | 84     | N/A  | N/A     | N/A    |
+| 32                          | N/A        | N/A            | N/A         | 519 | 69      | 72     | N/A  | N/A     | N/A    |
 
 <div>
-    <img src="images/performance-evaluation-PartA.png" align="center" alt="Performance Evaluation PartA"/>
+    <img src="images/PartA-Baseline-Performance-2025-26Fall.png" align="center" alt="Performance Evaluation PartA"/>
 </div>
 <p style="font-size: medium;" align="center">
-    <strong>Performance Evaluation of PartA (numbers refer to execution time in milliseconds)</strong>
+    <strong>Performance Evaluation of PartA on 20K image (numbers refer to execution time in milliseconds)</strong>
 </p>
 
 ### PartB (Baseline Performance)
@@ -375,20 +375,20 @@ If your program behaves poor performance to the baseline, points will be deducte
 - [sbatch file here](src/scripts/sbatch_PartB.sh)
 - Performance measured as execution time in milliseconds
 
-| Number of Processes / Cores | Sequential | SIMD (AVX2) | MPI  | Pthread | OpenMP | CUDA | OpenACC |
-|-----------------------------|------------|-------------|------|---------|--------|------|---------|
-| 1                           | 7247       | 4335        | 7324 | 8066    | 8542   | 32   | 23      |
-| 2                           | N/A        | N/A         | 7134 | 7229    | 7299   | N/A  | N/A     |
-| 4                           | N/A        | N/A         | 3764 | 3836    | 3886   | N/A  | N/A     |
-| 8                           | N/A        | N/A         | 2093 | 1835    | 1862   | N/A  | N/A     |
-| 16                          | N/A        | N/A         | 1083 | 924     | 1089   | N/A  | N/A     |
-| 32                          | N/A        | N/A         | 694  | 535     | 605    | N/A  | N/A     |
+| Number of Processes / Cores | Sequential | Auto Vectorize | SIMD (AVX2) | MPI  | Pthread | OpenMP | CUDA | OpenACC | Triton |
+|-----------------------------|------------|----------------|-------------|------|---------|--------|------|---------|--------|
+| 1                           | 6770       | 5374           | 3395        | 6900 | 7552    | 7888   | 33   | 24      | 1413   |
+| 2                           | N/A        | N/A            | N/A         | 6897 | 6922    | 7012   | N/A  | N/A     | N/A    |
+| 4                           | N/A        | N/A            | N/A         | 3618 | 3458    | 3504   | N/A  | N/A     | N/A    |
+| 8                           | N/A        | N/A            | N/A         | 1972 | 1746    | 1759   | N/A  | N/A     | N/A    |
+| 16                          | N/A        | N/A            | N/A         | 1106 | 875     | 891    | N/A  | N/A     | N/A    |
+| 32                          | N/A        | N/A            | N/A         | 799  | 555     | 484    | N/A  | N/A     | N/A    |
 
 <div style="display:flex;justify-content:space-around; align-items:center;">
-    <img src="images/performance-evaluation-PartB.png" alt="Performance Evaluation PartB"/>
+    <img src="images/PartB-Baseline-Performance-2025-26Fall.png" alt="Performance Evaluation PartB"/>
 </div>
 <p style="font-size: medium;" align="center">
-    <strong>Performance Evaluation of PartB (numbers refer to execution time in milliseconds)</strong>
+    <strong>Performance Evaluation of PartB on 20K image (numbers refer to execution time in milliseconds)</strong>
 </p>
 
 ### PartC (Baseline Performance)
@@ -406,14 +406,21 @@ If your program behaves poor performance to the baseline, points will be deducte
 - [sbatch file here](src/scripts/sbatch_PartC.sh)
 - Performance measured as execution time in milliseconds
 
-| Number of Processes / Cores | Sequential (AOS, -O0) | Sequential (SOA, -O0) | Sequential (-O2) | SIMD (AVX2, -O0) |  SIMD (AVX2, -O2) | MPI (-O2)  | Pthread (-O2) | OpenMP (-O2) | CUDA | OpenACC |
-|-----------------------------|-----------------------|-----------------------|------------------|------------------|-------------------|------------|---------------|--------------|------|---------|
-| 1                           | 10326                  | 9773                  | 3745            | 3685             | 3674              | 3640       | 3661          | 3654         | 9.6 | 43      |
-| 2                           | N/A                   | N/A                   | N/A              | N/A              | N/A               | 2838       | 2804          | 2799         | N/A  | N/A     |
-| 4                           | N/A                   | N/A                   | N/A              | N/A              | N/A               | 1428       | 1560          | 1452         | N/A  | N/A     |
-| 8                           | N/A                   | N/A                   | N/A              | N/A              | N/A               | 719        | 736           | 756          | N/A  | N/A     |
-| 16                          | N/A                   | N/A                   | N/A              | N/A              | N/A               | 361        | 396           | 501          | N/A  | N/A     |
-| 32                          | N/A                   | N/A                   | N/A              | N/A              | N/A               | 182        | 217           | 247          | N/A  | N/A     |
+| Number of Processes / Cores | Sequential (SOA) | Auto Vectorize | MPI  | Pthread | OpenMP | CUDA | OpenACC | Triton |
+|-----------------------------|------------------|----------------|------|---------|--------|------|---------|--------|
+| 1                           | 1913             | 385            | 1956 | 1947    | 1923   | 13   | 31      | 114    |
+| 2                           | N/A              | N/A            | 1653 | 1657    | 1648   | N/A  | N/A     | N/A    |
+| 4                           | N/A              | N/A            | 834  | 843     | 842    | N/A  | N/A     | N/A    |
+| 8                           | N/A              | N/A            | 449  | 426     | 433    | N/A  | N/A     | N/A    |
+| 16                          | N/A              | N/A            | 236  | 223     | 225    | N/A  | N/A     | N/A    |
+| 32                          | N/A              | N/A            | 147  | 162     | 176    | N/A  | N/A     | N/A    |
+
+<div style="display:flex;justify-content:space-around; align-items:center;">
+    <img src="images/PartC-Baseline-Performance-2025-26Fall.png" alt="Baseline Performance Evaluation PartC"/>
+</div>
+<p style="font-size: medium;" align="center">
+    <strong>Baseline Performance Evaluation of PartC on 4K images (numbers refer to execution time in milliseconds)</strong>
+</p>
 
 ## Appendix
 
