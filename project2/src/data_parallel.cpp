@@ -2,16 +2,15 @@
 // Created by Yang Yufan on 2023/10/07.
 // Email: yufanyang1@link.cuhk.edu.cn
 //
-// OpenMp + auto vectorization + Reordering Matrix Multiplication
-//scan
+// Data Parallelism + Reordering Matrix Multiplication
+//
 
 #include <immintrin.h>
-#include <omp.h> 
 #include <stdexcept>
 #include <chrono>
 #include "matrix.hpp"
 
-Matrix matrix_multiply_openmp(const Matrix& matrix1, const Matrix& matrix2) {
+Matrix matrix_multiply_dataparallel(const Matrix& matrix1, const Matrix& matrix2) {
     if (matrix1.getCols() != matrix2.getRows()) {
         throw std::invalid_argument(
             "Matrix dimensions are not compatible for multiplication.");
@@ -23,28 +22,25 @@ Matrix matrix_multiply_openmp(const Matrix& matrix1, const Matrix& matrix2) {
 
     // Your Code Here!
     // Optimizing Matrix Multiplication 
-    // In addition to auto vectorization, Memory Locality and Cache Missing,
-    // Further Applying OpenMp
+    // In addition to Memory Locality and Cache Missing,
+    // Further Applying GCC auto vectorization
 
     return result;
 }
 
 int main(int argc, char** argv) {
     // Verify input argument format
-    if (argc != 5) {
+    if (argc != 4) {
         throw std::invalid_argument(
-            "Invalid argument, should be: ./executable thread_num"
+            "Invalid argument, should be: ./executable "
             "/path/to/matrix1 /path/to/matrix2 /path/to/multiply_result\n");
     }
 
-    int thread_num = atoi(argv[1]);
-    omp_set_num_threads(thread_num);
+    const std::string matrix1_path = argv[1];
 
-    const std::string matrix1_path = argv[2];
+    const std::string matrix2_path = argv[2];
 
-    const std::string matrix2_path = argv[3];
-
-    const std::string result_path = argv[4];
+    const std::string result_path = argv[3];
 
     Matrix matrix1 = Matrix::loadFromFile(matrix1_path);
 
@@ -52,7 +48,7 @@ int main(int argc, char** argv) {
 
     auto start_time = std::chrono::high_resolution_clock::now();
 
-    Matrix result = matrix_multiply_openmp(matrix1, matrix2);
+    Matrix result = matrix_multiply_dataparallel(matrix1, matrix2);
 
     auto end_time = std::chrono::high_resolution_clock::now();
     auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(
