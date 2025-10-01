@@ -230,8 +230,8 @@ Dense matrices:
 | :------------------------------------------------------: | :----------------: | :----------------: |
 |                          Naive                           |      7844 ms       |      82560 ms      |
 |                     Memory Locality                      |       760 ms       |      6299 ms       |
-|          Auto Vectorization  + Memory Locality|       164 ms       |      1397 ms       |
-|       OpenMP + Auto Vectorization + Memory Locality (32 threads)       |        37 ms        |       195 ms       |
+|          Auto Vectorization  + Memory Locality|       236 ms       |      2400 ms       |
+|       OpenMP + Auto Vectorization + Memory Locality (32 threads)       |        25 ms        |       146 ms       |
 
 ### Extra Credits Result (For reference)
 Sparse matrices:
@@ -249,7 +249,7 @@ Data Parallelism
 
 |                         Methods                          | Matrices 1024*1024 | Matrices 2048*2048 |
 | :------------------------------------------------------: | :----------------: | :----------------: |
-|          Auto Vectorization  + Memory Locality|       164 ms       |      1397 ms       |
+|          Auto Vectorization  + Memory Locality|       236 ms       |      2400 ms       |
 |       SIMD + Memory Locality       |        217 ms        |       1843 ms       |
 | CUDA  | 31 ms | 209 ms | 
 
