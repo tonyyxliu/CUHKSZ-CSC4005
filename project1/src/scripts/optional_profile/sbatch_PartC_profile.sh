@@ -1,16 +1,15 @@
 #!/bin/bash
-#SBATCH -o ./Project1-PartC-Results.txt
-#SBATCH -p Project
-#SBATCH -J Project1-PartC
+#SBATCH -o ./Project1-PartC-Results-Profile.txt
+#SBATCH -p Release
+#SBATCH -J Project1-PartC-Profile
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=4
 #SBATCH --gres=gpu:1
 
 # Necessary Environment Variables for Triton
-export TRITON_PTXAS_PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/21.7/cuda/11.4/bin/ptxas                                                                      
-export TRITON_CUOBJDUMP_PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/21.7/cuda/11.4/bin/cuobjdump                                                              
-export TRITON_NVDISASM_PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/21.7/cuda/11.4/bin/nvdisasm  
-export PATH=/opt/rh/rh-python38/root/usr/bin:$PATH
+export TRITON_PTXAS_PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/23.7/cuda/12.2/bin/ptxas                                                                      
+export TRITON_CUOBJDUMP_PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/23.7/cuda/12.2/bin/cuobjdump                                                              
+export TRITON_NVDISASM_PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/23.7/cuda/12.2/bin/nvdisasm
 
 # srun -n 1 python3 /nfsmnt/118010200/CUHKSZ-CSC4005-Internal/sample_programs/triton-lang/vector_add.py
 
