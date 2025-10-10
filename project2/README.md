@@ -8,12 +8,11 @@ October 11th，2025 (Beijing Time, UTC+08:00)
 
 ### Deadline:
 
-11:59 P.M., October 30th, 2025 (Beijing Time, UTC+08:00)
+11:59 P.M., October 31st, 2025 (Beijing Time, UTC+08:00)
 
 ### TA In Charge of This Assignment
 
 **Mr. Mengkang Li** (mengkangli@link.cuhk.edu.cn)
-
 
 ## Prologue
 
