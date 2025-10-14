@@ -2,27 +2,38 @@
 // Created by Yang Yufan on 2023/10/07.
 // Email: yufanyang1@link.cuhk.edu.cn
 //
-// Naive Matrix Multiplication
+// Modified by Liu Yuxuan on 2025/10/12
+// Email: yuxuanliu1@link.cuhk.edu.cn
+//
+// Naive Matrix Multiplication with i-j-k triple loop
 //
 
 #include <stdexcept>
 #include <chrono>
 #include "matrix.hpp"
 
-Matrix matrix_multiply(const Matrix& matrix1, const Matrix& matrix2) {
-    if (matrix1.getCols() != matrix2.getRows()) {
+/**
+ * Naive Triple-Loop Matmul
+ */
+Matrix matrix_multiply(const Matrix& matrix1, const Matrix& matrix2)
+{
+    if (matrix1.getCols() != matrix2.getRows())
+    {
         throw std::invalid_argument(
             "Matrix dimensions are not compatible for multiplication.");
     }
 
     size_t M = matrix1.getRows(), K = matrix1.getCols(), N = matrix2.getCols();
+    std::cout << "M = " << M << ", N = " << N << ", K = " << K << std::endl;
 
     Matrix result(M, N);
-
-    for (size_t i = 0; i < M; ++i) {
-        for (size_t j = 0; j < N; ++j) {
-            for (size_t k = 0; k < K; ++k) {
-                result[i][j] += matrix1[i][k] * matrix2[k][j];
+    for (size_t i = 0; i < M; ++i)
+    {
+        for (size_t j = 0; j < N; ++j)
+        {
+            for (size_t k = 0; k < K; ++k)
+            {
+                result(i, j) += matrix1(i, k) * matrix2(k, j);
             }
         }
     }
@@ -30,22 +41,18 @@ Matrix matrix_multiply(const Matrix& matrix1, const Matrix& matrix2) {
     return result;
 }
 
-int main(int argc, char** argv) {
-    // Verify input argument format
-    if (argc != 4) {
-        throw std::invalid_argument(
-            "Invalid argument, should be: ./executable "
-            "/path/to/matrix1 /path/to/matrix2 /path/to/multiply_result\n");
+int main(int argc, char** argv)
+{
+    if (argc != 3)
+    {
+        throw std::invalid_argument("Invalid argument, should be: ./executable "
+                                    "/path/to/matrix1 /path/to/matrix2\n");
     }
 
     const std::string matrix1_path = argv[1];
-
     const std::string matrix2_path = argv[2];
 
-    const std::string result_path = argv[3];
-
     Matrix matrix1 = Matrix::loadFromFile(matrix1_path);
-
     Matrix matrix2 = Matrix::loadFromFile(matrix2_path);
 
     auto start_time = std::chrono::high_resolution_clock::now();
@@ -56,13 +63,12 @@ int main(int argc, char** argv) {
     auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(
         end_time - start_time);
 
-    result.saveToFile(result_path);
-
-    std::cout << "Output file to: " << result_path << std::endl;
-
-    std::cout << "Multiplication Complete!" << std::endl;
+    Matrix ground_truth = Matrix::getResultMatrix(matrix1_path, matrix2_path);
+    std::cout << "Verification: "
+              << ((Matrix::isIdentical(result, ground_truth)) ? "Passed"
+                                                              : "Failed")
+              << std::endl;
     std::cout << "Execution Time: " << elapsed_time.count() << " milliseconds"
               << std::endl;
-
     return 0;
 }
