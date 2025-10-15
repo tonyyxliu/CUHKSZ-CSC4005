@@ -44,6 +44,15 @@ We have provided 4 groups of matrices for your testing under `/path/to/project2/
 
 Only matrices within the same group can be multiplied together. The ground truth result matrices are also avaialble for correctness check. For performance testing, it's better to use matrices from Groups 3 and 4 to clearly observe the performance improvements.
 
+#### MUST-DO: Copy Matrices to Your Directory!!!
+
+```bash
+cd /path/to/your/project2
+cp -r /nfsmnt/CSC4005-resources/matrices ./
+```
+
+You can also generate the source matrices[1-8] by executing `bash generate_matrix.sh` and generate the ground-truth matrices by yourself.
+
 ### Compilation
 
 ```bash
@@ -67,22 +76,22 @@ salloc -N1 -n32 -t10 -pDebug
 
 cd /path/to/project2/build
 # Naive
-salloc -n 1 --cpus-per-task 1 ./src/naive /path/to/matrixA /path/to/matrixB
+srun -n 1 --cpus-per-task 1 ./src/naive /path/to/matrixA /path/to/matrixB
 # Task 1: FMA
-salloc -n 1 --cpus-per-task 1 ./src/fma_restrict /path/to/matrixA /path/to/matrixB
-salloc -n 1 --cpus-per-task 1 ./src/fma_standalone_var /path/to/matrixA /path/to/matrixB
+srun -n 1 --cpus-per-task 1 ./src/fma_restrict /path/to/matrixA /path/to/matrixB
+srun -n 1 --cpus-per-task 1 ./src/fma_standalone_var /path/to/matrixA /path/to/matrixB
 # Task 2: Const Ptr Decl
-salloc -n 1 --cpus-per-task 1 ./src/const_ptr_decl /path/to/matrixA /path/to/matrixB
+srun -n 1 --cpus-per-task 1 ./src/const_ptr_decl /path/to/matrixA /path/to/matrixB
 # Task 3: Memory Locality
-salloc -n 1 --cpus-per-task 1 ./src/transpose /path/to/matrixA /path/to/matrixB
-salloc -n 1 --cpus-per-task 1 ./src/loop_interchange /path/to/matrixA /path/to/matrixB
+srun -n 1 --cpus-per-task 1 ./src/transpose /path/to/matrixA /path/to/matrixB
+srun -n 1 --cpus-per-task 1 ./src/loop_interchange /path/to/matrixA /path/to/matrixB
 # Task 4: Tiling
-salloc -n 1 --cpus-per-task 1 ./src/tiling_transpose $BLOCK_SIZE /path/to/matrixA /path/to/matrixB
-salloc -n 1 --cpus-per-task 1 ./src/tiling_loop_interchange $BLOCK_SIZE /path/to/matrixA /path/to/matrixB
+srun -n 1 --cpus-per-task 1 ./src/tiling_transpose $BLOCK_SIZE /path/to/matrixA /path/to/matrixB
+srun -n 1 --cpus-per-task 1 ./src/tiling_loop_interchange $BLOCK_SIZE /path/to/matrixA /path/to/matrixB
 # Task 5: GCC auto Vectorization 
-salloc -n 1 --cpus-per-task 1 ./src/autovec $BLOCK_SIZE /path/to/matrixA /path/to/matrixB
+srun -n 1 --cpus-per-task 1 ./src/autovec $BLOCK_SIZE /path/to/matrixA /path/to/matrixB
 # Task 6: OpenMP
-salloc -n 1 --cpus-per-task $thread_num ./src/openmp $thread_num $BLOCK_SIZE  /path/to/matrixA /path/to/matrixB
+srun -n 1 --cpus-per-task $thread_num ./src/openmp $thread_num $BLOCK_SIZE  /path/to/matrixA /path/to/matrixB
 
 ############
 ## sbatch ##
@@ -285,7 +294,7 @@ Optimizing matrix multiplication is a topic that never comes to an end. A little
 
 Compared to replying on GCC to do auto vectorization, another way to exploit *data-level parallelism* is to manually control the vector registers and instructions by writing intrinsics. Note that we are dealing with double-precision elements.
 
-### EC-Option-2: Thread-Level Parallelism with MPI
+### EC-Option-2: Process-Level Parallelism with MPI
 
 You may write a MPI program to launch multiple process, while each process hosting several threads. Be careul with the data transfer.
 
