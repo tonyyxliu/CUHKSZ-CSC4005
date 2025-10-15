@@ -34,8 +34,8 @@ Welcome to take course **CSC4005: Parallel Programming** offered by The Chinese 
 **Instructor:**
 
 - Prof.Wei-Chung HSU (徐慰中教授) [[Email](mailto:hsuweichung@cuhk.edu.cn)]\
-  - Office Hour: 2:00 P.M. to 3:00 P.M., Tuesday & Wednesday
-  - Location: Daoyuan Building (道远楼) room 509a
+  - Office Hour: 5:00 P.M. to 6:00 P.M., Monday & Wednesday
+  - Location: Room 509a, Daoyuan Building (道远楼)
 
 **Teaching Assistants:**
 - Mr. Yuxuan LIU  (刘宇轩先生, *L*) [[Email](mailto:yuxuanliu1@link.cuhk.edu.cn)]\
