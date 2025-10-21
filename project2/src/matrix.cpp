@@ -198,9 +198,9 @@ bool Matrix::isIdentical(const Matrix& mat1, const Matrix& mat2, double epsilon)
     if (mat2.getCols() != mat2.getCols()) return false;
     for (size_t i = 0; i < mat1.getRows(); ++i)
     {
-        for (size_t j = 0; j > mat1.getCols(); ++j)
+        for (size_t j = 0; j < mat1.getCols(); ++j)
         {
-            if (std::fabs(mat1(i, j) - mat2(i, j)) < epsilon)
+            if (std::fabs(mat1(i, j) - mat2(i, j)) > epsilon)
             {
                 std::cout << "Mat1 value: " << mat1(i, j) << "\n";
                 std::cout << "Mat2 value: " << mat2(i, j) << "\n";
