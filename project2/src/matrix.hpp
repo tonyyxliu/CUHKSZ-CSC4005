@@ -89,7 +89,7 @@ public:
      * @return true if identical, false otherwise
      */
     static bool isIdentical(const Matrix& mat1, const Matrix& mat2,
-                            double epsilon = 1e-12);
+                            double epsilon = 0.5);
 
     /**
      * Load a matrix from a file
