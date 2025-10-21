@@ -421,16 +421,16 @@ Dense matrices:
 
 |                         Methods                          | Matrices 1024*1024  | Matrices 2048*2048 |
 | :------------------------------------------------------: | :-----------------: | :----------------: |
-|   Naive                                                  |      13664 ms       |      265377 ms     |
-|   Task 1.1: \_\_restrict\_\_ ptr                         |      11319 ms       |      190779 ms     |
-|   Task 1.2: standalone var                               |       9181 ms       |      201627 ms     |
-|   Task 2: const ptr decl                                 |       4356 ms       |       82298 ms     |
-|   Task 3.1: Transposition                                |       1510 ms       |       13493 ms     |
-|   Task 3.2: Loop Interchange                             |       676  ms       |        9146 ms     |
-|   Task 4.1: Tiling + Transposition (best BLOCK_SIZE)     |       909  ms       |        7456 ms     |
-|   Task 4.2: Tiling + Loop Interchange (best BLOCK_SIZE)  |       610  ms       |        5004 ms     |
-|   Task 5: Auto Vectorization (best BLOCK_SIZE)           |       358  ms       |        2899 ms     |
-|   Task 6: OpenMP Multi-Threading (32 threads)            |        66  ms       |         254 ms     |
+|   Naive                                                  |      9474 ms        |      192080 ms     |
+|   Task 1.1: \_\_restrict\_\_ ptr                         |      8923 ms        |      173692 ms     |
+|   Task 1.2: standalone var                               |       8795 ms       |      171997 ms     |
+|   Task 2: const ptr decl                                 |       3796 ms       |       68013 ms     |
+|   Task 3.1: Transposition                                |       1498 ms       |       12754 ms     |
+|   Task 3.2: Loop Interchange                             |       767 ms        |        7316 ms     |
+|   Task 4.1: Tiling + Transposition (best BLOCK_SIZE)     |       1017 ms       |        8323 ms     |
+|   Task 4.2: Tiling + Loop Interchange (best BLOCK_SIZE)  |       787 ms        |        6358 ms     |
+|   Task 5: Auto Vectorization (best BLOCK_SIZE)           |       365 ms        |        3209 ms     |
+|   Task 6: OpenMP Multi-Threading (32 threads)            |        62  ms       |         222 ms     |
 
 <!-- ### Extra Credits Result (For reference)
 Sparse matrices:

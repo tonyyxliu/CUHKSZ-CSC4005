@@ -104,7 +104,7 @@ void Matrix::getBlock(MAT_DATATYPE* __restrict__ block_data, size_t row_start,
 #pragma GCC unroll 8
         for (size_t j = 0; j < block_size; ++j)
         {
-            block_data[block_base_idx + j] = data[base_idx + j];
+            block_data[block_base_idx + j] = data[base_idx + col_start + j];
         }
     }
 }
@@ -122,7 +122,7 @@ void Matrix::setBlock(const MAT_DATATYPE* const block_data, size_t row_start,
 #pragma GCC unroll 8
         for (size_t j = 0; j < block_size; ++j)
         {
-            data[base_idx + j] += block_data[block_base_idx + j];
+            data[base_idx + col_start + j] += block_data[block_base_idx + j];
         }
     }
 }
@@ -200,7 +200,7 @@ bool Matrix::isIdentical(const Matrix& mat1, const Matrix& mat2, double epsilon)
     {
         for (size_t j = 0; j < mat1.getCols(); ++j)
         {
-            if (std::fabs(mat1(i, j) - mat2(i, j)) < epsilon)
+            if (std::fabs(mat1(i, j) - mat2(i, j)) > epsilon)
             {
                 std::cout << "Mat1 value: " << mat1(i, j) << "\n";
                 std::cout << "Mat2 value: " << mat2(i, j) << "\n";
