@@ -195,7 +195,7 @@ Matrix& Matrix::operator=(Matrix&& other) noexcept
 bool Matrix::isIdentical(const Matrix& mat1, const Matrix& mat2, double epsilon)
 {
     if (mat1.getRows() != mat2.getRows()) return false;
-    if (mat2.getCols() != mat2.getCols()) return false;
+    if (mat1.getCols() != mat2.getCols()) return false;
     for (size_t i = 0; i < mat1.getRows(); ++i)
     {
         for (size_t j = 0; j < mat1.getCols(); ++j)
