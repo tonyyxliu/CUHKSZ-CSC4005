@@ -10,18 +10,13 @@ if (OpenACC_CXX_FOUND)
     message("OpenACC FOUND, Version: " ${OpenACC_CXX_VERSION})
 endif ()
 
-add_executable(radixsort_sequential
-        sequential.cpp
-        ../utils.cpp ../utils.hpp)
-target_compile_options(radixsort_sequential PRIVATE -O2)
-
 set(CMAKE_CXX_COMPILER pgc++)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -acc")
 
 ## OpenACC Radixsort
-add_executable(radixsort
-        radixsort.cpp
+add_executable(searching_array_gpu
+        array_gpu.cpp
         ../utils.cpp ../utils.hpp)
-target_compile_options(radixsort PRIVATE -O2)
-target_link_libraries(radixsort cudart)
+target_compile_options(searching_array_gpu PRIVATE -O2)
+target_link_libraries(searching_array_gpu cudart)

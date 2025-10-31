@@ -10,24 +10,6 @@
 
 #include "utils.hpp"
 
-DistType str_2_dist_type(const std::string& str) {
-    if (!strcasecmp(str.c_str(), "uniform"))
-        return Uniform;
-    else if (!strcasecmp(str.c_str(), "normal"))
-        return Normal;
-    else
-        throw std::invalid_argument("dist_type option can only be 'uniform' or 'normal'\n");
-}
-
-std::vector<int> genRandomVec(int size, DistType dist, int seed) {
-    switch (dist) {
-        case Uniform:
-            return createUniformVec(size, seed);
-        case Normal:
-            return createNormalVec(size, seed);
-    }
-}
-
 std::vector<int> createUniformVec(int size, int seed) {
     std::mt19937 gen(seed);
     std::uniform_int_distribution<int> distribution(0, size);
@@ -36,27 +18,6 @@ std::vector<int> createUniformVec(int size, int seed) {
     for (int i = 0; i < size; i++) {
         int randomValue = distribution(gen);
         randomVector.push_back(randomValue);
-    }
-    return randomVector;
-}
-
-std::vector<int> createNormalVec(int size, int seed) {
-    std::mt19937 gen(seed);
-    // According to the empirical law of normal distribution
-    // Around 68% of data appear within [mean - stddev, mean + stddev]
-    // Around 95% of data appear within [mean - 2 * stddev, mean + 2 * stddev]
-    // Around 99.7% of data appear within [mean - 3 * stddev, mean + 3 * stddev]
-    double mean = size / 2.0;
-    double stddev = size / 10.0;
-    std::normal_distribution<> distribution(mean, stddev);
-    std::vector<int> randomVector;
-    randomVector.reserve(size);
-    for (int i = 0; i < size; i++) {
-        int num;
-        do {
-            num = static_cast<int>(distribution(gen));
-        } while (num < 0 || num > size); // Ensure within the range
-        randomVector.push_back(num);
     }
     return randomVector;
 }
@@ -85,6 +46,73 @@ void checkSortResult(std::vector<int>& vec1, std::vector<int>& vec2) {
         }
     }
     std::cout << "Pass the sorting result check!" << std::endl;
+}
+
+void checkSearchResult(const std::vector<int>& vec, 
+                       const std::vector<int>& search_targets,
+                       const std::vector<int>& results) {
+    // Check if results vector size matches search_targets size
+    if (results.size() != search_targets.size()) {
+        std::cout << "Fail to pass the searching result check!" << std::endl;
+        std::cout << "The size of the results vector is expected to be " << search_targets.size() << std::endl;
+        std::cout << "But your results vector's size is " << results.size() << std::endl; 
+        return;
+    }
+    
+    // Use std::lower_bound as the standard for verification (finds FIRST occurrence)
+    auto standardBinarySearch = [](const std::vector<int>& arr, int target) -> int {
+        auto it = std::lower_bound(arr.begin(), arr.end(), target);
+        if (it != arr.end() && *it == target) {
+            return std::distance(arr.begin(), it);
+        }
+        return -1;
+    };
+    
+    // Check each search result
+    int error_count = 0;
+    const int MAX_ERRORS_TO_SHOW = 5;
+    
+    for (int i = 0; i < search_targets.size(); ++i) {
+        int target = search_targets[i];
+        int student_result = results[i];
+        int expected_result = standardBinarySearch(vec, target);
+        
+        // Compare with std::lower_bound result
+        if (student_result != expected_result) {
+            if (error_count < MAX_ERRORS_TO_SHOW) {
+                std::cout << "Fail to pass the searching result check!" << std::endl;
+                std::cout << "For search target " << target << " (index " << i << "):" << std::endl;
+                std::cout << "  Your result: " << student_result;
+                if (student_result == -1) {
+                    std::cout << " (not found)";
+                } else if (student_result >= 0 && student_result < vec.size()) {
+                    std::cout << " (vec[" << student_result << "] = " << vec[student_result] << ")";
+                } else {
+                    std::cout << " (out of bounds)";
+                }
+                std::cout << std::endl;
+                std::cout << "  Expected (std::lower_bound): " << expected_result;
+                if (expected_result == -1) {
+                    std::cout << " (not found)";
+                } else {
+                    std::cout << " (vec[" << expected_result << "] = " << vec[expected_result] << ")";
+                }
+                std::cout << std::endl;
+            }
+            error_count++;
+        }
+        
+        if (error_count > 0 && error_count == MAX_ERRORS_TO_SHOW) {
+            std::cout << "... (showing first " << MAX_ERRORS_TO_SHOW << " errors)" << std::endl;
+        }
+    }
+    
+    if (error_count > 0) {
+        std::cout << "Total errors found: " << error_count << " out of " << search_targets.size() << " searches" << std::endl;
+        std::cout << "Fail to pass the searching result check!" << std::endl;
+    } else {
+        std::cout << "Pass the searching result check!" << std::endl;
+    }
 }
 
 std::vector<int> createCuts(int start, int end, int tasks_num) {

@@ -34,14 +34,13 @@ void quickSort(std::vector<int> &vec, int low, int high) {
 
 int main(int argc, char** argv) {
     // Verify input argument format
-    if (argc != 3) {
+    if (argc != 2) {
         throw std::invalid_argument(
-            "Invalid argument, should be: ./executable dist_type vector_size\n"
+            "Invalid argument, should be: ./executable vector_size\n"
             );
     }
-    const DistType dist_type = str_2_dist_type(std::string(argv[1]));
-    const int size = atoi(argv[2]);
-    std::vector<int> vec = genRandomVec(size, dist_type); // use default seed
+    const int size = atoi(argv[1]);
+    std::vector<int> vec = createUniformVec(size); // use default seed
     std::vector<int> vec_clone = vec;
 
     auto start_time = std::chrono::high_resolution_clock::now();
@@ -54,5 +53,6 @@ int main(int argc, char** argv) {
               << std::endl;
     
     checkSortResult(vec_clone, vec);
+
     return 0;
 }

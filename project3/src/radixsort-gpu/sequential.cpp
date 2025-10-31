@@ -2,58 +2,51 @@
 // Created by Lyu You on 2024/10/16
 // Email: 121090404@link.cuhk.edu.cn
 //
-// Task #6 (Extra Credits): Sequential Radix Sort
+// Sequential Radix Sort
 //
 
 #include <iostream>
 #include <vector>
-
 #include "../utils.hpp"
 
 #define BASE 256
+#define BASE_BITS 8
 
 void radixSort(std::vector<int> &vec) {
     int n = vec.size();
-    int i;
-    long exp;
 
-    // Get the largest element
-    int max_element = vec[0];
-
-    for (i = 0; i < n; ++i) {
-        if (vec[i] > max_element) {
-            max_element = vec[i];
-        }
-    }
+    // Get the pointer of element
+    int *vec_raw = vec.data();
 
     // Counting sort for each digit
-    for (exp = 1; max_element / exp > 0; exp *= BASE) {
-        std::vector<int> output(n);
-        std::vector<int> count(BASE, 0);
+    int *output = new int[n];
+    int count[BASE];
+    int start_pos[BASE];
+    int offset[BASE];
 
-        for (i = 0; i < n; i++)
-            count[(vec[i] / exp) % BASE]++;
+    for (int shift = 0; shift < 32; shift += BASE_BITS) {
+        
+        memset(count, 0, sizeof(int) * BASE);
+        for (int i = 0; i < n; i++)
+            count[(vec_raw[i] >> shift) & (BASE - 1)]++;
 
-        std::vector<int> start_pos(BASE, 0);
+        memset(start_pos, 0, sizeof(int) * BASE);
         for (int d = 1; d < BASE; d++) {
             start_pos[d] = start_pos[d - 1] + count[d - 1];
         }
 
-        std::vector<int> offset(BASE, 0);
+        memset(offset, 0, sizeof(int) * BASE);
         for (int i = 0; i < n; i++) {
-            int digit = (vec[i] / exp) % BASE;
+            int digit = (vec_raw[i] >> shift) & (BASE - 1);
             int pos = start_pos[digit] + offset[digit];
-            output[pos] = vec[i];
+            output[pos] = vec_raw[i];
             offset[digit]++;
         }
 
         // Assign elements back to the input vector
-        for (i = 0; i < n; i++) {
-            vec[i] = output[i];
-        }
+        memcpy(vec_raw, output, sizeof(int) * n);
     }
-
-    return;
+    delete[] output;
 }
 
 int main(int argc, char** argv) {
@@ -84,5 +77,6 @@ int main(int argc, char** argv) {
               << std::endl;
     
     checkSortResult(vec_clone, vec);
+
     return 0;
 }
