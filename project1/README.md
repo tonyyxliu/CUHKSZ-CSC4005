@@ -261,9 +261,12 @@ The image used for performance evaluation is the 4K JPEG image with around 10 mi
   2. Faster Math Computation
     - try to replace floating-point computation with integer ones and shifting operations (example: PartA 0.299 * r = 306 * r / 1024 = 306 * r >> 10)
     - try to replace complicated computation with approximated version (example: exp can be approximated with a series of Taylor expansion terms). Elaborate the trade-off between performance and speed.
+    - You may also try to vectorize the time-consuming exponential computation either through hand-crafted, AI-assisted or with some external library.
   3. Try to bind program to a specific CPU core for better performance. Refer to: https://slurm.schedmd.com/mc_support.html
   4. For GPU programs like CUDA, feel free to change the block size and grid size for better performance.
   5. For auto vectorization, try more optimization flags and pragmas.
+  6. The range of pixel values is from 0 to 255. 256 is not a big number. Maybe we can consider constructing a table with pre-computed results and replace many redundant computation with table lookup.
+    - Based on an intuition that there must be some commonly occurred pixel values. How to do further optimization on the distribution of hot pixel values?
 
 ### The Extra Credit Policy
 According to the professor, the extra credits for all projects cannot be added to the final grade or other projects, which determines your rank. The credits are the honor you received from the professor and the teaching stuff, and the professor may help raise you to a higher grade level if you are at the boundary of two grade levels and he think you deserve a better grade with your extra credits. For example, if you are the top students with B+ grade, and get enough extra credits, the professor may raise you to a A-.
