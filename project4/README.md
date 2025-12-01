@@ -1,280 +1,256 @@
-# Project 4: Parallel Programming with Machine Learning
+# Project 4: Parallel Programming with FlashAttention
 
 ### This project weights 12.5% for your final grade (4 Projects for 50%)
 
 ### Release Date:
 
-November 24th, 2024 (Beijing Time, UTC+08:00)
+December 1st, Monday, 2025 (Beijing Time, UTC+08:00)
 
 ### Deadline:
 
-11:59 P.M., December 13th, 2024 (Beijing Time, UTC+08:00)
+11:59 P.M., December 23th, Tuesday, 2025 (Beijing Time, UTC+08:00)
 
 ### TA/USTF In Charge of This Assignment
 
-**Mr. Zhang Qihang** for Implementation (qihangzhang@link.cuhk.edu.cn)
+**Mr. Li Mohan** for Code Skeleton Implementation (mohanli1@link.cuhk.edu.cn)
 
-**Mr. Hou Tianci** for Implementation (tiancihou@link.cuhk.edu.cn)
+**Mr. Liu Yuxuan** for Grading (yuxuanliu1@link.cuhk.edu.cn)
 
 ## Prologue
 
-In this project, you will have the opportunity to gain insight and practice in using OpenAcc & Triton to accelerate machine learning algorithms. Specifically, you will be accelerating MINST Handwritten Digit Recognition with neural networks.
+In this project, you will have the opportunity to gain insight and practice in using CUDA & Triton to accelerate key algorithms in modern machine learning. Specifically, you will implement flash attention algorithm, a high-performance attention mechanism used in large language model. 
 
-First, you will need to understand the basic principles and algorithms of neural networks. Then, you will work with OpenAcc, a programming model for parallel computing that makes it easier for you to optimize your code to run on GPUs, thereby greatly increasing the speed of computation.
+First, you will need to learn how to use CUDA and Triton, refer to the documentation and the provided matrix multiplication examples, and implement a simple softmax method. Then, you will need to understand the basic principles and algorithms of flash attention. 
 
-This assignment will help you understand the importance of parallel computing in machine learning, especially when working with large-scale data and complex models. You will learn how to effectively utilize hardware resources to improve the performance and efficiency of machine learning algorithms.
+Finally, you need to implement flash attention v1 and optimize it for sparse matrices.
 
 **REMIND: Please start ASAP to avoid the peak period of cluster job submission.**
 
-## Task0: Setup
+## Background: Attention is All You NEED!
 
-Download the dataset from BB or Internet. Unzip `dataset.zip` to folder `project4`. 
+Every beginner to AI and LLM must have heard this famous saying *"Attention is All You Need"*. This paper proposed the cutting-edge neural network architecture named *transformer* for natural language processing (NLP). It revolutionized sequence modeling by its attention mechanism, and it has received over 200K citations on Google Scholar.
+
+Different from LSTM (Long-Short Term Memory) and RNN (Recurrent Neural Network), which use recurrence and convolution to capture limited surronding context, attention can capture the whole input context and know which part is important to itself through self-attention computation.
+
+A standard way of attention computation is illustrated as follows:
+
+![principle](./assets/attention-compute-flow.png "Attention-Compute-Flow"){:height="50%" width="50%"}
+
+![principle](./assets/naive-attention.png "Naive Attention Algorithm")
+
+**The idea of FlashAttention then comes up with the following two questions:**
+1. From project 2 matrix multiply, we know that tiling can improve performance greatly. Attention is done with several matrix operations. Can we use tiling to improve its cache locality and memory utilization?
+2. Is it necessary to store intermediate results to HBM so many times? Can we do some computations in one time and reduce the times to store them to HBM and load them back?
+
+Online tutorials for reference:
+- [In Chinese] https://transformers.run/c1/attention/#
+- [In English] https://jalammar.github.io/illustrated-transformer/
+- Paper: Attention is All You Need: https://proceedings.neurips.cc/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf
+
+## Task-0: Project Setup
+
+get project4 from github
 
 The structure of working directory should look like below:
 
 ```tree
 .
-├── CMakeLists.txt
-├── MINST
-│   ├── readme.txt
-│   ├── t10k-images-idx3-ubyte
-│   ├── t10k-labels-idx1-ubyte
-│   ├── train-images-idx3-ubyte
-│   └── train-labels-idx1-ubyte
 ├── README.md
-├── build
-├── reference
-│   └── mlp_pytorch.py
-├── src
-│   ├── mlp_main.cpp
-│   ├── mlp_network.hpp
-│   ├── mlp_openacc_fusion.cpp
-│   ├── mlp_openacc_kernel.cpp
-│   ├── mlp_sequential.cpp
-│   ├── ops.hpp
-│   ├── ops_openacc_fusion.cpp
-│   ├── ops_openacc_kernel.cpp
-│   ├── ops_sequential.cpp
-│   ├── utils.cpp
-│   ├── utils.hpp
-├── test.sh
-└── triton
-    ├── mlp_triton.py
-    └── ops
-        ├── op_addbias.py
-        ├── op_matmul.py
-        ├── op_relu.py
-        ├── op_relu_backward.py
-        └── op_sum.py
-
+├── assets
+│   ├── flash_attention.png
+│   ├── part3_sparse_matrix.png
+│   └── flash_attention_algorithm.png
+├── scripts
+│   ├── sbatch_Part1.sh
+│   ├── sbatch_Part2.sh
+│   └── sbatch_Part3.sh
+├── part1_softmax_and_vector_add
+│   ├── cuda_softmax.cu
+│   ├── triton_softmax.py
+│   └── triton_vector_addtion.py
+├── part2_flash_attention
+│   └── triton_part.py
+└── part3_sparse_flash_attention
+    └── triton_part.py
 ```
+## Task-1: Softmax with CUDA and Trion
 
-## Task1: Train MNIST with MLP
+In this section, you will attempt to implement a high-performance softmax function using Triton, a crucial component in attention calculations.
 
+We have also provided some code from the Triton official website for your reference. (triton_vector_addtion.py)
 
-The inference and training process of a neural network can be described by the following formulas:
+Building upon the standard softmax function, you'll need to add a mask implementation. For more information, please refer to triton-lang.org. The key is to understand how to effectively manage the performance of Triton and the GPU.
 
-1. **Forward Propagation (Inference)**
-    The forward propagation process of a neural network can be described by the following formula, where $a^{(l)}$ is the activation value of the $l$ th layer $W^{(l)}$ is the weight of the $l$ th layer, $b^{(l)}$ is the bias of the $l$ th layer, and $f$ is the activation function:
+Simultaneously, you'll also need to implement a CUDA version of the same softmax function. Both functions must meet baseline requirements.
 
-    $$a^{(l)}=f(W^{(l)} a^{(l−1)}+b^{(l)})$$
+#### Standard Softmax Formulation
 
-    This process starts from the input layer, through the calculation of each layer’s weights and biases, as well as the activation function, and finally obtains the predicted value of the output layer.
+Softmax is a function that maps a real vector to a probability distribution, commonly used in classification and attention mechanisms.
 
-2. **Backward Propagation (Training)**
-   The training process of a neural network mainly updates the weights and biases through the backpropagation algorithm. First, we need to define a loss function $L$ to measure the gap between the predicted value and the true value. Then, we update the weights and biases by calculating the gradient of the loss function for the weights and biases:
+Definition: Given a vector $\large \mathbf{z} = (z_1,\dots,z_n)$, softmax is defined as:
 
-$$ \frac{\partial{L}}{\partial{W^{(l)}}} = \frac{\partial{L}}{\partial{a^{(l)}}} \frac{\partial{a^{(l)}}}{\partial{W^{(l)}}} $$
+$\large \mathrm{softmax}(z)i = \frac{e^{z_i}}{\sum{j=1}^{n} e^{z_j}}, \quad i=1,\dots,n$
 
-$$\frac{\partial{L}}{\partial{b^{(l)}}} = \frac{\partial{L}}{\partial{a^{(l)}}} \frac{\partial{a^{(l)}}}{\partial{b^{(l)}}} $$
+Its output satisfies:
 
-   Here, $\frac{\partial{L}}{\partial{a^{(l)}}}$ can be propagated from the next layer to the previous layer through the chain rule. Finally, we use the gradient descent method to update the weights and biases:
+$\large \sum_{i=1}^{n}\mathrm{softmax}(z)_i = 1,\quad \mathrm{softmax}(z)_i \in (0, 1)$
 
-$$ W^{(l)} = W^{(l)} - \alpha \frac{\partial{L}}{\partial{W^{(l)}}} $$
+For Triton implementation of Softmax, You can refer to:
+- https://triton-lang.org/main/index.html
 
-$$ b^{(l)} = b^{(l)} - \alpha \frac{\partial{L}}{\partial{b^{(l)}}} $$
+### Base on the standard softmax, We add some common changes in real applications.
 
-   Here, $\alpha$ is the learning rate, which controls the step size of the update.
+#### Adding Numerical Stability with $-\max(z)$:
 
-In this project, we are going to implement a 2-layer NN with bias by using the SGD method. The target function is below:
+$\large \mathrm{softmax}(z)_i = \frac{e^{z_i - \max(z)}}{\sum_{j=1}^{n} e^{z_j - \max(z)}}$
 
-$$ Z = W_2^T ReLU(W_1^T x+b_1)+b_2 $$
+Avoids numerical overflow caused by large $z_i$ (e.g., $e^{50}$ exceeds float32 limits). Subtracting $\max(z)$ keeps exponents non-positive, ensuring stable computation without changing the final probability distribution.
 
-where $W_1 \in \mathbb{R}^{n \times d}$ and $W_2 \in \mathbb{R}^{d \times k}$ represent the weights of the network (which has a $d$-dimensional hidden unit), $b_1 \in \mathbb{R}^{d}$ and $b_2 \in \mathbb{R}^{k}$ represent the bias of the network, and where $z \in \mathbb{R}^k$ represents the logits output by the network. The formula of ReLU activation function is $f(x) = \max(0,x)$. We again use the softmax / cross-entropy loss, meaning that we want to solve the optimization problem.
+#### Adding Scaling 
 
-Using the chain rule, you can derive the backpropagation updates for this network.
+$\large \mathrm{softmax}(\text{scale}(z))_i = \frac{e^{s \cdot z_i - \max(s \cdot z)}}{\sum_{j=1}^{n} e^{s \cdot z_j - \max(s \cdot z)}}$ (where $s$ is the scale factor)
 
-Here is the sample forward code in Python with `Pytorch`:
+Critical for attention mechanisms (e.g., $s = 1/\sqrt{d_k}$). Mitigates overly peaked softmax outputs caused by large dot-product values, preserving gradient flow for training.
 
-```python
-class MLP(nn.Module):
-    def __init__(self, input_size, hidden_size, output_size):
-        super(MLP, self).__init__()
-        self.fc1 = nn.Linear(input_size, hidden_size)
-        self.relu = nn.ReLU()
-        self.fc2 = nn.Linear(hidden_size, output_size)
-    
-    def forward(self, x):
-        fc1_out = self.fc1(x)
-        relu_out = self.relu(fc1_out)
-        out = self.fc2(relu_out)
-        return out
-```
+#### Adding Dropout 
+$\large \text{dropout}(\text{softmax}(z))_i = \begin{cases} \frac{\text{softmax}(z)_i}{1-p} & \text{with probability } 1-p, \\ 0 & \text{with probability } p \end{cases}$ (where $p$ is dropout rate)
 
-We already define **all functions** you need in the MLP in `ops_sequential.cpp` file (Also for OpenAcc Version). Also, the brief introduction and parameters for function are in `ops.hpp`.
+Prevents overfitting by randomly zeroing out a fraction of outputs. Scaling surviving elements by $1/(1-p)$ preserves the expected value of the output.
 
-Complete the code and use these function to do MLP training in `mlp_sequential.cpp`.
+#### Adding Masking 
 
-## Task2: Accelerate MLP with OpenAcc
+$\large \text{mask}(z)_i = z_i \cdot m_i + (1 - m_i) \cdot (-\infty)$ (where $m_i \in \{0,1\}$ is the binary mask, $1=$ valid, $0=$ invalid)
 
-First, copy your code in `ops_sequential.cpp` and `mlp_sequential.cpp` to OpenAcc version code! We have hint in code files for what you need to change for different sub-task.
+Ignores invalid positions (e.g., padding tokens, future tokens in autoregressive models). Invalid positions are set to $-\infty$ (so $e^{-\infty}=0$) and excluded from the softmax sum
 
-### 2.1 Accelerate with Kernel
+## Task-2: FlashAttention with Triton
 
-Implement a more flexible and easily extensible OpenAcc acceleration approach. This means using `#pragma acc` for each kernel call in the MLP training code structure, which may result in frequent communication between the CPU and GPU for kernel computation results.
+For reference:
+- Link of FlashAttention-v1 paper: https://arxiv.org/abs/2205.14135
+- Link of its GitHub repo: https://github.com/Dao-AILab/flash-attention
 
-### 2.2 Accelerate with Fusion
+In this part, you've already gained a basic understanding of Triton. You will now learn flash-attention, an algorithm that accelerates attention computation through parallelism, and implement it using Triton to achieve a baseline.
 
-Implement an OpenAcc acceleration approach that minimizes GPU communication. This involves transferring all necessary data to the GPU at the start of the MLP training process and using a single `#pragma acc`. 
+#### FlashAttention mainly optimizes attention computation from two perspectives
+**1. Tiling**
+  - Split the input into blocks and make several passes over input blocks
+  - Small blocks can fit in GPU SRAM for fast data access like in Project 2
 
-Please implement different methods and measure their execution times, then **analyze** the time differences.
+**2. Recomputation**
+  - Perform many computations in a time the block is loaded, avoiding storing intermediate results in HBM.
+  - Compute softmax in blocks requires numerical compensation.
 
-## Task3: Train MLP with Triton
+The core of the flash-attention algorithm lies in reducing MAC (Macro-Macro-Memory) operations. For high-performance GPUs, memory access speeds are shown in the diagram below. SRAM has the fastest access speed but limited space. Frequent reads and writes from HBM (Hardware Memory) will cause significant performance degradation. The flash-attention algorithm reduces unnecessary reads and writes to HBM by optimizing the traditional softmax algorithm through block partitioning.
 
-Task 3 is **optional for undergraduates but compulsotry for postgraduates**.
+![principle](./assets/flash_attention.png "Magic Gardens")
 
-You can use Triton to overload functions for backpropagation, thereby leveraging PyTorch's autograd functionality to train neural networks.
+This assignment requires implementing flash-attention version 1, with a focus on understanding the advantages of block-based computation.
 
-**NOTICE**: All opreation should not directly use the pytorch function!
+Basic attention calculation:
 
-## Extra Credit: Extend Neural Network to Convolutional Neural Network with&without OpenAcc
+Attention score calculation: $S_i = Q_iK_i^T$
 
-You need to implement and accelerate the  `conv` function in `ops_sequential.cpp` with&without OpenAcc. Copy and rename the `mlp_main.cpp` and `mlp_XXX.cpp` to run the CNN training.
+Numerically stable attention: $p_{ij} = \frac{e^{s_{ij} - \max(s_i)}}{\sum e^{s_{ik} - \max(s_i)}}$
 
-You can use any hyperparameters and filters as you like.
+Final output: $O_i = P_iV_i$
+
+![pseudocode](./assets/flash_attention_algorithm.png "Magic Gardens")
+
+## Task-3: Sparse FlashAttention
+
+FlashAttention v1 achieves efficient dense attention computation through tiled and recomputation optimizations. In practical tasks, the attention matrix often exhibits structured sparseness. This necessitates specifying non-zero interaction regions using `mask_ptr` (mask pointer) to further reduce invalid computations and memory overhead. This ensures that the zero-interaction regions specified by the mask are correctly skipped while maintaining the original IO optimization advantages of FlashAttention, while simultaneously verifying performance and correctness.
+
+![principle](./assets/part3_sparse_matrix.png "Magic Gardens")
+
+Since this course focuses on parallel computing, we will provide a simple sparse matrix implementation; you just need to pass it to your kernel function and process it.
+
+## Extra Credit:
+
+Optimizing attention computation is a hot topic. What we did in the three tasks are only about the first version of flash-attention paper. Here are some options for you for further optimization and training:
+
+### Option-1: FlashAttention in CUDA
+
+- implement flash attention version 1 using cuda
+- compare the tiling implementations between CUDA and Triton. This will give you an intuitive idea of how Triton was proposed to make CUDA programmers' lives easier.
+
+### Option-2: FlashAttention Ver.2 in Triton
+
+- Read the article and implement flash attention version 2
+- Link of article: https://tridao.me/publications/flash2/flash2.pdf
+
+### Option-3: Multi-Head FlashAttention
+
+- Performing attention on the whole input sequence uses a single (Q,K,V) triple, and it will pay too much attention to words identical to itself in the context. As a solution, recent researchers have proposed multi-head attention, simply dividing the input sequence into several parts and performing attention to each part with different (Q,K,V) triples.
+- You may implement multi-head attention with FlashAttention optimization.
+- Reference:
+  - https://colab.research.google.com/github/phlippe/uvadlc_notebooks/blob/master/docs/tutorial_notebooks/tutorial6/Transformers_and_MHAttention.ipynb
+  - [In Chinese] https://transformers.run/c1/attention/#multi-head-attention
+
 
 ## How to Execute the Program
 
-### Compilation
-
-```bash
-cd /path/to/project4
-mkdir build && cd build
-cmake ..
-make
+#### Job Submission
+Please submit the job with sbatch.sh through sbatch.
 ```
-
-Compilation with `cmake` may fail in docker container, if so, please compile with `gcc` and `pgc++` in the terminal with the correct optimization options.
-
-### Job Submission
-
-Execute the bash script.
-
-Make sure you are in the `project4` dir.
-
-```bash
-sbatch ./test.sh
+cd /path/to/project4/
+sbatch ./scripts/sbatch_Part1.sh
 ```
-
 ## Baseline
+### Part1
 
-For **1 epoch** with **400** hidden layer:
+When seq_len is low, you need to achieve approximate performance, while when seq_len is high, you need to achieve **2x** performance.
 
-| MLP Sequential | MLP OpenAcc(kernel) | MLP OpenAcc(fusion) |
-| -------------- | ------------------- | ------------------- |
-| ~50000 ms      | ~9000 ms            | ~6500 ms            |
+The performance of the basic softmax implementation of Triton is similar to that of Torch. You need to analyze in the report why adding softmax operations such as scaling and masking will improve Triton's performance.
 
-## Appendix
+| matrix ( seq_len * 4096 ) | cuda | triton   | torch    | native_softmax |
+| ------------------------- | ---- | -------- | -------- | -------------- |
+| 64                        | N/A  | 0.219897 | 0.092340 | 0.181889       |
+| 128                       | N/A  | 0.161582 | 0.096233 | 0.185031       |
+| 256                       | N/A  | 0.259864 | 0.133024 | 0.209217       |
+| 512                       | N/A  | 0.164272 | 0.227231 | 0.384761       |
+| 1024                      | N/A  | 0.213124 | 0.431139 | 0.715254       |
+| 2048                      | N/A  | 0.430722 | 0.845140 | 1.372665       |
+| 4096                      | N/A  | 0.835523 | 1.672786 | 2.687862       |
+| 8192                      | 3    | 1.552750 | 3.198960 | 5.319086       |
 
-### About acc rate
+### Part2
 
-If you use the same random seed for init the network, the acc rate will be:
+For short sequence tasks, your performance needs to be better than native attention, while for long sequences (1k-4k), you need to achieve at least **2x** performance.
 
-(The output for `hidden layer: 400`, `learning rate: 0.001`, `batch number=32`)
+| seq_len * 256 | flash attention | native attention |
+| ------------- | --------------- | ---------------- |
+| 64            | 0.009811        | 0.021873         |
+| 128           | 0.013707        | 0.027709         |
+| 256           | 0.019383        | 0.029978         |
+| 512           | 0.035849        | 0.063143         |
+| 1024          | 0.097026        | 0.229085         |
+| 2048          | 0.378505        | 0.839755         |
+| 4096          | 1.735831        | 3.556934         |
 
-```
-Sequential (Optimized with -O2)
-Training two layer neural network 400 hidden units
-| Epoch |  Acc Rate  |  Training Time
-|     1 |   92.330%  |   47477 ms
-|     2 |   93.950%  |   47482 ms
-|     3 |   95.000%  |   47474 ms
-|     4 |   95.730%  |   47448 ms
-|     5 |   96.310%  |   47392 ms
-|     6 |   96.570%  |   47449 ms
-|     7 |   96.870%  |   47403 ms
-|     8 |   97.090%  |   47437 ms
-|     9 |   97.300%  |   47469 ms
-|    10 |   97.400%  |   47368 ms
-Execution Time: 519906 milliseconds
+### Part3
 
-OpenACC kernel
-Training two layer neural network 400 hidden units
-| Epoch |  Acc Rate  |  Training Time 233
-|     1 |   92.330%  |   9312 ms
-|     2 |   93.950%  |   8220 ms
-|     3 |   94.970%  |   8243 ms
-|     4 |   95.720%  |   8236 ms
-|     5 |   96.300%  |   8279 ms
-|     6 |   96.560%  |   8288 ms
-|     7 |   96.870%  |   8336 ms
-|     8 |   97.100%  |   8303 ms
-|     9 |   97.260%  |   8303 ms
-|    10 |   97.400%  |   8358 ms
-Execution Time: 87501 milliseconds
+For the same input size, flash attention sparse is 2x faster than your part 2 flash attention.
 
-OpenACC fusion
-Training two layer neural network 400 hidden units
-| Epoch |  Acc Rate  |  Training Time
-|     1 |   92.330%  |   7379 ms
-|     2 |   93.950%  |   6205 ms
-|     3 |   94.970%  |   6213 ms
-|     4 |   95.720%  |   6251 ms
-|     5 |   96.300%  |   6251 ms
-|     6 |   96.560%  |   6298 ms
-|     7 |   96.870%  |   6326 ms
-|     8 |   97.100%  |   6312 ms
-|     9 |   97.260%  |   6340 ms
-|    10 |   97.400%  |   6354 ms
-Execution Time: 67134 milliseconds
-```
-
-Some student may get the result 
-```
-| Epoch |  Acc Rate  |  Training Time
-|     1 |   79.470%  |
-|     2 |   84.470%  |
-|     3 |   86.530%  |
-|     4 |   87.950%  |
-|     5 |   88.850%  |
-|     6 |   89.360%  |
-|     7 |   89.650%  |
-|     8 |   89.950%  |
-|     9 |   90.310%  |
-|    10 |   90.550%  |
-```
-
-This is because, during the implementation, I accounted for the effect of batch size on accuracy by default. If you have any questions, please refer to [this Chinese blog](https://kexue.fm/archives/10542). For students who obtained the above results, please multiply the learning rate by the batch size, and you should achieve a result close to 92%(like first table). If you followed our initialization method and obtained such a result, **you don’t need to worry about losing points**!
 
 ## Requirements & Grading Policy
 
-- **Machine Learning (50%)**
+- **Implementation (60%)**
   
-  - Task1: Train MLP with CPP (20%)
-  - Task2: Accelerate MLP with OpenAcc (20%)
-    - 2.1: Accelerate by kernel (10%)
-    - 2.2: Accelerate by fusion (10%)
-  - Task3: Train MLP with Triton (10% optional for undergraduates but compulsotry for postgraduates)
+  - *Task1: Softmax (20%)*
+    - *1.1 CUDA Part (10%)*
+    - *1.2 Triton Part (10%)*
+  - *Task2: Flash Attention (20%)*
+  - *Task3: Flash Attention with Sparse matrix (20%)*
 
   Your programs should be able to compile & execute to get the expected computation result to get the full grade in this part.
   
-- **Performance of Your Program (30%)**
+- **Performance of Your Program (20%)**
 
-  - 10% for Task 1
-  - 15% for Task 2
-    - 7.5% for 2.1
-    - 7.5% for 2.2
-  - 5% for Task 3 (optional for undergraduates but compulsotry for postgraduates)
+  - 5% for Task 1
+    - 2.5% for 1.1
+    - 2.5% for 1.2
+  - 10% for Task 2
+  - 5% for Task 3
 
   Try your best to do optimization on your parallel programs for higher speedup. If your programs show similar performance to the baseline performance, then you can get the full mark for this part. Points will be deducted if your parallel programs perform poorly while no justification can be found in the report.
 
@@ -288,13 +264,11 @@ This is because, during the implementation, I accounted for the effect of batch 
     - What kinds of optimizations have you tried to speed up your parallel program, and how do they work?
     - Any interesting discoveries you found during the experiment?
   
-  - **Profiling OpenAcc with nsys (10%)**
-    You are required to practice profiling OpenAcc programs with nsys as we explained in the [Instruction of profiling tools with perf and nsys](https://github.com/tonyyxliu/CSC4005-2023Fall/blob/main/docs/Instruction%20on%20Profiling%20with%20perf%20and%20nsys.md#nsys-for-gpu-profiling). The command line profiling of nsys is mandatory while the GUI Nsight System is optional.
+  - **Analyze performance (10%)**
+    - You need to analyze the performance of Triton for each part, including the difference in memory read/write operations between the Triton implementation and Torch.
+    - Answer the question: How do you select your *blockSize* and why these make your program performantly.
 
 - **Extra Credits (Max 10%)**
-  - Train MLP by Triton (5%, only for undergraduates)
-  - Train CNN with&without OpenAcc(10%)
-
   Extra optimizations or interesting discoveries in the first three tasks may also earn you some extra credits.
 
   Please write what you do for Extra Credits **in your report**!
@@ -319,24 +293,16 @@ Only Code and Report Needed!
 ```bash
 <Your StudentID>.pdf  # Report
 <Your StudentID>.zip  # Codes
-├── src
-│   ├── mlp_main.cpp
-│   ├── mlp_network.hpp
-│   ├── mlp_openacc_fusion.cpp
-│   ├── mlp_openacc_kernel.cpp
-│   ├── mlp_sequential.cpp
-│   ├── ops.hpp
-│   ├── ops_openacc_fusion.cpp
-│   ├── ops_openacc_kernel.cpp
-│   ├── ops_sequential.cpp
-│   ├── utils.cpp
-│   └── utils.hpp
-└── triton(If needed)
-    ├── mlp_triton.py
-    └── ops
-        ├── op_addbias.py
-        ├── op_matmul.py
-        ├── op_relu.py
-        ├── op_relu_backward.py
-        └── op_sum.py
+├── README.md
+├── part1_softmax_and_vector_add
+│   ├── cuda_softmax.cu
+│   ├── triton_softmax.py
+│   └── triton_vector_addtion.py
+├── part2_flash_attention
+│   └── triton_part.py
+├── part3_sparse_flash_attention
+│   └── triton_part.py    
+└── extra (If needed)
+    ├── flash_attention.cu
+    └── flash_attention_v2.py
 ```
