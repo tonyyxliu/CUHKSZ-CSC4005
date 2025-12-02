@@ -34,7 +34,7 @@ echo "Compilation successful."
 echo ""
 
 N=8192
-C=8192
+C=4096
 
 srun -n 1 --gpus 1 ./part1_softmax_and_vector_add/cuda_softmax_exec $N $C
 
