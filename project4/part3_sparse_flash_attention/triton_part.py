@@ -25,6 +25,9 @@ WARP_SIZE = properties["warpSize"]
 target = triton.runtime.driver.active.get_current_target()
 kernels = {}
 
+def get_block_MN(d_model):
+    # Your code here
+    # TODO
 
 def call_flash_attention_v1_sparse(q, k, v, mask_ptr):
     assert q.shape == k.shape == v.shape, "Input shapes must match"
@@ -44,18 +47,18 @@ def pytorch_attention(q, k, v):
         softmax = torch.softmax(scores, dim=1)
         attention = softmax @ v
         return attention
-
+    
 @triton.testing.perf_report(
     triton.testing.Benchmark(
         x_names=['seq_len'],
         x_vals=[ 2 ** i for i in range(7, 13)],
-        line_arg='provider',
-        line_vals=['flash_attention'],
-        line_names=["Flash Attention"],
-        styles=[('blue', '-')],
-        ylabel="ms",
-        plot_name="attention-performance",
-        args={'d_model': 256},
+        line_arg='d_model',
+        line_vals=[64, 128, 256],
+        line_names=['d=64', 'd=128', 'd=256'],
+        styles=[('blue', '-'), ('green', '--'), ('red', '-.')],
+        ylabel="Latency (ms)",
+        plot_name="flash-attention-performance",
+        args={'provider': 'flash_attention'},
     )
 )
 def benchmark(seq_len, d_model, provider):
@@ -69,7 +72,6 @@ def benchmark(seq_len, d_model, provider):
     
     if provider == 'flash_attention':
         ms = triton.testing.do_bench(lambda: call_flash_attention_v1_sparse(q, k, v, mask))
-
     return ms
 
 def unit_test(seq_len, d_model):
@@ -129,9 +131,11 @@ def native_block_sparse_attention(q, k, v, sparse_mask_flat, BLOCK_M, BLOCK_N):
     
     output = torch.matmul(attn_weights, v)
     return output
+
 if __name__ == "__main__":
     for i in range(6, 12):
-        unit_test(2 ** i, 64)
+        for d_model in [32, 64, 128]:
+            unit_test(2 ** i, d_model)
     print("pass all unit test")
     print("-----------------------------------------")    
     

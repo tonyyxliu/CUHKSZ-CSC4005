@@ -45,33 +45,55 @@ def pytorch_attention(q, k, v):
         attention = softmax @ v
         return attention
 
-@triton.testing.perf_report(
-    triton.testing.Benchmark(
-        x_names=['seq_len'],
-        x_vals=[2 ** i for i in range(4, 13)],
-        line_arg='provider',
-        line_vals=['flash_attention', 'native'],
-        line_names=["Flash Attention", "Native Attention"],
-        styles=[('blue', '-'), ('green', '-')],
-        ylabel="ms",
-        plot_name="attention-performance",
-        args={'d_model': 256},
-    )
-)
-def benchmark(seq_len, d_model, provider):
+def benchmark_internal(seq_len, d_model, provider):
     q = torch.randn(seq_len, d_model, device=DEVICE, dtype=torch.float32)
     k = torch.randn(seq_len, d_model, device=DEVICE, dtype=torch.float32)
     v = torch.randn(seq_len, d_model, device=DEVICE, dtype=torch.float32)
-    stream = getattr(torch, DEVICE.type).Stream()
-    getattr(torch, DEVICE.type).set_stream(stream)
-    
-    if provider == 'flash_attention':
-        ms = triton.testing.do_bench(lambda: call_flash_attention_v1(q, k, v))
-    if provider == 'native':
-        ms = triton.testing.do_bench(lambda: pytorch_attention(q, k, v))
-    
-    return ms
 
+    if provider == 'flash_attention':
+        fn = lambda: call_flash_attention_v1(q, k, v)
+    elif provider == 'pytorch':
+        fn = lambda: pytorch_attention(q, k, v)
+
+    return triton.testing.do_bench(fn)
+
+def benchmark():
+    @triton.testing.perf_report(
+        triton.testing.Benchmark(
+            x_names=['seq_len'],
+            x_vals=[2 ** i for i in range(2, 13)],
+            line_arg='d_model',
+            line_vals=[64, 128, 256],
+            line_names=['d=64', 'd=128', 'd=256'],
+            styles=[('blue', '-'), ('green', '--'), ('red', '-.')],
+            ylabel="Latency (ms)",
+            plot_name="flash-attention-performance",
+            args={'provider': 'flash_attention'},
+        )
+    )
+    def bench_flash(seq_len, d_model, provider):
+        return benchmark_internal(seq_len, d_model, provider)
+
+    @triton.testing.perf_report(
+        triton.testing.Benchmark(
+            x_names=['seq_len'],
+            x_vals=[2 ** i for i in range(2, 13)],
+            line_arg='d_model',
+            line_vals=[64, 128, 256],
+            line_names=['d=64', 'd=128', 'd=256'],
+            styles=[('orange', '-'), ('purple', '--'), ('brown', '-.')],
+            ylabel="Latency (ms)",
+            plot_name="pytorch-attention-performance",
+            args={'provider': 'pytorch'},
+        )
+    )
+    def bench_pytorch(seq_len, d_model, provider):
+        return benchmark_internal(seq_len, d_model, provider)
+
+    bench_flash.run(show_plots=False, print_data=True)
+    bench_pytorch.run(show_plots=False, print_data=True)
+    
+    
 def unit_test(seq_len, d_model):
     torch.manual_seed(0)
     q = torch.randn(seq_len, d_model, device=DEVICE, dtype=torch.float32)
@@ -85,9 +107,9 @@ def unit_test(seq_len, d_model):
     print(f"Attention output correct for seq_len={seq_len}, d_model={d_model}!")
 
 if __name__ == "__main__":
-    for i in range(6, 12):
-        unit_test(2 ** i, 64)
+    for i in range(8, 12):
+        for d_model in [32, 64, 128]:
+            unit_test(2 ** i, d_model)
     print("pass all unit test")
-    print("-----------------------------------------")    
-    
-    benchmark.run(show_plots=False, print_data=True)    
+    print("-----------------------------------------")   
+    benchmark()
